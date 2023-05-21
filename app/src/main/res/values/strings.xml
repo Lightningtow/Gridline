@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Gridline</string>
+
+    <string name="com_spotify_sdk_redirect_scheme">gridline</string>
+    <string name="com_spotify_sdk_redirect_host">spotify-auth</string>
+
+</resources>

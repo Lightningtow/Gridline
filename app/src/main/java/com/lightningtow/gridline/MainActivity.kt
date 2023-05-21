@@ -1,0 +1,66 @@
+package com.lightningtow.gridline
+
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
+import androidx.navigation.compose.rememberNavController
+import com.lightningtow.gridline.auth.guardValidSpotifyApi
+import com.lightningtow.gridline.data.PlaylistsHolder
+import com.lightningtow.gridline.ui.components.BottomNavigationBar
+import com.lightningtow.gridline.ui.components.GridlineScaffold
+//import com.lightningtow.gridline.ui.components.HomeScreen
+import com.lightningtow.gridline.ui.components.NavHostContainer
+//import com.lightningtow.gridline.ui.components.ProfileScreen
+import com.lightningtow.gridline.ui.theme.GridlineTheme
+import com.lightningtow.gridline.ui.theme.gridline_pink
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+
+class MainActivity : AppCompatActivity() {
+
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    fun loadPlaylists() =
+        scope.launch { // Is invoked in UI context with Activity's scope as a parent
+
+            guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
+                PlaylistsHolder.lists = api.playlists.getClientPlaylists().getAllItemsNotNull() }
+            PlaylistsHolder.loading = false;
+
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadPlaylists()
+        setContent {
+            GridlineTheme {
+
+                // remember navController so it does not
+                // get recreated on recomposition
+                val navController = rememberNavController()
+
+//                Surface(color = Color.White) {
+                // Scaffold Component
+                Scaffold(
+                    // Bottom navigation
+                    bottomBar = {
+
+                        BottomNavigationBar(navController = navController)
+                    }, content = { padding ->
+
+                        // Navhost: where screens are placed
+                        NavHostContainer(navController = navController, padding = padding)
+                    }
+                )
+//                }
+            }
+        }
+//        setContent {
+//            AuthPage(this)
+//
+//        }
+    }
+}
