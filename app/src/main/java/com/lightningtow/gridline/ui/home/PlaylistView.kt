@@ -33,14 +33,6 @@ import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.theme.gridline_pink
 import com.skydoves.landscapist.glide.GlideImage
 
-//class PlaylistViewActivity : AppCompatActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            PlaylistViewMaster(onPlaylistClick = )
-//        }
-//    }
-//}
 
 @Composable
 fun PlaylistViewMaster(onPlaylistClick: (SimplePlaylist) -> Unit) {
@@ -58,8 +50,7 @@ fun PlaylistViewMaster(onPlaylistClick: (SimplePlaylist) -> Unit) {
 }
 
 @Composable
-//fun PlaylistViewPage(activity: BaseActivity? = null, lists: List<SimplePlaylist>?) {
-//fun PlaylistViewPage(lists: List<SimplePlaylist>?) {
+
 private fun PlaylistViewPage(onPlaylistClick: (SimplePlaylist) -> Unit) {
 //    private fun PlaylistViewPage(holder: Int, onPlaylistClick: () -> Unit) {
 
@@ -96,13 +87,11 @@ private fun PlaylistViewPage(onPlaylistClick: (SimplePlaylist) -> Unit) {
         }
 //        Divider(color = gridline_pink)
 
-        if (lists != null) {
-            val sortedlist: List<SimplePlaylist> =
-                PlaylistsHolder.lists.sortedBy { it.name } // todo deal with capitals
+        val sortedlist: List<SimplePlaylist> =
+            PlaylistsHolder.lists.sortedBy { it.name } // todo deal with capitals
 //            PlaylistList(holder = holder, sortedlist, onPlaylistClick)
-            PlaylistList(sortedlist, onPlaylistClick)
+        PlaylistList(sortedlist, onPlaylistClick)
 
-        }
     }
 //        }
 }

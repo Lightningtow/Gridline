@@ -78,11 +78,9 @@ fun NavHostContainer(
             composable("purge") {
                 PurgeViewMaster()
 
-//                context.startActivity(Intent(context, PurgeActivity::class.java))
             }
 
-            composable("playlists") {
-//                uiState.currentPage = "PLAYLISTS"
+            composable("shuffle") {
 //
 //                masterMaster(callback = {
 //                    shouldLoadTracks = true

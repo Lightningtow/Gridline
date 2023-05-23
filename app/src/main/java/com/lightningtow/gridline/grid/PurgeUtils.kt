@@ -1,6 +1,7 @@
 package com.lightningtow.gridline.grid
 
 import LoadingScreen
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.lightningtow.gridline.data.Model
@@ -8,8 +9,12 @@ import kotlinx.coroutines.launch
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import com.lightningtow.gridline.data.SecTrackHolder
 import com.lightningtow.gridline.grid.PlaylistGetter
+import com.lightningtow.gridline.ui.home.dataStore
 import com.lightningtow.gridline.ui.home.loadingMessage
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
@@ -17,6 +22,9 @@ import com.lightningtow.gridline.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
 //var purging: Boolean = false
 //var message: String = "default"
 
@@ -25,65 +33,51 @@ import kotlinx.coroutines.SupervisorJob
 //class PurgeUtils(){ // todo this only hosts backend shit
 //    companion object {
 
-
-//        fun
-
-        private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 
-        fun purgePlaylist(victim: String, purgelist: String = Constants.PURGELIST, regen_purgelist: Boolean = true, callback: () -> Unit) {
+fun purgePlaylist(
+    victim: String,
+    purgelist: String = Constants.PURGELIST,
+    callback: () -> Unit
+) {
+
+    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+
+
+
+
+
+    Log.e("coroutine?", Dispatchers.toString())
+
+
+//    val purgeCallback =
+
+
+    loadingMessage = "Getting Purgelist"
+    Log.e("purge", "getting purgelist")
+
+    PlaylistGetter.getPlaylistByURI(URI = purgelist, holder = 2,
+
+        callback = {
 
             scope.launch {
-
-//                idk()
-                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
-
-//                uri = uriARG
-//                var uri = Constants.GIANT_TEST.toString()
-//
-//                val idk = "spotify:track:1xN1kZz11rolePhsZeLPJo"
-//                val idk2: PlayableUri = PlayableUri.invoke("spotify:track:1xN1kZz11rolePhsZeLPJo")
-//                var to_remove: MutableList<Playable> = mutableListOf() // idk2
-
-
-                Log.e("hah", "cliiiiiiiiiicked")
-
-                Log.e("coroutine?", Dispatchers.toString())
-
-//            var id: String =
-
-
-//                if (regen_purgelist) {
-                    loadingMessage = "Getting Purgelist"
-                    Log.e("purge", "getting purgelist")
-                    PlaylistGetter.getPlaylistByURI(purgelist, 2)
-//                }
-
-                // lmaooo theres no need at all to load the victims, just remove
-
-//                loadingMessage = "Getting Victim"
-//                Log.e("purge", "getting victim")
-//                PlaylistGetter.getPlaylistByURI(victim, 1)
-
-                val uh: String? = null
-
-                Log.e("purge", "removing")
-
-                api.playlists.removePlayablesFromClientPlaylist(
-                    playlist = victim,
-                    snapshotId = uh,
-                    playables = SecTrackHolder.contents.map { it.uri }.toTypedArray() )
-                // todo recommended to have snapshot id
-
-
-
-                Log.e("purge", "returing")
+            Log.e("purge", "removing")
+            api.playlists.removePlayablesFromClientPlaylist(
+                playlist = victim,
+//            snapshotId = uh,
+                playables = SecTrackHolder.contents.map { it.uri }.toTypedArray()
+            )
                 callback()
-//                return@launch
 
-            }
-
+                Log.e("purge", "returning from $victim")
         }
+    }) // end callback
+
+
+    // todo recommended to have snapshot id
+
+}
 
 //    }
 //}
