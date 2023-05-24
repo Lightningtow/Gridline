@@ -34,9 +34,13 @@ import com.lightningtow.gridline.data.TrackHolder
 import com.lightningtow.gridline.grid.PlaylistGetter
 import com.lightningtow.gridline.grid.ShuffleInPlace
 import com.lightningtow.gridline.ui.components.GridlineButton
+import com.lightningtow.gridline.ui.components.GridlineCoverImage
+import com.lightningtow.gridline.ui.components.GridlineDivider
 import com.skydoves.landscapist.glide.GlideImage
 import com.lightningtow.gridline.ui.theme.*
 import com.lightningtow.gridline.utils.toast
+import com.lightningtow.gridline.ui.components.GridlineDivider
+import com.lightningtow.gridline.ui.components.GridlineHeader
 
 private var loadingTracks by mutableStateOf(false)
 var shouldLoadTracks by mutableStateOf(false)
@@ -68,19 +72,13 @@ fun TrackViewMaster(uri: String = "default") {
 
 // main page for viewing playables
 @Composable
-//fun PlayableViewPage(activity: BaseActivity? = null, tracks: List<Playable>, name: String,  onNameClick: (SimplePlaylist) -> Unit) {
 private fun PlayableViewPage(
-//    activity: BaseActivity? = null,
     tracks: List<Playable>,
     name: String
-) { // todo howsabout make tracks just directly accessed
-    val context = LocalContext.current
-//    val imageModifier = Modifier
-//        .height(80.dp)
-//        .width(80.dp)
+) {
+// todo howsabout make tracks just directly accessed    ??? what does this mean
 
     GridlineTheme() {
-
 
         Column( // padding here messes with the dividers too
         ) {
@@ -90,47 +88,31 @@ private fun PlayableViewPage(
 //        Divider(color = gridline_pink)
             PlayableList(tracks)
         }
-//        startActivity(context, PlaylistViewActivity, )
-//                    toast(context, "You clicked ${track.name} - opening in spotify")
-//    }
+
     }
 }
 
 @Composable
 private fun Header(
     name: String,
-//    context: Context
 ) {
     val context = LocalContext.current
 
-    Row(
+    GridlineHeader(
         modifier = Modifier
-            .background(color = GridlineTheme.colors.uiFloated)
-            .fillMaxWidth()
+//            .background(color = GridlineTheme.colors.uiFloated)
+//            .fillMaxWidth()
             .padding(4.dp)
             .padding(start = 8.dp)
-    ) { // header row
 
-        GlideImage(
-//            imageModel = (TrackHolder.imageuri
-            imageModel = (TrackHolder.actualist.images.firstOrNull()?.url
-                ?: "https://picsum.photos/300/300"),
-            modifier = Modifier
-                .height(80.dp)
-                .width(80.dp)
-                .clickable {
-                    //                itemContent = { track ->
-//                onNameClick = {
-                    val browserIntent =
-                        Intent(
-                            Intent.ACTION_VIEW,
-//                            Uri.parse(TrackHolder.uri.toString())
-                            Uri.parse(TrackHolder.actualist.uri.uri)
-//                          Uri.parse(track.externalUrls.first { it.name == "spotify" }.url)
-                        )
-                    startActivity(context, browserIntent, null)
-                },
+    ) { // header row
+        GridlineCoverImage(
+            size = 80.dp,
+            imageModelArg = TrackHolder.actualist.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
+            deeplink_url = TrackHolder.actualist.uri.uri,
         )
+
+
         Column() {
             Row( // text row
                 modifier = Modifier
@@ -200,7 +182,6 @@ private fun ButtonRow() { // here
 
 @Composable
 private fun PlayableList(playables: List<Playable>) {
-//private fun TrackList(tracks: MutableList<Track>) {
     LazyColumn(
 //        modifier = Modifier
 //        .padding(start = 8.dp)
@@ -212,7 +193,7 @@ private fun PlayableList(playables: List<Playable>) {
 //                TrackRow(track = track, onTrackClick = {
                 PlayableRow(playable = playable)
 
-                Divider(color = GridlineTheme.colors.uiBorder)
+                GridlineDivider()
             })
     }
 
@@ -220,7 +201,6 @@ private fun PlayableList(playables: List<Playable>) {
 
 // one playable item
 @Composable
-//private fun TrackRow(track: Track, onTrackClick: (Track) -> Unit) {
 private fun PlayableRow(playable: Playable) {
     val context = LocalContext.current
 
@@ -231,38 +211,16 @@ private fun PlayableRow(playable: Playable) {
             .padding(4.dp)
             .padding(start = 8.dp) // padding between picture and edge
     ) {
-//        val imageModifier = Modifier
-//            .height(40.dp)
-//            .width(40.dp)
+
 
 // todo find better default image
-        GlideImage(
-            modifier = Modifier // image modifiers
-                .height(40.dp)
-                .width(40.dp)
-                .clickable {
-                    val browserIntent =
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(playable.asTrack!!.externalUrls.first { it.name == "spotify" }.url)
-                        )
-                    startActivity(context, browserIntent, null)
-                },
-            imageModel = (
-                    if (playable.asTrack != null) playable.asTrack!!.album.images.firstOrNull()?.url
-                        ?: "https://picsum.photos/300/300"
-                    else if (playable.asLocalTrack != null) "https://picsum.photos/300/300"
-//                    else if (playable.asLocalTrack != null) playable.asTrack!!.album.images.firstOrNull()?.url ?: "https://picsum.photos/300/300"
-                    else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.album.images.firstOrNull()?.url
-                        ?: "https://picsum.photos/300/300"
-                    else {
-                        Log.e("ctrlfme", "???")
-                        "???" // text =
-                    }),
-//            imageModel = playable.asTrack?.album?.images?.firstOrNull()?.url ?: "https://picsum.photos/300/300",
-            contentDescription = null,
+        GridlineCoverImage(
+            deeplink_url = playable.asTrack!!.externalUrls.first { it.name == "spotify" }.url,
+            track = playable
+        )
 
-            )
+
+
 
         Column(
             modifier = Modifier
@@ -275,15 +233,11 @@ private fun PlayableRow(playable: Playable) {
                         else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.name
 //                    else if (playable.)
                         else {
-                            Log.e("ctrlfme", "???")
-                            "???" // text =
+                            Log.e("ctrlfme", "missing trackname in PlayableRow")
+                            "missing trackname"
                         }),
                 color = GridlineTheme.colors.textPrimary,
-//                color = Color(0xFFF0F0F0),
-
-//                playable.asTrack!!.name,
                 fontWeight = FontWeight.Bold,
-//                style = MaterialTheme.typography.body1,
                 style = MaterialTheme.typography.body2,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -292,16 +246,12 @@ private fun PlayableRow(playable: Playable) {
 //                text = playable.asTrack!!.artists.joinToString(", ") { it.name },
                 text = (
                         if (playable.asTrack != null) playable.asTrack!!.artists.joinToString(", ") { it.name }
-                        else if (playable.asLocalTrack != null) playable.asLocalTrack!!.artists.joinToString(
-                            ", "
-                        ) { it.name }
-                        else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.artists.joinToString(
-                            ", "
-                        ) { it.name }
+                        else if (playable.asLocalTrack != null) playable.asLocalTrack!!.artists.joinToString(", ") { it.name }
+                        else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.artists.joinToString(", ") { it.name }
                         //                    else if (playable.)
                         else {
-                            Log.e("ctrlfme", "???")
-                            "???" // text =
+                            Log.e("ctrlfme", "missing artistname in PlayableRow")
+                            "missing artistname"
                         }),
                 color = GridlineTheme.colors.textSecondary,
                 style = MaterialTheme.typography.body2,
@@ -311,73 +261,3 @@ private fun PlayableRow(playable: Playable) {
         }
     }
 }
-
-////class TrackViewActivity : BaseActivity() {
-//class TrackViewActivity : AppCompatActivity() {
-////
-//////    val context = LocalContext.current doesnt work here!!
-////
-////    //    private val scope = MainScope()
-////    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-////
-////    fun asyncGetData() =
-////        scope.launch { // Is invoked in UI context with Activity's scope as a parent
-////
-//////            PlaylistHolder.loading = true
-////            PlaylistGetter.getPlaylistByURI(uri, 1);
-//////            PlaylistGetter.getPlaylist();
-////
-//////            DisplayTracks()
-////            TrackHolder.templist = TrackHolder.contents
-////            setContent {
-////                PlayableViewPage(TrackHolder.templist, TrackHolder.playlistName) // here
-////            }
-////        }
-////    // todo if crashes cause something 'activity' try uncommenting all the lines that say 'here'
-//
-//
-////    fun DisplayTracks() {
-////        setContent {
-////            GridlineTheme() {
-////                PlayableViewPage(TrackHolder.templist, TrackHolder.playlistName) // here
-//////                PlayableViewPage(this, TrackHolder.templist, TrackHolder.playlistName)
-////            }
-////        }
-////    }
-//
-//    // https://stackoverflow.com/questions/47499891/how-i-can-use-callback-in-kotlin
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        asyncGetPlaylistTracks()
-//        setContent {
-////            TrackViewMaster
-//
-//
-//////            GridlineTheme() {
-//////            val msg = "Loading " + TrackHolder.playlistName + "..."
-////            val msg = "Loading " + TrackHolder.playlistName + "..."
-////            LoadingScreen(msg)
-//////            PlayableViewPage(this, PlaylistHolder.templist, PlaylistHolder.playlistName)
-//////            }
-//
-//        }
-//
-//
-//    }
-//}
-
-//private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-//fun asyncGetPlaylistTracks() {
-//
-//    scope.launch { // Is invoked in UI context with Activity's scope as a parent
-//
-////            PlaylistHolder.loading = true
-//        PlaylistGetter.getPlaylistByURI(uri, 1, );
-////            PlaylistGetter.getPlaylist();
-//
-////            DisplayTracks()
-//        TrackHolder.templist = TrackHolder.contents
-//        loadingTracks = false
-//    }
-//}

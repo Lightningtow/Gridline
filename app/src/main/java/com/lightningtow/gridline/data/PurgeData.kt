@@ -32,10 +32,11 @@ object PurgeData {
 
     var purgename: MutableState<String> = mutableStateOf<String>("default")
     var purgeuri: MutableState<String>  = mutableStateOf<String>("default")
-
+    var purgecover: MutableState<String>  = mutableStateOf<String>("default")
+    
     var namelist = mutableStateListOf<String>("default", "default", "default", "default", "default")
     var urilist  = mutableStateListOf<String>("default", "default", "default", "default", "default")
-
+    var coverlist = mutableStateListOf<String>("default", "default", "default", "default", "default")
 
 
 
@@ -59,6 +60,12 @@ object PurgeData {
             ds.edit { settings -> settings[URI_3] = "default" }
             ds.edit { settings -> settings[URI_4] = "default" }
 
+            ds.edit { settings -> settings[COVER_PURGE] = "default" }
+            ds.edit { settings -> settings[COVER_0] = "default" }
+            ds.edit { settings -> settings[COVER_1] = "default" }
+            ds.edit { settings -> settings[COVER_2] = "default" }
+            ds.edit { settings -> settings[COVER_3] = "default" }
+            ds.edit { settings -> settings[COVER_4] = "default" }
             toast(context,"reset dataStore")
         }
     }
@@ -80,6 +87,12 @@ object PurgeData {
             if (urilist[3] != "default") ds.edit { settings -> settings[URI_3] = urilist[3] }
             if (urilist[4] != "default") ds.edit { settings -> settings[URI_4] = urilist[4] }
 
+            if (purgecover.value != "default") ds.edit { settings -> settings[COVER_PURGE] = purgecover.value }
+            if (coverlist[0] != "default") ds.edit { settings -> settings[COVER_0] = coverlist[0] }
+            if (coverlist[1] != "default") ds.edit { settings -> settings[COVER_1] = coverlist[1] }
+            if (coverlist[2] != "default") ds.edit { settings -> settings[COVER_2] = coverlist[2] }
+            if (coverlist[3] != "default") ds.edit { settings -> settings[COVER_3] = coverlist[3] }
+            if (coverlist[4] != "default") ds.edit { settings -> settings[COVER_4] = coverlist[4] }
             toast(context,"saved playlists")
         }
     }
@@ -87,18 +100,25 @@ object PurgeData {
         val ds = context.dataStore
 
     var test = runBlocking { (ds.data.first()) }[NAME_PURGE]!!; if (test != "default") purgename.value = test
-        test = runBlocking { (ds.data.first()) }[NAME_0]!!; if (test != "default") namelist[0] = test
-        test = runBlocking { (ds.data.first()) }[NAME_1]!!; if (test != "default") namelist[1] = test
-        test = runBlocking { (ds.data.first()) }[NAME_2]!!; if (test != "default") namelist[2] = test
-        test = runBlocking { (ds.data.first()) }[NAME_3]!!; if (test != "default") namelist[3] = test
-        test = runBlocking { (ds.data.first()) }[NAME_4]!!; if (test != "default") namelist[4] = test
+        test = runBlocking { (ds.data.first()) }[NAME_0]!!;     if (test != "default") namelist[0] = test
+        test = runBlocking { (ds.data.first()) }[NAME_1]!!;     if (test != "default") namelist[1] = test
+        test = runBlocking { (ds.data.first()) }[NAME_2]!!;     if (test != "default") namelist[2] = test
+        test = runBlocking { (ds.data.first()) }[NAME_3]!!;     if (test != "default") namelist[3] = test
+        test = runBlocking { (ds.data.first()) }[NAME_4]!!;     if (test != "default") namelist[4] = test
 
         test = runBlocking { (ds.data.first()) }[URI_PURGE]!!; if (test != "default") purgeuri.value = test
-        test = runBlocking { (ds.data.first()) }[URI_0]!!; if (test != "default") urilist[0] = test
-        test = runBlocking { (ds.data.first()) }[URI_1]!!; if (test != "default") urilist[1] = test
-        test = runBlocking { (ds.data.first()) }[URI_2]!!; if (test != "default") urilist[2] = test
-        test = runBlocking { (ds.data.first()) }[URI_3]!!; if (test != "default") urilist[3] = test
-        test = runBlocking { (ds.data.first()) }[URI_4]!!; if (test != "default") urilist[4] = test
+        test = runBlocking { (ds.data.first()) }[URI_0]!!;     if (test != "default") urilist[0] = test
+        test = runBlocking { (ds.data.first()) }[URI_1]!!;     if (test != "default") urilist[1] = test
+        test = runBlocking { (ds.data.first()) }[URI_2]!!;     if (test != "default") urilist[2] = test
+        test = runBlocking { (ds.data.first()) }[URI_3]!!;     if (test != "default") urilist[3] = test
+        test = runBlocking { (ds.data.first()) }[URI_4]!!;     if (test != "default") urilist[4] = test
+
+        test = runBlocking { (ds.data.first()) }[COVER_PURGE]!!; if (test != "default") purgecover.value = test
+        test = runBlocking { (ds.data.first()) }[COVER_0]!!;     if (test != "default") coverlist[0] = test
+        test = runBlocking { (ds.data.first()) }[COVER_1]!!;     if (test != "default") coverlist[1] = test
+        test = runBlocking { (ds.data.first()) }[COVER_2]!!;     if (test != "default") coverlist[2] = test
+        test = runBlocking { (ds.data.first()) }[COVER_3]!!;     if (test != "default") coverlist[3] = test
+        test = runBlocking { (ds.data.first()) }[COVER_4]!!;     if (test != "default") coverlist[4] = test
     }
     private val NAME_PURGE = stringPreferencesKey("name_purge")
     private val NAME_0 = stringPreferencesKey("name_0")
@@ -106,13 +126,20 @@ object PurgeData {
     private val NAME_2 = stringPreferencesKey("name_2")
     private val NAME_3 = stringPreferencesKey("name_3")
     private val NAME_4 = stringPreferencesKey("name_4")
-
+    
     private val URI_PURGE = stringPreferencesKey("uri_purge")
     private val URI_0  = stringPreferencesKey("uri_0")
     private val URI_1  = stringPreferencesKey("uri_1")
     private val URI_2  = stringPreferencesKey("uri_2")
     private val URI_3  = stringPreferencesKey("uri_3")
     private val URI_4  = stringPreferencesKey("uri_4")
+
+    private val COVER_PURGE = stringPreferencesKey("cover_purge")
+    private val COVER_0  = stringPreferencesKey("cover_0")
+    private val COVER_1  = stringPreferencesKey("cover_1")
+    private val COVER_2  = stringPreferencesKey("cover_2")
+    private val COVER_3  = stringPreferencesKey("cover_3")
+    private val COVER_4  = stringPreferencesKey("cover_4")
 }
 
 

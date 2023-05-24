@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.lightningtow.gridline.data.PurgeData
 import com.lightningtow.gridline.ui.home.TrackViewMaster
 import com.lightningtow.gridline.ui.home.shouldLoadTracks
 import com.lightningtow.gridline.data.TrackHolder
@@ -30,6 +31,7 @@ import com.lightningtow.gridline.ui.home.PlaylistViewMaster
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 import com.lightningtow.gridline.ui.home.AuthPage
 import com.lightningtow.gridline.ui.home.PurgeViewMaster
+import com.lightningtow.gridline.ui.home.listPicking
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
 
@@ -46,7 +48,7 @@ fun NavHostContainer(
         navController = navController,
 
         // set the start destination as home
-        startDestination = "search",
+        startDestination = "home",
 
         // Set the padding provided by scaffold
         modifier = Modifier.padding(paddingValues = padding),
@@ -60,8 +62,9 @@ fun NavHostContainer(
 
             }
 
-            composable("search") {
-                SearchScreen()
+            composable("home") {
+//                HelloWorld()
+                HomeScreen()
                 showTracksNow = false
 
             }
@@ -77,7 +80,12 @@ fun NavHostContainer(
 
             composable("purge") {
                 PurgeViewMaster()
+                BackHandler(enabled = listPicking // runs this only while trackPicking
+                    , onBack = {
+                        listPicking = false
+                    PurgeData.choosingPurgelist = false
 
+                })
             }
 
             composable("shuffle") {
@@ -88,13 +96,13 @@ fun NavHostContainer(
 //
 //                })
 //                var playlist: SimplePlaylist;
-                BackHandler(enabled = true, onBack = {
+                BackHandler(enabled = showTracksNow, onBack = {
                     shouldLoadTracks = false
                     showTracksNow = false
 
                 })
                 if(!showTracksNow) {
-                    PlaylistViewMaster(onPlaylistClick = {
+                    PlaylistViewMaster("Shuffle Playlists", onPlaylistClick = {
 //                    loadingTracks = true
 
 

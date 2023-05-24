@@ -21,14 +21,14 @@ object Constants {
 //        ),
         BottomNavItem(
             label = "Login",
-            icon = R.drawable.electric_bolt,
+            icon = R.drawable.account_circle,
             route = "login"
         ),
 
         BottomNavItem(
-            label = "Search",
+            label = "Home",
             icon = R.drawable.home,
-            route = "search"
+            route = "home"
         ),
 
         BottomNavItem(

@@ -3,12 +3,16 @@ package com.lightningtow.gridline.ui.home
 import LoadingScreen
 import android.content.Context
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -27,10 +31,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.adamratzman.spotify.models.SimplePlaylist
+import com.lightningtow.gridline.data.Model
 import com.lightningtow.gridline.data.PurgeData
 import com.lightningtow.gridline.grid.purgePlaylist
 import com.lightningtow.gridline.ui.components.GridlineButton
+import com.lightningtow.gridline.ui.components.GridlineDivider
 import com.lightningtow.gridline.ui.theme.GridlineTheme
+import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -38,8 +46,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-private var trackPicking by mutableStateOf(false)
-private var shouldPurge by mutableStateOf(false)
+/* private */ var listPicking by mutableStateOf(false)
+/* private */ var shouldPurge by mutableStateOf(false)
 private var displayLoadingScreen by mutableStateOf(false)
 var loadingMessage by mutableStateOf("default")
 // At the top level of your kotlin file:
@@ -48,14 +56,17 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 @Composable
 fun PurgeViewMaster() {
-    if (trackPicking) // since `loading` is a mutableStateOf, PlaylistViewMaster automatically recomposes when loading changes
+    if (listPicking) {// since `loading` is a mutableStateOf, PlaylistViewMaster automatically recomposes when loading changes
+
 
         if (PurgeData.choosingPurgelist) { // choosing purgelist
 
-            PlaylistViewMaster(onPlaylistClick = {
+            PlaylistViewMaster("Choose purgelist", onPlaylistClick = {
                 PurgeData.purgename.value = it.name
                 PurgeData.purgeuri.value = it.uri.uri
-                trackPicking = false
+                PurgeData.purgecover.value = it.images.first().url
+
+                listPicking = false
                 PurgeData.choosingPurgelist = false
 
             })
@@ -63,12 +74,15 @@ fun PurgeViewMaster() {
 
         } else { // if picking victimlist
 
-            PlaylistViewMaster(onPlaylistClick = {
+            PlaylistViewMaster("Choose victim", onPlaylistClick = {
                 PurgeData.namelist[PurgeData.currentSlot] = it.name
                 PurgeData.urilist[PurgeData.currentSlot] = it.uri.uri
-                trackPicking = false
+                PurgeData.coverlist[PurgeData.currentSlot] = it.images.first().url
+
+                listPicking = false
             })
         }
+    }
     else if (shouldPurge) {
         shouldPurge = false
         displayLoadingScreen = true
@@ -119,7 +133,7 @@ private fun Homepage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = 8.dp),
+//            .padding(all = 8.dp),
 //        horizontalAlignment = Alignment.CenterHorizontally,
 //        verticalArrangement = Arrangement.SpaceEvenly
 //            .align(Alignment.CenterVertically)
@@ -127,7 +141,7 @@ private fun Homepage() {
 //        center = Arrangement.spacedBy(8.dp),
 
         val purgeCallback: () -> Unit = {
-            trackPicking = true // this redoes the whole screen
+            listPicking = true // this redoes the whole screen
             PurgeData.choosingPurgelist = true
         }  // victim callback is the default
 
@@ -140,6 +154,8 @@ private fun Homepage() {
         Slot(4)
 
         GridlineButton(
+            modifier = Modifier
+                .padding(all = 8.dp),
             onClick = {
                 shouldPurge = true
                 displayLoadingScreen = true
@@ -149,8 +165,11 @@ private fun Homepage() {
             Text("purge!")
         }
 
-        Row(modifier = Modifier.align(alignment = Alignment.End)) {
-//            Text(PurgeData.testint.toString())
+        Row(
+            modifier = Modifier
+                .align(alignment = Alignment.End)
+                .padding(all = 8.dp)
+        ) {
             GridlineButton(
                 onClick = {
                     scope.launch {
@@ -185,73 +204,128 @@ private fun Homepage() {
 private fun Slot(
     slot: Int,
     callback: () -> Unit = {
-        trackPicking = true // default is victim
+        listPicking = true // default is victim
         PurgeData.currentSlot = slot;
     }
-
 ) {
-    var thisIsPurgelist = false
 
-    if (slot == -42)
-        thisIsPurgelist = true
-
-    var rowname: String = "defualt rowname"
-// todo https://adamint.github.io/spotify-web-api-kotlin-docs/spotify-web-api-kotlin/com.adamratzman.spotify.endpoints.pub/-playlist-api/get-playlist-covers.html
-
-// todo if purgelist is empty it just crashes
-
-
-    if (thisIsPurgelist) { // if purgelist
-
-        if (PurgeData.purgename.value == "default")
-            rowname = "Choose purgelist"
-        else
-            rowname = PurgeData.purgename.value
+    val rowname = if (slot == -42) { // if purgelist
+        if (PurgeData.purgename.value == "default")  "Choose purgelist"
+        else  PurgeData.purgename.value
 
     } else { // if victim
-
-        if (PurgeData.namelist[slot] == "default")
-            rowname = "Choose victim"
-        else
-            rowname = PurgeData.namelist[slot]
+        if (PurgeData.namelist[slot] == "default")  "Choose victim"
+        else  PurgeData.namelist[slot]
     }
 
+//    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 
-    Column(
+    Row(
         modifier = Modifier
-            .padding(4.dp)
+            .fillMaxWidth()
+//            .padding(16.dp)
+            .padding(4.dp) // padding between rows
+            .padding(start = 8.dp) // padding between playlist name and left edge -- 2
+
+            .clickable(onClick = {
+                callback()
+            })
 
     ) {
+        GlideImage(
+//            imageModel = "https://picsum.photos/300/300",
+            imageModel = if (slot == -42) PurgeData.purgecover.value
+            else (PurgeData.coverlist[slot]),
 
-        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-
-                .clickable(onClick = {
-                    callback()
-                })
+                .height(40.dp)
+                .width(40.dp)
+        )
+        Box(
+            modifier = Modifier
+                .padding(start = 8.dp)  // padding between picture and name
+                .align(Alignment.CenterVertically)
         ) {
+            Text(
+                text = rowname,
+                color = GridlineTheme.colors.textPrimary,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.body1,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
 
 
 //            Text(PurgeData.namelist[slot])
-        }
-    }
-    Text(
-        text = rowname,
-        color = GridlineTheme.colors.textPrimary,
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.body1,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis
-    )
+
 
 //        Row(
 //            modifier = Modifier.fillMaxWidth()
 //        ) {
 //            Text(PurgeData.urilist[slot]) }
+    GridlineDivider()
 
 //}
-    Divider(color = GridlineTheme.colors.uiBorder)
 }
 
+@Composable
+private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePlaylist) -> Unit) {
+
+    val context = LocalContext.current
+
+
+    Row(
+        modifier = Modifier
+            .clickable(onClick = {
+
+
+                onPlaylistClick(playlistItem)
+            })
+//            .clickable(onClick = {
+//                val intent = Intent(context, TrackViewActivity::class.java)
+////                        val intent = Intent(context, LoadingScreenActivity::class.java)
+//                val id = playlistItem.uri.uri
+////                        intent.putExtra("uri", id)
+//                TrackHolder.uri = id;
+//                TrackHolder.playlistName = playlistItem.name
+//                startActivity(context, intent, null)
+//            })
+
+            .fillMaxWidth()
+            .padding(4.dp) // padding between rows
+            .padding(start = 8.dp) // padding between playlist name and left edge -- 2
+
+    ) {
+
+// todo find better default image
+        GlideImage(
+            imageModel = (playlistItem.images.firstOrNull()?.url
+                ?: "https://picsum.photos/300/300"),
+//                    else {
+//                        Log.e("ctrlfme", "???")
+//                        "???" // text =
+//                    }),
+//            contentDescription = null,
+            modifier = Modifier
+                .height(40.dp)
+                .width(40.dp)
+        )
+        Box(
+            modifier = Modifier
+                .padding(start = 8.dp)  // padding between picture and name
+                .align(Alignment.CenterVertically)
+        ) {
+
+            Text(  // playlist name
+                color = GridlineTheme.colors.textPrimary,
+                textAlign = TextAlign.Center,
+                text = playlistItem.name,
+                style = MaterialTheme.typography.body1,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}

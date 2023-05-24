@@ -1,6 +1,5 @@
 package com.lightningtow.gridline.ui.components
 
-import android.content.res.Resources
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.DrawerDefaults
