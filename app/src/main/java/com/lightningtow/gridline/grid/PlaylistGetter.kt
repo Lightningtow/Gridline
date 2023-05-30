@@ -1,24 +1,17 @@
 package com.lightningtow.gridline.grid
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import com.adamratzman.spotify.models.Playable
 import com.adamratzman.spotify.models.PlayableUri
 import com.adamratzman.spotify.utils.Market
-import com.lightningtow.gridline.GridlineApplication
-import com.lightningtow.gridline.data.Model
+import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.data.SecTrackHolder
 import com.lightningtow.gridline.data.TrackHolder
-import com.lightningtow.gridline.utils.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.net.URL
-import kotlin.system.exitProcess
 
 class PlaylistGetter() {
     //} : ViewModel() {

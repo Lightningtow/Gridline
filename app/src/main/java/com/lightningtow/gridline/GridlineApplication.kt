@@ -3,8 +3,7 @@ package com.lightningtow.gridline
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.lightningtow.gridline.data.Model
-import java.lang.ref.WeakReference
+import com.lightningtow.gridline.auth.Model
 
 class GridlineApplication : Application() {
     lateinit var model: Model

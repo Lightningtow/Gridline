@@ -59,16 +59,16 @@ private fun PlaylistViewPage(headername: String, onPlaylistClick: (SimplePlaylis
 
     Column() { // don't put padding here or you'll move the dividers
         GridlineHeader() {
-                Text(
+            Text(
 //                    "All Playlists",
-                    headername,
-                    color = GridlineTheme.colors.textPrimary,
-                    fontWeight = FontWeight.Bold,
-                    style = typography.h5,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 12.dp)
-                )
+                headername,
+                color = GridlineTheme.colors.textPrimary,
+                fontWeight = FontWeight.Bold,
+                style = typography.h5,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(start = 12.dp)
+            )
 //            }
         }
 //        Divider(color = gridline_pink)
@@ -79,7 +79,6 @@ private fun PlaylistViewPage(headername: String, onPlaylistClick: (SimplePlaylis
 
     }
 }
-
 
 
 @Composable
@@ -94,7 +93,8 @@ private fun PlaylistList(lists: List<SimplePlaylist>, onPlaylistClick: (SimplePl
             })
     }
 }
-// todo make this a GridlinePlaylistRow usable anywhere!
+
+
 @Composable
 private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePlaylist) -> Unit) {
 
@@ -110,7 +110,7 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
     ) {
         GridlineCoverImage(
 //            imageModelArg = playlistItem.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
-            imageModelArg = playlistItem.images.first().url,
+            image_url = playlistItem.images.first().url,
             deeplink_url = playlistItem.uri.uri
         )
 
@@ -120,7 +120,8 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
                 .align(Alignment.CenterVertically) // todo put this below in Text()?
         ) {
 
-            Text(  // playlist name
+            Text(
+                // playlist name
                 text = playlistItem.name,
                 color = GridlineTheme.colors.textPrimary,
                 textAlign = TextAlign.Center,
@@ -134,3 +135,64 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
         }
     }
 }
+
+
+
+//// todo make this a GridlinePlaylistRow usable anywhere!
+//@Composable
+//fun GridlinePlaylistRow(
+//    modifier: Modifier = Modifier,
+//    playlistItem: SimplePlaylist?,
+//    defaultText: String,
+//    onPlaylistClick: (SimplePlaylist) -> Unit
+//) {
+//
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(4.dp) // padding between rows
+//            .padding(start = 8.dp) // padding between playlist name and left edge -- 2
+//            .clickable(onClick = {
+//                if (playlistItem != null) {
+//                    onPlaylistClick(playlistItem)
+//                }
+//            })
+//
+//    ) {
+//        if (playlistItem != null) {
+//            GridlineCoverImage(
+////            imageModelArg = playlistItem.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
+//                image_url = playlistItem.images.first().url,
+//                deeplink_url = playlistItem.uri.uri ?: "default"
+//            )
+//        }
+//        else (
+//                GridlineCoverImage(
+////            imageModelArg = playlistItem.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
+//                    image_url = null,
+//                    track = null, // this just displays the default image // todo is this the right way of doing it
+//                    deeplink_url = "default"
+//                )
+//                )
+//
+//        Box(
+//            modifier = Modifier
+//                .padding(start = 8.dp)  // padding between picture and name
+//                .align(Alignment.CenterVertically) // todo put this below in Text()?
+//        ) {
+//
+//            Text(
+//                // playlist name
+//                text = playlistItem?.name ?: defaultText,
+//                color = GridlineTheme.colors.textPrimary,
+//                textAlign = TextAlign.Center,
+//                style = MaterialTheme.typography.body1,
+//                maxLines = 1,
+//                overflow = TextOverflow.Ellipsis,
+////                modifier = Modifier
+////                    .padding(start = 8.dp)
+////                    .align(Alignment.CenterVertically)
+//            )
+//        }
+//    }
+//}

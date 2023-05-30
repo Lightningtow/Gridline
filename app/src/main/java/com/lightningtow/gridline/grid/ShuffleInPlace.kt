@@ -2,14 +2,7 @@ package com.lightningtow.gridline.grid
 
 //import com.lightningtow.gridline.utils.toast
 import android.util.Log
-import android.widget.Toast
-import com.adamratzman.spotify.models.PlayableUri
-import com.lightningtow.gridline.GridlineApplication.Companion.context
-import com.lightningtow.gridline.data.Model
 import com.lightningtow.gridline.data.TrackHolder
-import com.lightningtow.gridline.utils.toast
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 class ShuffleInPlace() {//} : BaseActivity() { //

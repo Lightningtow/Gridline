@@ -1,21 +1,14 @@
 package com.lightningtow.gridline.ui.home
 
 import LoadingScreen
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
@@ -28,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import com.adamratzman.spotify.models.Playable
 import com.lightningtow.gridline.data.TrackHolder
 import com.lightningtow.gridline.grid.PlaylistGetter
@@ -36,10 +28,8 @@ import com.lightningtow.gridline.grid.ShuffleInPlace
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.GridlineCoverImage
 import com.lightningtow.gridline.ui.components.GridlineDivider
-import com.skydoves.landscapist.glide.GlideImage
 import com.lightningtow.gridline.ui.theme.*
-import com.lightningtow.gridline.utils.toast
-import com.lightningtow.gridline.ui.components.GridlineDivider
+import com.lightningtow.gridline.utils.toasty
 import com.lightningtow.gridline.ui.components.GridlineHeader
 
 private var loadingTracks by mutableStateOf(false)
@@ -108,7 +98,7 @@ private fun Header(
     ) { // header row
         GridlineCoverImage(
             size = 80.dp,
-            imageModelArg = TrackHolder.actualist.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
+            image_url = TrackHolder.actualist.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
             deeplink_url = TrackHolder.actualist.uri.uri,
         )
 
@@ -169,7 +159,7 @@ private fun ButtonRow() { // here
             GridlineButton(onClick = {  // upload button
 //                if (activity == null) return@GridlineButton //here
                 PlaylistGetter.upload()
-                toast(
+                toasty(
                     context,
                     "Successfully uploaded playlist"
                 ) // todo what happens if unsuccessful? wrap this with trycatch?

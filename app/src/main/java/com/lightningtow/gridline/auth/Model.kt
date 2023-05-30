@@ -1,4 +1,4 @@
-package com.lightningtow.gridline.data
+package com.lightningtow.gridline.auth
 
 import com.lightningtow.gridline.BuildConfig
 import com.adamratzman.spotify.auth.SpotifyDefaultCredentialStore

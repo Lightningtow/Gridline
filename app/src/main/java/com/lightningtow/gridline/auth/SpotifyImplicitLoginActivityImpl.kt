@@ -7,7 +7,7 @@ import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.auth.implicit.AbstractSpotifyAppImplicitLoginActivity
 import com.lightningtow.gridline.BuildConfig
 import com.lightningtow.gridline.MainActivity
-import com.lightningtow.gridline.utils.toast
+import com.lightningtow.gridline.utils.toasty
 
 class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity() {
     override val state: Int = 1337
@@ -19,12 +19,12 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
     override fun onSuccess(spotifyApi: SpotifyImplicitGrantApi) {
         val model = (application as com.lightningtow.gridline.GridlineApplication).model
         model.credentialStore.setSpotifyApi(spotifyApi)
-        toast("Authentication via spotify-auth has completed. Launching TrackViewActivity..")
+        toasty("Authentication via spotify-auth has completed. Launching TrackViewActivity..")
         startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun onFailure(errorMessage: String) {
-        toast("Auth failed: $errorMessage")
+        toasty("Auth failed: $errorMessage")
         Log.e("Auth failed:", errorMessage)
     }
 }

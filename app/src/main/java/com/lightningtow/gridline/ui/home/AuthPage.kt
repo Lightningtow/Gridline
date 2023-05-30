@@ -1,37 +1,31 @@
 package com.lightningtow.gridline.ui.home
 
 import android.app.Activity
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.getDrawable
 import com.adamratzman.spotify.auth.implicit.startSpotifyImplicitLoginActivity
 import com.adamratzman.spotify.auth.pkce.startSpotifyClientPkceLoginActivity
-import com.lightningtow.gridline.R
 //import com.lightningtow.gridline.activities.ActionHomeActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 import com.lightningtow.gridline.auth.SpotifyImplicitLoginActivityImpl
 import com.lightningtow.gridline.auth.SpotifyPkceLoginActivityImpl
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.theme.GridlineTheme
-import com.lightningtow.gridline.utils.toast
+import com.lightningtow.gridline.utils.toasty
 //import androidx.compose.material.icons.filled .materialIconsExtended
-import com.lightningtow.gridline.R.drawable.point_scan
 
 @Composable
 private fun AuthPageInner(activity: Activity? = null) {
@@ -96,7 +90,7 @@ private fun AuthPageInner(activity: Activity? = null) {
 //            activity?.model?.credentialStore?.spotifyAccessToken = "invalid"
 
             activity?.let {
-                toast(
+                toasty(
                     it,
                     message = "Invalidated spotify token... next call should refresh api"
                 )

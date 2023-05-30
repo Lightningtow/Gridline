@@ -6,7 +6,6 @@ import com.adamratzman.spotify.SpotifyException
 import com.adamratzman.spotify.auth.SpotifyDefaultCredentialStore
 import com.adamratzman.spotify.auth.implicit.startSpotifyImplicitLoginActivity
 import com.adamratzman.spotify.auth.pkce.startSpotifyClientPkceLoginActivity
-import com.lightningtow.gridline.data.Model
 import kotlinx.coroutines.runBlocking
 
 fun <T> Activity.guardValidSpotifyApi(

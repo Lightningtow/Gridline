@@ -1,30 +1,23 @@
 package com.lightningtow.gridline.ui.components
 
-import android.util.Log
-import com.lightningtow.gridline.utils.toast
-import androidx.compose.foundation.background
+import com.lightningtow.gridline.utils.toasty
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.theme.gridline_pink
-import com.lightningtow.gridline.utils.Constants
-import kotlinx.coroutines.Dispatchers
 
 
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
+    var toggle = true
+    var msg = "default"
     GridlineTheme() {
 
         Column(
@@ -45,7 +38,9 @@ fun HomeScreen() {
 
             GridlineButton(
                 onClick = {
-                    toast(context, "owie")
+                    msg = if (toggle) "owie" else "oof"
+                    toasty(context, msg)
+                    toggle = !toggle
 
 //                helloworld(msg = "hello fuckin world")
             }) {

@@ -80,10 +80,11 @@ fun NavHostContainer(
 
             composable("purge") {
                 PurgeViewMaster()
-                BackHandler(enabled = listPicking // runs this only while trackPicking
-                    , onBack = {
+                BackHandler(
+                    enabled = listPicking, // runs this only while trackPicking
+                    onBack = {
                         listPicking = false
-                    PurgeData.choosingPurgelist = false
+//                    PurgeData.choosingPurgelist = false
 
                 })
             }

@@ -1,6 +1,7 @@
 package com.lightningtow.gridline.utils
 
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -21,16 +22,28 @@ fun SharedPreferences.saveBoolean(key: String, value: Boolean) = this.edit().put
 
 fun SharedPreferences.getStringNotNull(key: String, defaultValue: String? = ""): String = this.getString(key, defaultValue) ?: defaultValue ?: ""
 
-fun Activity.toast(message: String, duration: Int = Toast.LENGTH_SHORT) =
-    toast(this, message, duration)
+fun Activity.toasty(message: String, duration: Int = Toast.LENGTH_SHORT) =
+    toasty(this, message, duration)
 
-fun Activity.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) =
-    toast(this, getString(message), duration)
+fun Activity.toasty(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) =
+    toasty(this, getString(message), duration)
 
 fun safeLoadImage(action: () -> Unit) {
     try {
         action.invoke()
     } catch (e: IllegalArgumentException) {
         // Possible error: You cannot start a load for a destroyed activity
+    }
+}
+
+// from KotlinUtils.kt  /\
+
+// from UIUtils.kt      \/
+
+fun toasty(context: Context, message: String?, duration: Int = Toast.LENGTH_SHORT) {
+    safeLet(context, message, duration) { safeContext, safeMessage, safeDuration ->
+        (safeContext as? Activity)?.runOnUiThread {
+            Toast.makeText(safeContext, safeMessage, safeDuration).show()
+        }
     }
 }
