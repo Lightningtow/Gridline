@@ -4,5 +4,4 @@ This is an app that uses [Spotify-Web-Api-Kotlin](https://github.com/adamint/spo
 It is still in alpha, under heavy development. Many functionalities have not been implemented yet, but the shuffling works as intended, and the other utils are coming along quickly.
 
 Screenshots:
-
-<img width="300" alt="image" src="https://github.com/Lightningtow/gridline/blob/d4e8b4549b7e93d05f96998c249507ed36314e22/app/src/main/res/images/playlistlist.jpg">      <img width="300" alt="image" src="https://github.com/Lightningtow/gridline/blob/d4e8b4549b7e93d05f96998c249507ed36314e22/app/src/main/res/images/tracklist.jpg">
+<todo>
