@@ -1,16 +1,33 @@
-package com.lightningtow.gridline.ui.components
+package com.lightningtow.gridline.ui.home
 
+import android.util.Log
 import com.lightningtow.gridline.utils.toasty
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.adamratzman.spotify.models.Playable
+import com.lightningtow.gridline.data.TrackHolder1
+import com.lightningtow.gridline.data.TrackHolder2
+import com.lightningtow.gridline.data.TrackHolder3
+import com.lightningtow.gridline.grid.GetDiffByURI
+import com.lightningtow.gridline.grid.PlaylistGetter
+import com.lightningtow.gridline.grid.getcount
+import com.lightningtow.gridline.grid.logging
+import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.theme.gridline_pink
+import com.lightningtow.gridline.utils.Constants
+import com.lightningtow.gridline.utils.Constants.TESTLIST
+import com.lightningtow.gridline.utils.Constants.TESTLIST2
+
 
 
 @Composable
@@ -26,15 +43,21 @@ fun HomeScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Icon Composable
-//            Icon(
-//                imageVector = Icons.Default.Search,
-//                contentDescription = "search",
-//                tint = Color(0xFF0F9D58)
-//            )
-//            // Text to Display the current Screen
-//            Text(text = "Search", color = Color.Black)
+            GridlineButton(
+                onClick = {
+                    var returns: Int = 0
 
+                    GetDiffByURI(
+                        baselist = Constants.TESTLIST2,
+                        removeTheseTracks = Constants.TESTLIST
+                    )
+
+
+                }) {
+                Text("launch nukes")
+            }
+
+            Spacer(modifier = Modifier.padding(10.dp))
 
             GridlineButton(
                 onClick = {
@@ -42,9 +65,8 @@ fun HomeScreen() {
                     toasty(context, msg)
                     toggle = !toggle
 
-//                helloworld(msg = "hello fuckin world")
             }) {
-                Text("poke me")
+                Text("poke me for lulz")
 
             }
         }

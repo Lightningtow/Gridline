@@ -116,8 +116,8 @@ fun GridlineCoverImage(
 //
 //// trackView header
 //        GlideImage(
-////            imageModel = (TrackHolder.imageuri
-//            imageModel = (TrackHolder.actualist.images.firstOrNull()?.url
+////            imageModel = (TrackHolder1.imageuri
+//            imageModel = (TrackHolder1.actualist.images.firstOrNull()?.url
 //                ?: "https://picsum.photos/300/300"),
 //            modifier = Modifier
 //                .height(80.dp)
@@ -128,8 +128,8 @@ fun GridlineCoverImage(
 //                    val browserIntent =
 //                        Intent(
 //                            Intent.ACTION_VIEW,
-////                            Uri.parse(TrackHolder.uri.toString())
-//                            Uri.parse(TrackHolder.actualist.uri.uri)
+////                            Uri.parse(TrackHolder1.uri.toString())
+//                            Uri.parse(TrackHolder1.actualist.uri.uri)
 ////                          Uri.parse(track.externalUrls.first { it.name == "spotify" }.url)
 //                        )
 //                    startActivity(context, browserIntent, null)

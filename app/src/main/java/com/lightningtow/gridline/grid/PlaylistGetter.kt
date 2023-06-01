@@ -5,8 +5,8 @@ import com.adamratzman.spotify.models.Playable
 import com.adamratzman.spotify.models.PlayableUri
 import com.adamratzman.spotify.utils.Market
 import com.lightningtow.gridline.auth.Model
-import com.lightningtow.gridline.data.SecTrackHolder
-import com.lightningtow.gridline.data.TrackHolder
+import com.lightningtow.gridline.data.TrackHolder2
+import com.lightningtow.gridline.data.TrackHolder1
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,17 +22,17 @@ class PlaylistGetter() {
 
                 val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 
-                api.playlists.removeAllClientPlaylistPlayables(TrackHolder.uri)
+                api.playlists.removeAllClientPlaylistPlayables(TrackHolder1.uri)
 
-                var newlist: MutableList<PlayableUri> =
+                val newlist: MutableList<PlayableUri> =
                     mutableListOf(); //PlaylistHolder.templist.toTypedArray()
 
-                for (item in TrackHolder.templist) {
+                for (item in TrackHolder1.templist) {
                     if (item.asLocalTrack != null) continue;  // todo let it keep local tracks
                     newlist.add(item.uri)
                 }
                 api.playlists.addPlayablesToClientPlaylist(
-                    playlist = TrackHolder.uri,
+                    playlist = TrackHolder1.uri,
                     *newlist.toTypedArray()
                 ) // todo prevent trying to uploading to unowned playlist, causes crash
 //                val toast = Toast.makeText(context, "sometext", Toast.LENGTH_SHORT)
@@ -67,14 +67,14 @@ class PlaylistGetter() {
 
                 val realPlaylist = api.playlists.getPlaylist(URI, Market.US)!!
                 if (holder == 1) {
-                    TrackHolder.templist = mutlist
-                    TrackHolder.contents = mutlist // todo wildly inefficient
-                    TrackHolder.actualist = realPlaylist
-                    TrackHolder.playlistName = realPlaylist.name
+                    TrackHolder1.templist = mutlist
+                    TrackHolder1.contents = mutlist // todo wildly inefficient
+                    TrackHolder1.actualist = realPlaylist
+                    TrackHolder1.playlistName = realPlaylist.name
 
                 } else if (holder == 2) {
-                    SecTrackHolder.contents = mutlist
-//                    SecTrackHolder.actualist = api.playlists.getPlaylist(URI, Market.US)!!
+                    TrackHolder2.contents = mutlist
+//                    TrackHolder2.actualist = api.playlists.getPlaylist(URI, Market.US)!!
 
                 } else {
                     while (true) {

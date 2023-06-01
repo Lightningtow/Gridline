@@ -21,15 +21,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.lightningtow.gridline.data.PurgeData
 import com.lightningtow.gridline.ui.home.TrackViewMaster
 import com.lightningtow.gridline.ui.home.shouldLoadTracks
-import com.lightningtow.gridline.data.TrackHolder
+import com.lightningtow.gridline.data.TrackHolder1
 
 import com.lightningtow.gridline.ui.home.PlaylistViewMaster
 //import com.lightningtow.gridline.activities.PlaylistViewActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 import com.lightningtow.gridline.ui.home.AuthPage
+import com.lightningtow.gridline.ui.home.HomeScreen
 import com.lightningtow.gridline.ui.home.PurgeViewMaster
 import com.lightningtow.gridline.ui.home.listPicking
 import com.lightningtow.gridline.ui.theme.GridlineTheme
@@ -75,8 +75,8 @@ fun NavHostContainer(
 //                        Log.e("URIIIII", id)
 
 //                        intent.putExtra("uri", id)
-//                    TrackHolder.uri = playlistItem.uri.uri;
-//                    TrackHolder.playlistName = playlistItem.name
+//                    TrackHolder1.uri = playlistItem.uri.uri;
+//                    TrackHolder1.playlistName = playlistItem.name
 
             composable("purge") {
                 PurgeViewMaster()
@@ -110,8 +110,8 @@ fun NavHostContainer(
                         shouldLoadTracks = true
 //                    PlaylistGetter.getPlaylistByURI(URI=it.uri.uri, holder=1) // done in asyncGetData
 
-                        TrackHolder.playlistName = it.name
-                        TrackHolder.uri = it.uri.uri
+                        TrackHolder1.playlistName = it.name
+                        TrackHolder1.uri = it.uri.uri
                         showTracksNow = true
 
 //                    asyncGetPlaylistTracks()
@@ -122,7 +122,7 @@ fun NavHostContainer(
 
                 else if (showTracksNow) {
 //                    Test()
-                    TrackViewMaster(uri=TrackHolder.uri)
+                    TrackViewMaster(uri=TrackHolder1.uri)
 
 
                 }

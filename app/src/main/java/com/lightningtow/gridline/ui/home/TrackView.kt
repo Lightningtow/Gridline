@@ -22,9 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.adamratzman.spotify.models.Playable
-import com.lightningtow.gridline.data.TrackHolder
+import com.lightningtow.gridline.data.TrackHolder1
 import com.lightningtow.gridline.grid.PlaylistGetter
-import com.lightningtow.gridline.grid.ShuffleInPlace
+import com.lightningtow.gridline.grid.shuffle
+//import com.lightningtow.gridline.grid.ShuffleInPlace
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.GridlineCoverImage
 import com.lightningtow.gridline.ui.components.GridlineDivider
@@ -52,11 +53,11 @@ fun TrackViewMaster(uri: String = "default") {
 
         if (loadingTracks)
 //            setContent {
-                LoadingScreen(message = "Loading " + TrackHolder.playlistName)
+                LoadingScreen(message = "Loading " + TrackHolder1.playlistName)
 
 //            }
         else
-            PlayableViewPage(tracks = TrackHolder.templist, name = TrackHolder.playlistName)
+            PlayableViewPage(tracks = TrackHolder1.templist, name = TrackHolder1.playlistName)
 }
 
 
@@ -98,8 +99,8 @@ private fun Header(
     ) { // header row
         GridlineCoverImage(
             size = 80.dp,
-            image_url = TrackHolder.actualist.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
-            deeplink_url = TrackHolder.actualist.uri.uri,
+            image_url = TrackHolder1.actualist.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
+            deeplink_url = TrackHolder1.actualist.uri.uri,
         )
 
 
@@ -144,7 +145,7 @@ private fun ButtonRow() { // here
             GridlineButton(
                 onClick = {  // shuffle button
 //                    if (activity == null) return@GridlineButton // todo why does this exist - here
-                    ShuffleInPlace.shuffle()
+                    shuffle()
                 }, modifier = Modifier.padding(end = 4.dp)
             ) { Text("Shuffle") }
 

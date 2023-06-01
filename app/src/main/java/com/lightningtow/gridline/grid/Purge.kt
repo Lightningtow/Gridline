@@ -3,7 +3,7 @@ package com.lightningtow.gridline.grid
 import android.util.Log
 import com.lightningtow.gridline.auth.Model
 import kotlinx.coroutines.launch
-import com.lightningtow.gridline.data.SecTrackHolder
+import com.lightningtow.gridline.data.TrackHolder2
 import com.lightningtow.gridline.ui.home.loadingMessage
 import com.lightningtow.gridline.utils.Constants
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +52,7 @@ fun purgePlaylist(
             api.playlists.removePlayablesFromClientPlaylist(
                 playlist = victim,
 //            snapshotId = uh,
-                playables = SecTrackHolder.contents.map { it.uri }.toTypedArray()
+                playables = TrackHolder2.contents.map { it.uri }.toTypedArray()
             )
                 callback()
 

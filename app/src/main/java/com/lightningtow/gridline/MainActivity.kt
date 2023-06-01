@@ -10,7 +10,7 @@ import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.ui.components.BottomNavigationBar
 import com.lightningtow.gridline.ui.components.GridlineScaffold
-//import com.lightningtow.gridline.ui.components.HomeScreen
+//import com.lightningtow.gridline.ui.home.HomeScreen
 import com.lightningtow.gridline.ui.components.NavHostContainer
 //import com.lightningtow.gridline.ui.components.ProfileScreen
 import com.lightningtow.gridline.ui.theme.GridlineTheme

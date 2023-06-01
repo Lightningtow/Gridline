@@ -90,7 +90,7 @@ fun PurgeViewMaster() {
             // so either get the purgelist ahead of time (and hang all the others purging till its done)
             // or just launch all concurrently, and get purgelist multiple times
             // main issue is making sure A) spotify doesnt get pissed I'm making too many API calls
-            // other issue is they're all dumping to SecTrackHolder, even though they're writing the same thing,
+            // other issue is they're all dumping to TrackHolder2, even though they're writing the same thing,
             // could be bad to write to the same location 4 at a time
 
 //            purgePlaylist(victim = item, purgelist = PurgeData.purgeuri.value,
@@ -321,8 +321,8 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
 ////                        val intent = Intent(context, LoadingScreenActivity::class.java)
 //                val id = playlistItem.uri.uri
 ////                        intent.putExtra("uri", id)
-//                TrackHolder.uri = id;
-//                TrackHolder.playlistName = playlistItem.name
+//                TrackHolder1.uri = id;
+//                TrackHolder1.playlistName = playlistItem.name
 //                startActivity(context, intent, null)
 //            })
 

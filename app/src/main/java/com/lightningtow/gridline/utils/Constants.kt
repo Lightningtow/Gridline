@@ -8,10 +8,10 @@ import com.lightningtow.gridline.R
 object Constants {
     val TEST_11: String = "spotify:playlist:1KJW3gIz3EGTviDLDwb7xa"
     val TESTLIST: String = "spotify:playlist:5NKYetvb0UeaSDcnjs7SB7"
+    val TESTLIST2: String = "spotify:playlist:55iEYHdJtZLoTErFPMSju8"
     val PURGELIST: String = "spotify:playlist:3gWBGiJmlvbVJaS0CSY2Vg"
     val GIANT_TEST: String = "spotify:playlist:5HB0nTfYl0bC1yvpxvHJjh"
     val RK_TEST: String = "spotify:playlist:5PaNURPIq7G4kEpO6aEKp1"
-
 
     val BottomNavItems = listOf(
 //        BottomNavItem(
