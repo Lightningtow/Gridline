@@ -3,5 +3,5 @@ This is an app that uses [Spotify-Web-Api-Kotlin](https://github.com/adamint/spo
 
 It is still in alpha, under heavy development. Many functionalities have not been implemented yet, but the shuffling works as intended, and the other utils are coming along quickly.
 
-Screenshots:
-<todo>
+Screenshots:  
+\<todo\>
