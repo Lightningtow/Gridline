@@ -6,127 +6,130 @@ package com.lightningtow.gridline.player;
 
 //import com.lightningtow.gridline.data.PlayerState.pauseNoView
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
 import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.DarkGray
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions.OnClick
-import androidx.compose.ui.semantics.SemanticsProperties.ContentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import com.adamratzman.spotify.utils.Language
-import com.lightningtow.gridline.BuildConfig
+import androidx.lifecycle.MutableLiveData
 import com.lightningtow.gridline.R
-import com.lightningtow.gridline.player.PlayerActivity.playPauseIcon
-import com.lightningtow.gridline.player.PlayerActivity.playing
-import com.lightningtow.gridline.ui.components.GridlineButton
-import com.lightningtow.gridline.ui.theme.GridlineColors
+import com.lightningtow.gridline.player.PlayerActivity.skipTo
+import com.lightningtow.gridline.player.PlayerActivity.spotifyAppRemote
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.skydoves.landscapist.glide.GlideImage
-import com.spotify.android.appremote.api.ConnectionParams
-import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.protocol.types.Track
-import kotlinx.coroutines.NonDisposableHandle.parent
+import kotlin.properties.Delegates
 
-//class PlayerActivity : AppCompatActivity() {
 
-//object PlayerActivity : AppCompatActivity() {
-//    companion object {
-//    fun PlayerActivity() {}
 public object PlayerActivity {
-    //        public fun PlayerActivity() {}
-//        private val clientId: String = BuildConfig.SPOTIFY_CLIENT_ID
-//        private val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_PKCE
+
     var spotifyAppRemote: SpotifyAppRemote? = null
 
-    enum class Skip {
+
+    enum class SkipVals {
         FORWARD, BACK
     }
 
-    var change: Boolean = false
-    var playing: Boolean = false
-    var setPlayingTo: Boolean? = null
-    var skipTo: Skip? = null
+//    mCurrentIndex.setValue(12345); // Replace 12345 with your int value.
 
-    // todo better way of doing this
-    // todo    https://stackoverflow.com/questions/54186231/detecting-when-a-value-changed-in-a-specific-variable-in-android
-    // todo    https://stackoverflow.com/questions/7157123/in-android-how-do-i-take-an-action-whenever-a-variable-changes
-    fun updatePlaying() {
-        when (setPlayingTo) {
-            false -> pause()
-            true -> resume()
-            else -> Log.e("ctrlfme", "ERROR: updatePlaying called when setPlayingTo == null")
-        }
-        setPlayingTo = null
+/**     NEVER update isPlaying manually  */
+    var isPlaying: MutableState<Boolean> = mutableStateOf(false)
+//    var readOnlyPlaying = readOnlyisPlaying.value
+
+
+/**     Observable values. Runs the func when the function gets changed  */
+    var togglePlayback: Boolean by Delegates.observable(false) { property, oldvalue, newvalue ->
+        Log.e("toggling to", (!isPlaying.value).toString())
+        if (isPlaying.value) spotifyAppRemote?.playerApi?.pause()
+        else if (!isPlaying.value) spotifyAppRemote?.playerApi?.resume()
+        else Log.e("uhhh", "readonlyplaying has some deep seated issues")
+//        togglePlayback = false // DON'T TOGGLE THIS BACK MANUALLY
+        // why does it automatically toggle back
+        // oh it doesn't, it just triggers when true->false. More efficient that way anyways
     }
-
-    fun updateSkip() {
+    var skipTo: SkipVals? by Delegates.observable(null) { property, oldvalue, newvalue ->
+        Log.e("skipping", skipTo.toString())
         when (skipTo) {
-            Skip.FORWARD -> skipForward()
-            Skip.BACK -> skipBack()
+            SkipVals.FORWARD -> skipForward()
+            SkipVals.BACK -> skipBack()
             else -> Log.e("ctrlfme", "ERROR: updateSkip called when skipTo == null")
         }
         skipTo = null
     }
 
+//    fun onstart() {
+//        spotifyAppRemote?.playerApi?.subscribeToPlayerState()
+//            ?.setEventCallback { playerState -> readOnlyPlaying = !playerState.isPaused }
+//            ?.setErrorCallback { throwable -> }
+//    }
 
-    fun pause() {
-        Log.e("ctrlfme", "pausing")
-        spotifyAppRemote?.playerApi?.pause()
+
+
+//    fun updatePlaying() {
+//
+//        when (setPlayingTo) {
+//            false -> pause()
+//            true -> resume()
+//            else -> Log.e("ctrlfme", "ERROR: updatePlaying called when setPlayingTo == null")
+//        }
+//        setPlayingTo = null
+//
+//        // Subscribe to PlayerState
+//        spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
+////            val track: Track = it.track
+////            Log.d("MainActivity", track.name + " by " + track.artist.name)
+//            Log.e("ctrlfme", it.isPaused.toString())
+//        }
+//
+//
+//    }
+
+    fun updateSkip() {
+        when (skipTo) {
+            PlayerActivity.SkipVals.FORWARD -> skipForward()
+            PlayerActivity.SkipVals.BACK -> skipBack()
+            else -> Log.e("ctrlfme", "ERROR: updateSkip called when skipTo == null")
+        }
+        skipTo = null
     }
 
-    fun resume() {
-        Log.e("ctrlfme", "resuming")
-        spotifyAppRemote?.playerApi?.resume()
-    }
+//    fun pause() {
+//        Log.e("ctrlfme", "pausing")
+//        spotifyAppRemote?.playerApi?.pause()
+//    }
+//    fun resume() {
+//        Log.e("ctrlfme", "resuming")
+//        spotifyAppRemote?.playerApi?.resume()
+//    }
 
     fun skipForward() {
         Log.e("ctrlfme", "skipping forward")
@@ -139,9 +142,7 @@ public object PlayerActivity {
     }
 
     //    var idk = spotifyAppRemote?.playerApi?.playerState?.
-    var playPauseIcon =
-        { mutableStateOf(if (playing) R.drawable.baseline_pause_circle_24 else R.drawable.baseline_play_circle_24) }
-    // todo actually sync it to spotify
+//    var playPauseIcon: MutableState<Int> = mutableStateOf(if (isPlaying.value) R.drawable.baseline_pause_circle_24 else R.drawable.baseline_play_circle_24)
 
 }
 
@@ -149,17 +150,8 @@ public object PlayerActivity {
 fun PlayerPage(activity: Activity? = null) {
     GridlineTheme() {
 
-
         val context = LocalContext.current
-//    MaterialTheme {
-//        val typography = MaterialTheme.typography
-//        val LocalContentColor = MaterialTheme.colors.contentColorFor(Color.White)
 
-//        Surface(
-////            color = MaterialTheme.colors.background
-//
-//
-//        ) {
 
         Column(
             modifier = Modifier
@@ -170,16 +162,7 @@ fun PlayerPage(activity: Activity? = null) {
         ) {
 
             BigButton()
-//                GridlineButton(onClick = {
-//
-//                }) {
-//                    Text("start, hit me first")
-//                };
-//                GridlineButton(onClick = {
-//                    context.startActivity(Intent(context, MainActivity::class.java))
-//                }) {
-//                    Text("start activity")
-//                };
+
 
             Spacer(Modifier.padding(16.dp))
 
@@ -195,11 +178,7 @@ private val TransparentColors = darkColors(
 )
 
 @Composable
-private fun BigButton(
-
-) {
-
-
+private fun BigButton() {
     Box(
         modifier = Modifier
 //            .padding(16.dp)
@@ -223,7 +202,7 @@ private fun BigButton(
         Row(
             modifier = Modifier
                 .align(Alignment.Center)
-            ) {
+        ) {
 
             Button(
 
@@ -233,7 +212,7 @@ private fun BigButton(
                     .fillMaxWidth(fraction = .4f)
                     .background(color = GridlineTheme.colors.uiBackground),
                 onClick = {
-                    PlayerActivity.skipTo = PlayerActivity.Skip.BACK;
+                    PlayerActivity.skipTo = PlayerActivity.SkipVals.BACK;
                     PlayerActivity.updateSkip()
 
                 },
@@ -245,7 +224,7 @@ private fun BigButton(
                     .fillMaxHeight(fraction = .5f)
                     .fillMaxWidth(fraction = 1f),
                 onClick = {
-                    PlayerActivity.skipTo = PlayerActivity.Skip.FORWARD;
+                    PlayerActivity.skipTo = PlayerActivity.SkipVals.FORWARD;
                     PlayerActivity.updateSkip()
 
                 }
@@ -292,8 +271,6 @@ private fun ButtonRow(
     ) {
 
 
-        val FILLME = stringResource(R.string.FILLME)
-
         PlayerButton(
             icon = R.drawable.shuffle,
             OnClick = {
@@ -307,32 +284,32 @@ private fun ButtonRow(
         PlayerButton(
             icon = R.drawable.baseline_skip_previous_24,
             OnClick = {
-                PlayerActivity.skipTo = PlayerActivity.Skip.BACK
+                PlayerActivity.skipTo = PlayerActivity.SkipVals.BACK
                 PlayerActivity.updateSkip()
             },
         )
 
         PlayerButton(
-            icon = R.drawable.baseline_pause_circle_24,
+//            icon = playPauseIcon.value,
+            icon = if (PlayerActivity.isPlaying.value) R.drawable.baseline_pause_circle_24 else R.drawable.baseline_play_circle_24,
             OnClick = {
-                PlayerActivity.setPlayingTo = false
-                PlayerActivity.updatePlaying()
+                PlayerActivity.togglePlayback = true
             },
         )
 
-        PlayerButton(
-            icon = R.drawable.baseline_play_circle_24,
-            OnClick = {
-                PlayerActivity.setPlayingTo = true
-                PlayerActivity.updatePlaying()
-            },
-        )
+//        PlayerButton(
+//            icon = R.drawable.baseline_play_circle_24,
+//            OnClick = {
+//                PlayerActivity.setPlayingTo = true
+//                PlayerActivity.updatePlaying()
+//            },
+//        )
 
         PlayerButton(
             icon = R.drawable.baseline_skip_next_24,
             OnClick = {
 
-                PlayerActivity.skipTo = PlayerActivity.Skip.FORWARD
+                PlayerActivity.skipTo = PlayerActivity.SkipVals.FORWARD
                 PlayerActivity.updateSkip()
             }
         )

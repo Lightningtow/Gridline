@@ -55,7 +55,7 @@ fun NavHostContainer(
         navController = navController,
 
         // set the start destination as home
-        startDestination = "home",
+        startDestination = "player",
 
         // Set the padding provided by scaffold
         modifier = Modifier.padding(paddingValues = padding),
@@ -68,28 +68,19 @@ fun NavHostContainer(
                 showTracksNow = false
 
             }
+            composable("idk") {
+//                HelloWorld()
+                HomeScreen()
+                showTracksNow = false
 
+            }
             composable("player") {
 //                context.startActivity(Intent(context, PlayerActivity::class.java)) // its not a damn activity lmao
 //                context.startActivity(Intent(context, AuthPage::class.java))
                 PlayerPage()
                 showTracksNow = false
             }
-            composable("home") {
-//                HelloWorld()
-                HomeScreen()
-                showTracksNow = false
 
-            }
-//                        val intent = Intent(context, LoadingScreenActivity::class.java)
-
-//                    val id = item.uri.uri
-//                        toast(context, id)
-//                        Log.e("URIIIII", id)
-
-//                        intent.putExtra("uri", id)
-//                    TrackHolder1.uri = playlistItem.uri.uri;
-//                    TrackHolder1.playlistName = playlistItem.name
 
             composable("purge") {
                 PurgeViewMaster()
@@ -119,7 +110,9 @@ fun NavHostContainer(
                     PlaylistViewMaster("Shuffle Playlists", onPlaylistClick = {
 //                    loadingTracks = true
 
-
+                        // todo what in the actual fuck is this spaghetti
+                        // todo    https://stackoverflow.com/questions/54186231/detecting-when-a-value-changed-in-a-specific-variable-in-android
+                        // todo    https://stackoverflow.com/questions/7157123/in-android-how-do-i-take-an-action-whenever-a-variable-changes
                         shouldLoadTracks = true
 //                    PlaylistGetter.getPlaylistByURI(URI=it.uri.uri, holder=1) // done in asyncGetData
 

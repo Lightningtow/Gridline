@@ -25,14 +25,14 @@ object Constants {
             route = "login"
         ),
         BottomNavItem(
-            label = "Player",
+            label = "Idk",
             icon = R.drawable.multiple_stop,
-            route = "player"
+            route = "idk"
         ),
         BottomNavItem(
-            label = "Home",
+            label = "Player",
             icon = R.drawable.home,
-            route = "home"
+            route = "Player"
         ),
 
         BottomNavItem(

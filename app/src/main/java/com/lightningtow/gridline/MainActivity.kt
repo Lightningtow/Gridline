@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.navigation.compose.rememberNavController
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
@@ -12,10 +11,8 @@ import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.player.PlayerActivity
 import com.lightningtow.gridline.player.PlayerActivity.spotifyAppRemote
 import com.lightningtow.gridline.ui.components.BottomNavigationBar
-import com.lightningtow.gridline.ui.components.GridlineScaffold
 import com.lightningtow.gridline.ui.components.NavHostContainer
 import com.lightningtow.gridline.ui.theme.GridlineTheme
-import com.lightningtow.gridline.ui.theme.gridline_pink
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -45,11 +42,18 @@ class MainActivity : AppCompatActivity() {
     private fun connected() {
         PlayerActivity.spotifyAppRemote?.let { it ->
             // Subscribe to PlayerState
+            /**
+             * automatically update isPlaying
+             */
             it.playerApi.subscribeToPlayerState().setEventCallback {
-                val track: Track = it.track
-                Log.d("MainActivity", track.name + " by " + track.artist.name)
+//                val track: Track = it.track
+//                Log.d("MainActivity", track.name + " by " + track.artist.name)
+                PlayerActivity.isPlaying.value = !it.isPaused
             }
         }
+        spotifyAppRemote?.playerApi?.subscribeToPlayerState()
+            ?.setEventCallback { playerState -> PlayerActivity.isPlaying.value = !playerState.isPaused }
+            ?.setErrorCallback { throwable -> }
     }
     override fun onStop() {
         super.onStop()
@@ -65,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             .setRedirectUri(redirectUri)
             .showAuthView(true)
             .build()
+
 
         SpotifyAppRemote.connect(this, connectionParams, object : Connector.ConnectionListener {
             override fun onConnected(appRemote: SpotifyAppRemote) {
