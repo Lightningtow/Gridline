@@ -1,0 +1,169 @@
+package com.lightningtow.gridline.ui.home;
+
+//import android.support.v7.app.AppCompatActivity;
+
+//import com.adamratzman.spotify.models.Track
+
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.lightningtow.gridline.BuildConfig
+import com.lightningtow.gridline.ui.components.GridlineButton
+import com.lightningtow.gridline.ui.theme.GridlineTheme
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
+
+class PlayerActivity : AppCompatActivity() {
+//class PlayerStuff {
+//object PlayerObject {
+
+    private val clientId: String = BuildConfig.SPOTIFY_CLIENT_ID
+    private val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_PKCE
+    private var spotifyAppRemote: SpotifyAppRemote? = null
+//    var mSpotifyAppRemote: SpotifyAppRemote? = null
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_main)
+//    }
+
+    override fun onStart() {
+        setContent {
+            PlayerPage()
+        }
+        super.onStart()
+        val connectionParams = ConnectionParams.Builder(clientId)
+            .setRedirectUri(redirectUri)
+            .showAuthView(true)
+            .build()
+
+        SpotifyAppRemote.connect(this, connectionParams, object : Connector.ConnectionListener {
+            override fun onConnected(appRemote: SpotifyAppRemote) {
+                spotifyAppRemote = appRemote
+                Log.d("MainActivity", "Connected! Yay!")
+                // Now you can start interacting with App Remote
+                connected()
+
+            }
+
+            override fun onFailure(throwable: Throwable) {
+                Log.e("MainActivity", throwable.message, throwable)
+                // Something went wrong when attempting to connect! Handle errors here
+            }
+        })
+    }
+//    fun start() {
+////        super.onStart()
+//        Log.e("ctrlfme", "starting")
+//        val connectionParams = ConnectionParams.Builder(clientId)
+//            .setRedirectUri(redirectUri)
+//            .showAuthView(true)
+//            .build()
+//
+//        SpotifyAppRemote.connect(this, connectionParams, object : Connector.ConnectionListener {
+//            override fun onConnected(appRemote: SpotifyAppRemote) {
+//                spotifyAppRemote = appRemote
+//                Log.d("MainActivity", "Connected! Yay!")
+//                // Now you can start interacting with App Remote
+//                connected()
+//
+//            }
+//
+//            override fun onFailure(throwable: Throwable) {
+//                Log.e("ctrlfme", "connection failure")
+//                Log.e("MainActivity", "ERROR MESSAGE: " + throwable.message, throwable)
+//                // Something went wrong when attempting to connect! Handle errors here
+//            }
+//        })
+//    }
+
+    private fun pauseNoView() {
+        //artistname = "hello";
+        Log.e("ctrlfme", "attempting to pause with bypass")
+        spotifyAppRemote?.playerApi?.pause()
+
+    }
+
+    private fun connected() {
+        spotifyAppRemote?.let { it ->
+//            // Play a playlist
+//            val playlistURI = "spotify:playlist:37i9dQZF1DX2sUQwD7tbmL"
+//            it.playerApi.play(playlistURI)
+            // Subscribe to PlayerState
+            it.playerApi.subscribeToPlayerState().setEventCallback {
+                val track: Track = it.track
+                Log.d("MainActivity", track.name + " by " + track.artist.name)
+            }
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        spotifyAppRemote?.let {
+            SpotifyAppRemote.disconnect(it)
+        }
+    }
+
+    @Composable
+    fun PlayerPage(activity: Activity? = null) {
+        GridlineTheme() {
+
+
+            val context = LocalContext.current
+//    MaterialTheme {
+//        val typography = MaterialTheme.typography
+//        val LocalContentColor = MaterialTheme.colors.contentColorFor(Color.White)
+
+//        Surface(
+////            color = MaterialTheme.colors.background
+//
+//
+//        ) {
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+//                GridlineButton(onClick = {
+//
+//                }) {
+//                    Text("start, hit me first")
+//                };
+//                GridlineButton(onClick = {
+//                    context.startActivity(Intent(context, MainActivity::class.java))
+//                }) {
+//                    Text("start activity")
+//                };
+
+                Spacer(Modifier.padding(16.dp))
+                GridlineButton(onClick = {
+                    pauseNoView()
+                }) {
+                    Text("pause in theory")
+                };
+
+            }
+//        }
+//    }
+        }
+    }
+}

@@ -81,10 +81,10 @@ android {
 var composeVersion = "1.1.1"
 
 dependencies {
-    // todo get rid of this!
-//    val composeBom = platform("androidx.compose:compose-bom:2023.04.01")
-//    implementation("androidx.compose:compose-bom:2023.05.01")
-//    implementation("androidx.compose.material:material-icons-extended")    // todo get rid of this!
+//    implementation project(':spotify-app-remote')
+    implementation("com.google.code.gson:gson:2.6.1")
+
+
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
 //    implementation("androidx.compose.material:material-icons-extended:${composeVersion}")
@@ -97,6 +97,7 @@ dependencies {
 
     // Images
     implementation("com.github.bumptech.glide:glide:4.13.1")
+    implementation(files("libs/spotify-app-remote-release-0.7.2.aar"))
     annotationProcessor("com.github.bumptech.glide:compiler:4.13.1")
     implementation("com.github.skydoves:landscapist-glide:1.5.0")
 

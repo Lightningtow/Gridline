@@ -17,10 +17,17 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
     override val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_PKCE
 
     //    override val clientId: String = Secrets.CLIENT_ID
-//    override val redirectUri: String = Secrets.REDIRECT_URI_PKCE
-    override val scopes = SpotifyScope.values().toList()
+    //    override val redirectUri: String = Secrets.REDIRECT_URI_PKCE
+//    override val scopes = SpotifyScope.values().toList()
+    val appremote = SpotifyScope.APP_REMOTE_CONTROL
+    val streaming = SpotifyScope.STREAMING
+    override val scopes = SpotifyScope.values().toList() + streaming + appremote
+
+
 
     override fun onSuccess(api: SpotifyClientApi) {
+        Log.e("ctrlfme", "pkce login success")
+        Log.e("pkce scopes", scopes.toString())
         val model = (application as com.lightningtow.gridline.GridlineApplication).model
         model.credentialStore.setSpotifyApi(api)
         val classBackTo = pkceClassBackTo ?: MainActivity::class.java

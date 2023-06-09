@@ -14,9 +14,18 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
     override val clientId: String = BuildConfig.SPOTIFY_CLIENT_ID
     override val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_AUTH
     override val useDefaultRedirectHandler: Boolean = false
-    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList()
+//    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList()
+
+    val appremote = SpotifyScope.APP_REMOTE_CONTROL
+    val streaming = SpotifyScope.STREAMING
+    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() + appremote + streaming
+
+//    override fun getRequestingScopes(): List<SpotifyScope> =
 
     override fun onSuccess(spotifyApi: SpotifyImplicitGrantApi) {
+        Log.e("ctrlfme", "implicit login success")
+        Log.e("implicit scopes", getRequestingScopes().toString())
+
         val model = (application as com.lightningtow.gridline.GridlineApplication).model
         model.credentialStore.setSpotifyApi(spotifyApi)
         toasty("Authentication via spotify-auth has completed. Launching TrackViewActivity..")

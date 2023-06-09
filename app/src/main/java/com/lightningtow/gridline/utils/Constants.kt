@@ -24,7 +24,11 @@ object Constants {
             icon = R.drawable.account_circle,
             route = "login"
         ),
-
+        BottomNavItem(
+            label = "Player",
+            icon = R.drawable.multiple_stop,
+            route = "player"
+        ),
         BottomNavItem(
             label = "Home",
             icon = R.drawable.home,
