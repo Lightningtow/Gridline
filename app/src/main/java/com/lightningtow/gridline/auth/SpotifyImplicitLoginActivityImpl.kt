@@ -1,6 +1,7 @@
 package com.lightningtow.gridline.auth
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.SpotifyScope
@@ -14,13 +15,16 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
     override val clientId: String = BuildConfig.SPOTIFY_CLIENT_ID
     override val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_AUTH
     override val useDefaultRedirectHandler: Boolean = false
-//    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList()
 
     val appremote = SpotifyScope.APP_REMOTE_CONTROL
     val streaming = SpotifyScope.STREAMING
     override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() + appremote + streaming
+//    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() // original
 
-//    override fun getRequestingScopes(): List<SpotifyScope> =
+    override fun onCreate(savedInstanceState: Bundle?) { // this didn't exist
+        super.onCreate(savedInstanceState)
+        Log.e("auth", "LOGGING IN VIA IMPLICIT")
+    }
 
     override fun onSuccess(spotifyApi: SpotifyImplicitGrantApi) {
         Log.e("ctrlfme", "implicit login success")

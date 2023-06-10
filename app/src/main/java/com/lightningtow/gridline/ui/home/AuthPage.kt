@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adamratzman.spotify.auth.implicit.startSpotifyImplicitLoginActivity
 import com.adamratzman.spotify.auth.pkce.startSpotifyClientPkceLoginActivity
+import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.Model.credentialStore
 //import com.lightningtow.gridline.activities.ActionHomeActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
@@ -32,6 +33,7 @@ import com.lightningtow.gridline.utils.toasty
 
 @Composable
 private fun AuthPageInner(activity: Activity? = null) {
+    val context = LocalContext.current
 
 //    MaterialTheme {
 //        val typography = MaterialTheme.typography
@@ -95,13 +97,13 @@ private fun AuthPageInner(activity: Activity? = null) {
 //            activity?.model?.credentialStore?.spotifyAccessToken = "invalid"
             Log.e("ctrlfme", "invalidating token")
             credentialStore.spotifyAccessToken = "invalid"
+//            Model?.credentialStore?.spotifyAccessToken = "invalid"
 
-            activity?.let {
-                toasty(
-                    it,
-                    message = "Invalidated spotify token... next call should refresh api"
-                )
-            }
+//            activity?.let {
+                toasty(context, message = "Invalidated spotify token... next call should refresh api")
+            Log.e("ctrlfme", credentialStore.spotifyAccessToken!!)
+//            }
+
         }) {
             Text("Invalidate token")
         }

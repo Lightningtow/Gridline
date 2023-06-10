@@ -2,6 +2,7 @@ package com.lightningtow.gridline.auth
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import com.lightningtow.gridline.BuildConfig
 import com.adamratzman.spotify.SpotifyClientApi
@@ -18,12 +19,15 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
 
     //    override val clientId: String = Secrets.CLIENT_ID
     //    override val redirectUri: String = Secrets.REDIRECT_URI_PKCE
-//    override val scopes = SpotifyScope.values().toList()
     val appremote = SpotifyScope.APP_REMOTE_CONTROL
     val streaming = SpotifyScope.STREAMING
     override val scopes = SpotifyScope.values().toList() + streaming + appremote
+//    override val scopes = SpotifyScope.values().toList() // original
 
-
+    override fun onCreate(savedInstanceState: Bundle?) { // this didnt exist
+        super.onCreate(savedInstanceState)
+        Log.e("auth", "LOGGING IN VIA PKCE")
+    }
 
     override fun onSuccess(api: SpotifyClientApi) {
         Log.e("ctrlfme", "pkce login success")

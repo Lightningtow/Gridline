@@ -51,10 +51,7 @@
         </activity>
 
         <activity android:name="com.lightningtow.gridline.activities.TrackViewActivity" />
-        <activity android:name="com.lightningtow.gridline.player.PlayerActivity" />
-<!--        <activity android:name="com.lightningtow.gridline.player.PlayerActivity" />-->
-
-        <!--        <activity android:name="com.lightningtow.gridline.activities.LoadingScreenActivity" />-->
+        <activity android:name="com.lightningtow.gridline.player.Player" />
 <!--        <activity android:name="com.lightningtow.gridline.activities.PlaylistViewActivity" />-->
 <!--        <activity android:name="com.lightningtow.gridline.activities.ActionHomeActivity" />-->
 <!--        <activity android:name="com.lightningtow.gridline.activities.ViewBroadcastsActivity" />-->

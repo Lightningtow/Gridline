@@ -1,6 +1,5 @@
 package com.lightningtow.gridline.ui.components
 
-import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
@@ -14,12 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.lightningtow.gridline.ui.home.TrackViewMaster
 import com.lightningtow.gridline.ui.home.shouldLoadTracks
 import com.lightningtow.gridline.data.TrackHolder1
+import com.lightningtow.gridline.player.Player.PlayerPage
 import com.lightningtow.gridline.ui.home.AuthPage
 
 import com.lightningtow.gridline.ui.home.PlaylistViewMaster
@@ -34,8 +32,6 @@ import com.lightningtow.gridline.ui.home.PlaylistViewMaster
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 //import com.lightningtow.gridline.ui.home.AuthPage
 import com.lightningtow.gridline.ui.home.HomeScreen
-import com.lightningtow.gridline.player.PlayerActivity
-import com.lightningtow.gridline.player.PlayerPage
 //import com.lightningtow.gridline.ui.home.MainActivity
 import com.lightningtow.gridline.ui.home.PurgeViewMaster
 import com.lightningtow.gridline.ui.home.listPicking
@@ -55,7 +51,7 @@ fun NavHostContainer(
         navController = navController,
 
         // set the start destination as home
-        startDestination = "player",
+        startDestination = "idk",
 
         // Set the padding provided by scaffold
         modifier = Modifier.padding(paddingValues = padding),
@@ -63,7 +59,7 @@ fun NavHostContainer(
         builder = {
 
             composable("login") {
-//                context.startActivity(Intent(context, PlayerActivity::class.java))
+//                context.startActivity(Intent(context, Player::class.java))
                 AuthPage()
                 showTracksNow = false
 
@@ -75,7 +71,7 @@ fun NavHostContainer(
 
             }
             composable("player") {
-//                context.startActivity(Intent(context, PlayerActivity::class.java)) // its not a damn activity lmao
+//                context.startActivity(Intent(context, Player::class.java)) // its not a damn activity lmao
 //                context.startActivity(Intent(context, AuthPage::class.java))
                 PlayerPage()
                 showTracksNow = false

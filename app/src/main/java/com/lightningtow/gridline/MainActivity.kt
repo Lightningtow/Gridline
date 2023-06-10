@@ -8,19 +8,22 @@ import androidx.compose.material.Scaffold
 import androidx.navigation.compose.rememberNavController
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.PlaylistsHolder
-import com.lightningtow.gridline.player.PlayerActivity
-import com.lightningtow.gridline.player.PlayerActivity.spotifyAppRemote
+import com.lightningtow.gridline.player.Player
+import com.lightningtow.gridline.player.Player.spotifyAppRemote
 import com.lightningtow.gridline.ui.components.BottomNavigationBar
 import com.lightningtow.gridline.ui.components.NavHostContainer
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.protocol.types.Track
+import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp
+import com.spotify.android.appremote.api.error.NotLoggedInException
+import com.spotify.android.appremote.api.error.UserNotAuthorizedException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     //    private var spotifyAppRemote: SpotifyAppRemote? = null
     private fun connected() {
-        PlayerActivity.spotifyAppRemote?.let { it ->
+        spotifyAppRemote?.let { it ->
             // Subscribe to PlayerState
             /**
              * automatically update isPlaying
@@ -48,32 +51,63 @@ class MainActivity : AppCompatActivity() {
             it.playerApi.subscribeToPlayerState().setEventCallback {
 //                val track: Track = it.track
 //                Log.d("MainActivity", track.name + " by " + track.artist.name)
-                PlayerActivity.isPlaying.value = !it.isPaused
+                Player.isPlaying.value = !it.isPaused
             }
         }
-        spotifyAppRemote?.playerApi?.subscribeToPlayerState()
-            ?.setEventCallback { playerState -> PlayerActivity.isPlaying.value = !playerState.isPaused }
-            ?.setErrorCallback { throwable -> }
+        spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
+                Player.isPlaying.value = !playerState.isPaused
+                Player.track.value = playerState.track
+
+
+
+                Player.trackname.value = playerState.track.name
+                Player.albumname.value = playerState.track.album.name
+
+                Player.artistname.value = playerState.track.artist.name
+//                playerState.track.imageUri?.let { Log.e("image uri", it.toString()) }
+                Player.coverUri = playerState.track.imageUri
+                Player.tempPlayerStateFILLME = playerState
+
+                // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
+//                val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+//                scope.launch {
+//                    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                    Log.e("within coroutine", playerState.track.album.uri.toString())
+//                    Player.cover.value = (api.albums.getAlbum(album = playerState.track.album.uri.toString())!!.images.firstOrNull()?.url)
+//                }
+                // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
+
+
+//                spotifyAppRemote?.imagesApi?.getImage(Player.coverUri.value)
+//                    ?.setResultCallback { result ->  Player.bitmap.value = result }
+            }?.setErrorCallback { throwable ->
+                Log.e(
+                    "error connecting to appremote", "message: $throwable"
+                )
+            }
     }
+
     override fun onStop() {
         super.onStop()
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
         }
+
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    // https://stackoverflow.com/questions/4414171/how-to-detect-when-an-android-app-goes-to-the-background-and-come-back-to-the-fo/44461605#44461605
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         loadPlaylists()
 //        fun tart() {
-        val connectionParams = ConnectionParams.Builder(clientId)
-            .setRedirectUri(redirectUri)
-            .showAuthView(true)
-            .build()
+        val connectionParams = ConnectionParams.Builder(clientId).setRedirectUri(redirectUri).showAuthView(true).build()
 
 
         SpotifyAppRemote.connect(this, connectionParams, object : Connector.ConnectionListener {
             override fun onConnected(appRemote: SpotifyAppRemote) {
-                PlayerActivity.spotifyAppRemote = appRemote
+                Player.spotifyAppRemote = appRemote
                 Log.d("MainActivity", "Connected! Yay!")
                 // Now you can start interacting with App Remote
                 connected()
@@ -89,6 +123,7 @@ class MainActivity : AppCompatActivity() {
 //                PlayerPage()
 //            }
 //        }
+
         setContent {
             GridlineTheme {
 
@@ -106,8 +141,7 @@ class MainActivity : AppCompatActivity() {
 
                         // Navhost: where screens are placed
                         NavHostContainer(navController = navController, padding = padding)
-                    }
-                )
+                    })
             }
         }
     }

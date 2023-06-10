@@ -79,7 +79,7 @@ android {
     }
 }
 var composeVersion = "1.1.1"
-
+var lifecycle_version = "2.4.1"
 dependencies {
 //    implementation project(':spotify-app-remote')
     implementation("com.google.code.gson:gson:2.6.1")
@@ -87,10 +87,12 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-//    implementation("androidx.compose.material:material-icons-extended:${composeVersion}")
+    implementation("androidx.lifecycle:lifecycle-common:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-process:$lifecycle_version")
+//    implementation("android.arch.lifecycle:extensions:1.0.0")
+//    annotationProcessor("android.arch.lifecycle:compiler:1.0.0")
 
-//    implementation("androidx.compose.material3:material3:1.1.0")
-//    implementation("org.greenrobot:eventbus:3.3.1")
+
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
@@ -105,7 +107,6 @@ dependencies {
     implementation("com.adamratzman:spotify-api-kotlin-android:3.8.6")
 
     implementation("androidx.compose.runtime:runtime:${composeVersion}")
-//    implementation("androidx.compose.runtime:runtime:${composeVersion}")
 
     implementation("androidx.compose.ui:ui:${composeVersion}")
     implementation("androidx.compose.foundation:foundation-layout:${composeVersion}")
@@ -113,8 +114,8 @@ dependencies {
     implementation("com.google.android.material:material:1.5.0")
 //    implementation("androidx.compose.material:material-icons-core:${composeVersion}")
 //    implementation("androidx.compose.material:material-icons-extended:${composeVersion}")
-    implementation("androidx.compose.foundation:foundation:${composeVersion}")
     implementation("androidx.compose.animation:animation:${composeVersion}")
+    implementation("androidx.compose.foundation:foundation:${composeVersion}")
     implementation("androidx.compose.ui:ui-tooling-preview:${composeVersion}")
     implementation("androidx.compose.runtime:runtime-livedata:${composeVersion}")
     debugImplementation("androidx.compose.ui:ui-tooling:${composeVersion}")

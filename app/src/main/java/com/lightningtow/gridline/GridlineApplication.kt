@@ -2,8 +2,16 @@ package com.lightningtow.gridline
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.player.Player
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 
 class GridlineApplication : Application() {
     lateinit var model: Model
@@ -14,6 +22,7 @@ class GridlineApplication : Application() {
         instance = this
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         model = Model
+
 
     }
 
@@ -27,53 +36,3 @@ class GridlineApplication : Application() {
     }
 }
 
-
-//class GridlineApplication : Application() {
-//    lateinit var model: Model
-////    lateinit var context: Context
-//    private var context: WeakReference<Context>? = null
-//
-//    //Private contructor
-//
-//
-//    var mContext = context.getApplicationContext()
-//
-//    override fun onCreate() {
-//        super.onCreate()
-//
-//
-//        model = Model
-////        GridlineApplication.Companion.context = applicationContext
-////        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-////        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//
-//
-//    }
-//
-//    companion object { // todo memory leak? wtf
-//////        lateinit var context: Context
-////        @Synchronized
-////        fun getInstance(context: Context): RestClient? {
-////            if (mInstance == null) {
-////                mInstance = RestClient(context.applicationContext)
-////            }
-////            return mInstance
-////        }
-//        private var context: WeakReference<Context?>? = null
-//
-//        //Private contructor
-//        private fun WidgetManager(context: Context) {
-//            this.context = WeakReference(context)
-//        }
-//
-//        //Singleton
-//        fun getInstance(context: Context): WidgetManager? {
-//            if (null == widgetManager) {
-//                widgetManager = WidgetManager(context)
-//            }
-//            return widgetManager
-//        }
-//    }
-//
-//}
