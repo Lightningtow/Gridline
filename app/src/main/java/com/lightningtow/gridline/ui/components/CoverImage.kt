@@ -45,7 +45,7 @@ fun GridlineCoverImage(
     var newImageModel: Any = missing
 
     if ((image_url == null && track == null) || (image_url != null && track != null)) {
-        Log.e("ctrlfme", "invalid args passed for GridlineCoverImage, either neither or both passed")
+        Log.e("GridlineCoverImage", "invalid args passed for GridlineCoverImage, either neither or both passed")
 
     }
 
@@ -59,12 +59,12 @@ fun GridlineCoverImage(
                 else if (track.asLocalTrack != null) missing // local tracks no bueno for fancy cover art
                 else if (track.asPodcastEpisodeTrack != null) track.asPodcastEpisodeTrack!!.album.images.firstOrNull()?.url ?: missing
                 else {
-                    Log.e("ctrlfme", "playable somehow managed to be neither a track nor a localtrack nor an episode")
+                    Log.e("GridlineCoverImage", "playable somehow managed to be neither a track nor a localtrack nor an episode")
                     missing
                 }
             }
             else {
-                Log.e("ctrlfme", "invalid args passed for GridlineCoverImage, both are null")
+                Log.e("GridlineCoverImage", "invalid args passed for GridlineCoverImage, both are null")
                 missing
             }
 

@@ -27,7 +27,7 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
     }
 
     override fun onSuccess(spotifyApi: SpotifyImplicitGrantApi) {
-        Log.e("ctrlfme", "implicit login success")
+        Log.e("auth", "implicit login success")
         Log.e("implicit scopes", getRequestingScopes().toString())
 
         val model = (application as com.lightningtow.gridline.GridlineApplication).model

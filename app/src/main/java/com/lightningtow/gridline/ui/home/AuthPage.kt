@@ -29,6 +29,7 @@ import com.lightningtow.gridline.auth.SpotifyPkceLoginActivityImpl
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.toasty
+
 //import androidx.compose.material.icons.filled .materialIconsExtended
 
 @Composable
@@ -52,7 +53,7 @@ private fun AuthPageInner(activity: Activity? = null) {
     ) {
 
         GridlineButton(onClick = {
-            Log.e("ctrlfme", "implicit login")
+            Log.e("AuthPageInner", "implicit login")
             activity?.startSpotifyImplicitLoginActivity<SpotifyImplicitLoginActivityImpl>()
         }) {
             Text("Connect to Spotify (spotify-auth integration, Implicit Grant)")
@@ -64,7 +65,7 @@ private fun AuthPageInner(activity: Activity? = null) {
 
 
         GridlineButton(onClick = {
-            Log.e("ctrlfme", "pkce login")
+            Log.e("AuthPageInner", "pkce login")
             activity?.startSpotifyClientPkceLoginActivity(SpotifyPkceLoginActivityImpl::class.java);
         }) {
             Text("Connect to Spotify (spotify-web-api-kotlin integration, PKCE auth)")
@@ -88,20 +89,16 @@ private fun AuthPageInner(activity: Activity? = null) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            "spotify-web-api-kotlin by Adam Ratzman",
-            color = Color.White,
-            style = MaterialTheme.typography.body2
-        )
+
         GridlineButton(onClick = {
 //            activity?.model?.credentialStore?.spotifyAccessToken = "invalid"
-            Log.e("ctrlfme", "invalidating token")
+            Log.e("AuthPageInner", "invalidating token")
             credentialStore.spotifyAccessToken = "invalid"
 //            Model?.credentialStore?.spotifyAccessToken = "invalid"
 
 //            activity?.let {
-                toasty(context, message = "Invalidated spotify token... next call should refresh api")
-            Log.e("ctrlfme", credentialStore.spotifyAccessToken!!)
+            toasty(context, message = "Invalidated spotify token... next call should refresh api")
+            Log.e("AuthPageInner", credentialStore.spotifyAccessToken!!)
 //            }
 
         }) {

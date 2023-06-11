@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.adamratzman.spotify.models.Playable
 import com.lightningtow.gridline.data.TrackHolder1
 import com.lightningtow.gridline.grid.PlaylistGetter
-import com.lightningtow.gridline.grid.shuffle
 //import com.lightningtow.gridline.grid.ShuffleInPlace
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.GridlineCoverImage
@@ -145,7 +144,7 @@ private fun ButtonRow() { // here
             GridlineButton(
                 onClick = {  // shuffle button
 //                    if (activity == null) return@GridlineButton // todo why does this exist - here
-                    shuffle()
+                    TrackHolder1.shuffle()
                 }, modifier = Modifier.padding(end = 4.dp)
             ) { Text("Shuffle") }
 
@@ -206,7 +205,8 @@ private fun PlayableRow(playable: Playable) {
 
 // todo find better default image
         GridlineCoverImage(
-            deeplink_url = playable.asTrack!!.externalUrls.first { it.name == "spotify" }.url,
+            // todo this deeplink_url can cause crashes
+            deeplink_url = "",//,playable.asTrack!!.externalUrls.first { it.name == "spotify" }.url,
             track = playable
         )
 
@@ -224,7 +224,7 @@ private fun PlayableRow(playable: Playable) {
                         else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.name
 //                    else if (playable.)
                         else {
-                            Log.e("ctrlfme", "missing trackname in PlayableRow")
+                            Log.e("PlayableRow", "missing trackname in PlayableRow")
                             "missing trackname"
                         }),
                 color = GridlineTheme.colors.textPrimary,
@@ -241,7 +241,7 @@ private fun PlayableRow(playable: Playable) {
                         else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.artists.joinToString(", ") { it.name }
                         //                    else if (playable.)
                         else {
-                            Log.e("ctrlfme", "missing artistname in PlayableRow")
+                            Log.e("PlayableRow", "missing artistname in PlayableRow")
                             "missing artistname"
                         }),
                 color = GridlineTheme.colors.textSecondary,

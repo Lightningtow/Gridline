@@ -30,7 +30,7 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
     }
 
     override fun onSuccess(api: SpotifyClientApi) {
-        Log.e("ctrlfme", "pkce login success")
+        Log.e("auth", "pkce login success")
         Log.e("pkce scopes", scopes.toString())
         val model = (application as com.lightningtow.gridline.GridlineApplication).model
         model.credentialStore.setSpotifyApi(api)

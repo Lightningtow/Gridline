@@ -10,6 +10,7 @@ object Constants {
     val TESTLIST: String = "spotify:playlist:5NKYetvb0UeaSDcnjs7SB7"
     val TESTLIST2: String = "spotify:playlist:55iEYHdJtZLoTErFPMSju8"
     val PURGELIST: String = "spotify:playlist:3gWBGiJmlvbVJaS0CSY2Vg"
+    val ROADPURGE: String = "spotify:playlist:1MYRwRHs71GWJNk1HunSAz"
     val GIANT_TEST: String = "spotify:playlist:5HB0nTfYl0bC1yvpxvHJjh"
     val RK_TEST: String = "spotify:playlist:5PaNURPIq7G4kEpO6aEKp1"
 
@@ -26,7 +27,7 @@ object Constants {
         ),
         BottomNavItem(
             label = "Idk",
-            icon = R.drawable.multiple_stop,
+            icon = R.drawable.settings_backup_restore,
             route = "idk"
         ),
         BottomNavItem(

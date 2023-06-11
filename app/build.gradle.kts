@@ -14,6 +14,8 @@ plugins {
 android {
     namespace = "com.lightningtow.gridline"
     compileSdk = 31
+//    compileSdk = 31
+
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
@@ -79,6 +81,8 @@ android {
     }
 }
 var composeVersion = "1.1.1"
+//var composeVersion = "1.4.1"
+
 var lifecycle_version = "2.4.1"
 dependencies {
 //    implementation project(':spotify-app-remote')
@@ -94,7 +98,7 @@ dependencies {
 
 
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10") // this seems to be duplicated within the sdk aar
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
     // Images

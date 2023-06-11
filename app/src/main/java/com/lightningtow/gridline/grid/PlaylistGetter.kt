@@ -47,7 +47,7 @@ class PlaylistGetter() {
             scope.launch {
 //        = runBlocking { launch {// this gets local tracks too
 
-                Log.e("ctrlfme", "getting playlist $URI")
+                Log.e("getPlaylistByURI", "getting playlist $URI")
                 val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 
 //                val contents = playlistTrackToPlayable(
@@ -84,7 +84,7 @@ class PlaylistGetter() {
                         )
                     }
                 }
-                Log.e("ctrlfme", "finished getting playlist")
+                Log.e("getPlaylistByURI", "finished getting playlist")
                 callback();
 
             }

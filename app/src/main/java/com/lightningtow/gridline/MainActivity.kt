@@ -1,6 +1,5 @@
 package com.lightningtow.gridline
 
-import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,9 +15,6 @@ import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp
-import com.spotify.android.appremote.api.error.NotLoggedInException
-import com.spotify.android.appremote.api.error.UserNotAuthorizedException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -56,14 +52,13 @@ class MainActivity : AppCompatActivity() {
         }
         spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
                 Player.isPlaying.value = !playerState.isPaused
-                Player.track.value = playerState.track
+                Player.currentTrack.value = playerState.track
 
 
+//                Player.trackname.value = playerState.track.name
+//                Player.albumname.value = playerState.track.album.name
+//                Player.artistname.value = playerState.track.artist.name
 
-                Player.trackname.value = playerState.track.name
-                Player.albumname.value = playerState.track.album.name
-
-                Player.artistname.value = playerState.track.artist.name
 //                playerState.track.imageUri?.let { Log.e("image uri", it.toString()) }
                 Player.coverUri = playerState.track.imageUri
                 Player.tempPlayerStateFILLME = playerState

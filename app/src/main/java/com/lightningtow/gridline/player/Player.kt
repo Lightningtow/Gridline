@@ -5,12 +5,12 @@ package com.lightningtow.gridline.player;
 //import com.adamratzman.spotify.models.Track
 
 //import com.lightningtow.gridline.data.PlayerState.pauseNoView
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -46,17 +45,18 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.annotation.GlideModule
+import com.adamratzman.spotify.models.PlayableUri
 import com.lightningtow.gridline.R
 import com.lightningtow.gridline.auth.Model
-import com.lightningtow.gridline.player.Player.coverUri
-import com.lightningtow.gridline.player.Player.spotifyAppRemote
+import com.lightningtow.gridline.player.Player.bigButtonOpacity
+import com.lightningtow.gridline.player.Player.currentTrack
+import com.lightningtow.gridline.player.Player.isPlaying
 import com.lightningtow.gridline.ui.theme.GridlineTheme
+import com.lightningtow.gridline.utils.Constants
+import com.lightningtow.gridline.utils.StringToPlayableURI
 import com.lightningtow.gridline.utils.toasty
 import com.skydoves.landscapist.glide.GlideImage
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.protocol.client.CallResult
-import com.spotify.protocol.client.PendingResult
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.PlayerState
 import com.spotify.protocol.types.Track
@@ -83,10 +83,16 @@ object Player {
     var coverUri: ImageUri? by Delegates.observable(null) { property, oldvalue, newvalue ->
         val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
         scope.launch {
-            val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+            try {
+                val api =
+                    Model.credentialStore.getSpotifyClientPkceApi()!! // todo this is nullpointer place
 //                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
-            Player.cover.value =
-                (api.albums.getAlbum(album = tempPlayerStateFILLME!!.track.album.uri.toString())!!.images.firstOrNull()?.url)
+                val albumUri = tempPlayerStateFILLME!!.track.album.uri.toString()
+                cover.value = (api.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
+            } catch (e: NullPointerException) {
+                Log.e("Player.coverUri", "failed to get album art")
+//                toasty( "failed to get album art")
+            }
         }
     }
     /**
@@ -98,7 +104,7 @@ object Player {
     }
      */
 
-    /**     Observable values. Runs the func when the function gets changed  */
+    /**     Observable values. Runs the func when the variable gets changed  */
     private var togglePlayback: Boolean by Delegates.observable(false) { property, oldvalue, newvalue ->
         Log.e("toggling to", (!isPlaying.value).toString())
         if (isPlaying.value) spotifyAppRemote?.playerApi?.pause()
@@ -109,12 +115,12 @@ object Player {
         // oh it doesn't, it just triggers when true->false. More efficient that way anyways
     }
     private var skipTo: SkipVals? by Delegates.observable(null) { property, oldvalue, newvalue ->
-        Log.e("skipping", skipTo.toString())
+        Log.e("Player.skipTo", skipTo.toString())
         if (newvalue != null) {
             when (skipTo) {
                 SkipVals.FORWARD -> spotifyAppRemote?.playerApi?.skipNext()
                 SkipVals.BACK -> spotifyAppRemote?.playerApi?.skipPrevious()
-                else -> Log.e("ctrlfme", "ERROR: updateSkip called when skipTo == null")
+                else -> Log.e("Player.skipTo", "ERROR: updateSkip called when skipTo == null")
             }
         }
 //        skipTo = null // this also breaks things
@@ -126,16 +132,17 @@ object Player {
 
     var cover: MutableState<Any?> = mutableStateOf(null)
 
+    var bigButtonOpacity: MutableState<Float> = mutableStateOf(0f)
 
 //    private val defaultCoverUri: ImageUri = "ImageId{spotify:image:ab67616d0000b27380b68290d8a8cca20b341d20'}"
 
     //    var trackname:  MutableState<String> = mutableStateOf("default")
-    var track: MutableState<Track?> = mutableStateOf(null)
+    var currentTrack: MutableState<Track?> = mutableStateOf(null)
     // todo combine variables?
 
-    var trackname: MutableState<String> = mutableStateOf("default")
-    var albumname: MutableState<String> = mutableStateOf("default")
-    var artistname: MutableState<String> = mutableStateOf("default")
+//    var trackname: MutableState<String> = mutableStateOf("default")
+//    var albumname: MutableState<String> = mutableStateOf("default")
+//    var artistname: MutableState<String> = mutableStateOf("default")
 
 
 //    var coverAny: MutableState<Any?> = mutableStateOf(null)
@@ -149,12 +156,35 @@ object Player {
 //        ?.setResultCallback { result ->  bitmap = result }
 //        ?.setErrorCallback { throwable -> Log.e("player.kt", "error fetching image")}
 
-    /**
-     * cover image with skip forward/back buttons on it
-     */
-//    @GlideModule
+
+    private fun quickAdd(
+        context: Context,
+        trackUriString: String,
+        playlistUri: String,
+        displayname: String
+    ) {
+        try {
+            val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+            scope.launch {
+                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+                val trackUri = StringToPlayableURI(trackUriString)
+                api.playlists.addPlayableToClientPlaylist(
+                    playlist = playlistUri,
+                    playable = trackUri
+                )
+                toasty(context, "track added to $displayname")
+            }
+        } catch (ex: Exception) {
+            toasty(context, "track could not be added")
+            ex.message?.let { Log.e("error in quickAdd", it) } // log errors
+        }
+    }
+
     @Composable
     private fun BigButton() {
+        /**
+         * cover image with skip forward/back buttons on it
+         */
         Box(
             modifier = Modifier
 //            .padding(16.dp)
@@ -182,11 +212,11 @@ object Player {
                     .align(Alignment.Center)
             ) {
 
-                Button(
+                Button( // back
 
                     modifier = Modifier
-                        .alpha(0f)
-                        .fillMaxHeight(fraction = .7f)
+                        .alpha(bigButtonOpacity.value)
+                        .fillMaxHeight(fraction = .6f)
                         .fillMaxWidth(fraction = .4f)
                         .background(color = GridlineTheme.colors.uiBackground),
                     onClick = {
@@ -195,10 +225,10 @@ object Player {
                     },
                 ) {}
 
-                Button(
+                Button( // forwards
                     modifier = Modifier
-                        .alpha(0f) // todo change color here
-                        .fillMaxHeight(fraction = .7f)
+                        .alpha(bigButtonOpacity.value) // todo change color here
+                        .fillMaxHeight(fraction = .6f)
                         .fillMaxWidth(fraction = 1f),
                     onClick = {
                         Player.skipTo = Player.SkipVals.FORWARD;
@@ -214,31 +244,51 @@ object Player {
     @Composable
     fun PlayerPage() {
         GridlineTheme() {
-            Column() { // this starts at the same height as the
 
-                Spacer(Modifier.padding(46.dp))
-
-                BigButton()
-            }
+            Column() {
 
 
-            Column( // this starts at the same height as the button
-                modifier = Modifier
-//                .padding(4.dp)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween // so bottom bar anchored to bottom
-                // https://stackoverflow.com/questions/70904979/how-align-to-bottom-a-row-in-jetpack-compose
-            ) {
+//                Column() { // this starts at the same height as the
+
+                    Spacer(Modifier.padding(46.dp))
+                UtilRow()
+
+                    BigButton()
+
+//                }
 
 
-                Spacer(Modifier.padding(200.dp))
-                BottomPart()
+//                Column( // this starts at the same height as the button
+//                    modifier = Modifier
+////                .padding(4.dp)
+//                        .fillMaxSize()
+//                                    .weight(0.5f, false) // anchor to bottom
+//                    ,
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.SpaceBetween // so bottom bar anchored to bottom
+//                    // https://stackoverflow.com/questions/70904979/how-align-to-bottom-a-row-in-jetpack-compose
+//                ) {
+//                    Column(
+////                        modifier = Modifier
+////                            .weight(0.1f, true) // anchor to bottom
+//                    ) {
+
+//                        Spacer(Modifier.padding(20.dp))
+
+
+//                Spacer(Modifier.padding(170.dp))
+//                    Spacer(Modifier.padding(270.dp))
+                        BottomPart()
+//                    }
+
+
+//                }
             }
         }
 
     }
 
+//    @OptIn(ExperimentalFoundationApi::class) // for basicMarquee
     @Composable
     private fun BottomPart() {
         val context = LocalContext.current
@@ -247,55 +297,62 @@ object Player {
             modifier = Modifier
         ) {
             Column(
-                modifier = Modifier
-                    .weight(0.1f, false) // anchor to bottom
+
             ) {
 
-                Text(
-                    trackname.value,
-                    modifier = Modifier.padding(start = 20.dp),
-//                    .clickable { },
-                    style = MaterialTheme.typography.h5
-                )
+                currentTrack.value?.name?.let {
+                    Text(it,
+                        //                    trackname.value,
+                        modifier = Modifier
+                            .padding(start = 20.dp)
+//                            .basicMarquee()
+                            .clickable {
+                               toasty(context, "get rekt")
+                            },
+                        style = MaterialTheme.typography.h5
+                    )
+                }
                 Spacer(Modifier.padding(12.dp))
 
-                Text(
-                    artistname.value,
-                    modifier = Modifier
-                        .padding(start = 20.dp)
+                currentTrack.value?.artist?.name?.let {
+                    Text(it,
+            //                    artistname.value,
+                        modifier = Modifier
+                            .padding(start = 20.dp)
+//                            .basicMarquee()
+                            .clickable {
+                                val goto = Uri.parse(currentTrack.value?.artist?.uri)
+                                Log.e("deeplink", "deeplinking to $goto")
+                                //                            toasty(context, "Opening " + track.value?.artist?.name)
+                                val browserIntent = Intent(Intent.ACTION_VIEW, goto)
+                                ContextCompat.startActivity(context, browserIntent, null)
+                            },
+                        style = MaterialTheme.typography.h5  // todo figure out better typography
 
-                        .clickable {
-                            val goto = Uri.parse(track.value?.artist?.uri)
-                            Log.e("deeplink", "deeplinking to $goto")
-
-
-//                            toasty(context, "Opening " + track.value?.artist?.name)
-                            val browserIntent = Intent(Intent.ACTION_VIEW, goto)
-                            ContextCompat.startActivity(context, browserIntent, null)
-                        },
-                    style = MaterialTheme.typography.h5  // todo figure out better typography
-
-                )
+                    )
+                }
 
                 Spacer(Modifier.padding(16.dp))
 
-                Text(
-                    albumname.value,
-                    modifier = Modifier
-                        .padding(start = 20.dp)
+                currentTrack.value?.album?.name?.let {
+                    Text(it,
+            //                    albumname.value,
+                        modifier = Modifier
+                            .padding(start = 20.dp)
+//                            .basicMarquee()
+                            .clickable {
+                                val goto = Uri.parse(currentTrack.value?.album?.uri)
+                                Log.e("deeplink", "deeplinking to $goto")
+                                //                            toasty(context, "Opening " + track.value?.album?.name)
 
-                        .clickable {
-                            val goto = Uri.parse(track.value?.album?.uri)
-                            Log.e("deeplink", "deeplinking to $goto")
-//                            toasty(context, "Opening " + track.value?.album?.name)
-
-                            val browserIntent = Intent(Intent.ACTION_VIEW, goto)
-                            ContextCompat.startActivity(context, browserIntent, null)
-                        },
-                    style = MaterialTheme.typography.body2
-                )
+                                val browserIntent = Intent(Intent.ACTION_VIEW, goto)
+                                ContextCompat.startActivity(context, browserIntent, null)
+                            },
+                        style = MaterialTheme.typography.body2
+                    )
+                }
                 Spacer(Modifier.padding(8.dp))
-                ButtonRow()
+                PlaybackButtonRow()
                 Spacer(Modifier.padding(8.dp))
 
             }
@@ -303,7 +360,7 @@ object Player {
     }
 
     @Composable
-    private fun ButtonRow(
+    private fun PlaybackButtonRow(
         modifier: Modifier = Modifier,
         playerButtonSize: Dp = 72.dp, sideButtonSize: Dp = 48.dp
     ) {
@@ -357,6 +414,60 @@ object Player {
         }
     }
 
+    @Composable
+    private fun UtilRow(
+        modifier: Modifier = Modifier,
+    ) {
+        val context = LocalContext.current
+        val spacing = Modifier.padding(8.dp)
+
+        Row( // todo create a giant database of playback funcs
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+
+
+            PlayerButton(
+                icon = R.drawable.knife,
+                OnClick = {
+                    currentTrack.value?.let {
+                        quickAdd(context,
+                            it.uri,
+                            Constants.PURGELIST,
+                            "Purgelist" // todo hardcoding
+                        ) }
+                })
+            Spacer(spacing)
+
+
+            PlayerButton(
+                icon = R.drawable.point_scan,
+                OnClick = {
+                    if (bigButtonOpacity.value == 0.3f) bigButtonOpacity.value = 0f
+                    else bigButtonOpacity.value = 0.3f
+                })
+
+            Spacer(spacing)
+
+
+
+            PlayerButton(
+                icon = R.drawable.round_water_drop_24,
+                OnClick = {
+                    currentTrack.value?.let {
+                        quickAdd(context,
+                            it.uri,
+                            Constants.ROADPURGE,
+                            "Road Cleansing" // todo hardcoding
+                        )
+                    }
+                })
+
+
+
+        }
+    }
     @Composable
     private fun PlayerButton(
         icon: Int,

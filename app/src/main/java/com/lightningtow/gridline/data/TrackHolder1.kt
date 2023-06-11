@@ -35,7 +35,10 @@ fun WipeHolders(
 object TrackHolder1 {//} : ViewModel() {
     var loading = false
 
+    fun shuffle() {
+        TrackHolder1.templist = TrackHolder1.templist.toMutableList().also { it.shuffle() }
 
+    }
 
     // should maybe just leave these be
     // if it ain't broke, don't fix it

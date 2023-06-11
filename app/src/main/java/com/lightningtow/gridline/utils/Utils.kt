@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.adamratzman.spotify.models.PlayableUri
+import com.lightningtow.gridline.auth.Model
 
 // safeLet retrieved from: https://stackoverflow.com/a/35522422/6422820
 fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? =
@@ -34,6 +36,12 @@ fun safeLoadImage(action: () -> Unit) {
     } catch (e: IllegalArgumentException) {
         // Possible error: You cannot start a load for a destroyed activity
     }
+}
+
+suspend fun StringToPlayableURI(arg: String): PlayableUri {
+    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+    val trackUri: PlayableUri = api.tracks.getTrack(arg)!!.uri
+    return trackUri;
 }
 
 // from KotlinUtils.kt  /\
