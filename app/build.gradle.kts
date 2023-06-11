@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
 //    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
 
 
 //    id ("com.android.application") version "7.2.1" apply false
@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "com.lightningtow.gridline"
-    compileSdk = 31
+    compileSdk = 33
 //    compileSdk = 31
 
     buildToolsVersion = "30.0.3"
@@ -75,13 +75,13 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.1"
-//        kotlinCompilerExtensionVersion = "1.2.0"
+//        kotlinCompilerExtensionVersion = "1.1.1"
+        kotlinCompilerExtensionVersion = "1.4.7"
 
     }
 }
-var composeVersion = "1.1.1"
-//var composeVersion = "1.4.1"
+//var composeVersion = "1.1.1"
+var composeVersion = "1.4.1"
 
 var lifecycle_version = "2.4.1"
 dependencies {
@@ -98,7 +98,7 @@ dependencies {
 
 
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10") // this seems to be duplicated within the sdk aar
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10") // this seems to be duplicated within the sdk aar
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
     // Images

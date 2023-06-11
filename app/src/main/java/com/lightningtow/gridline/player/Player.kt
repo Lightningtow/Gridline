@@ -12,6 +12,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -288,7 +289,7 @@ object Player {
 
     }
 
-//    @OptIn(ExperimentalFoundationApi::class) // for basicMarquee
+    @OptIn(ExperimentalFoundationApi::class) // for basicMarquee
     @Composable
     private fun BottomPart() {
         val context = LocalContext.current
@@ -305,7 +306,9 @@ object Player {
                         //                    trackname.value,
                         modifier = Modifier
                             .padding(start = 20.dp)
-//                            .basicMarquee()
+//                            .basicMarquee(velocity=64.dp)
+                            .basicMarquee()
+
                             .clickable {
                                toasty(context, "get rekt")
                             },
@@ -319,7 +322,7 @@ object Player {
             //                    artistname.value,
                         modifier = Modifier
                             .padding(start = 20.dp)
-//                            .basicMarquee()
+                            .basicMarquee()
                             .clickable {
                                 val goto = Uri.parse(currentTrack.value?.artist?.uri)
                                 Log.e("deeplink", "deeplinking to $goto")
@@ -339,7 +342,7 @@ object Player {
             //                    albumname.value,
                         modifier = Modifier
                             .padding(start = 20.dp)
-//                            .basicMarquee()
+                            .basicMarquee()
                             .clickable {
                                 val goto = Uri.parse(currentTrack.value?.album?.uri)
                                 Log.e("deeplink", "deeplinking to $goto")
