@@ -34,6 +34,7 @@ import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.GridlineCoverImage
 import com.lightningtow.gridline.ui.components.GridlineDivider
 import com.lightningtow.gridline.ui.theme.GridlineTheme
+import com.lightningtow.gridline.utils.Constants
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,7 +67,7 @@ fun PurgeViewMaster() {
 //            })
 //        } else { // if picking victimlist
 
-            PlaylistViewMaster("Choose playlist", onPlaylistClick = {
+            AllPlaylistsViewEntry("Choose playlist", onPlaylistClick = {
                 PurgeData.namelist[PurgeData.currentSlot] = it.name
                 PurgeData.urilist[PurgeData.currentSlot] = it.uri.uri
                 PurgeData.coverlist[PurgeData.currentSlot] = it.images.first().url
@@ -227,11 +228,11 @@ private fun Slot(
 
     ) {
         GridlineCoverImage(
-//            imageModel = "https://picsum.photos/300/300",
+//            imageModel = Constants.DEFAULT_MISSING,
 //            imageModel = if (slot == -42) PurgeData.purgecover.value
 //            else (PurgeData.coverlist[slot]),
 
-            image_url = if(PurgeData.isEmptylist[slot]) "https://picsum.photos/300/300"
+            image_url = if(PurgeData.isEmptylist[slot]) Constants.DEFAULT_MISSING
             else PurgeData.coverlist[slot],
 
             deeplink_url = "www.example.com" // todo
@@ -335,7 +336,7 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
 // todo find better default image
         GlideImage(
             imageModel = (playlistItem.images.firstOrNull()?.url
-                ?: "https://picsum.photos/300/300"),
+                ?: Constants.DEFAULT_MISSING),
 //                    else {
 //                        Log.e("ctrlfme", "???")
 //                        "???" // text =

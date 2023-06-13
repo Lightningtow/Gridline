@@ -1,6 +1,5 @@
 package com.lightningtow.gridline.ui.home
 
-import android.util.Log
 import com.lightningtow.gridline.utils.toasty
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,25 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.adamratzman.spotify.models.Playable
-import com.lightningtow.gridline.data.TrackHolder1
-import com.lightningtow.gridline.data.TrackHolder2
-import com.lightningtow.gridline.data.TrackHolder3
 import com.lightningtow.gridline.grid.GetDiffByURI
-import com.lightningtow.gridline.grid.PlaylistGetter
-import com.lightningtow.gridline.grid.getcount
-import com.lightningtow.gridline.grid.logging
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.theme.gridline_pink
 import com.lightningtow.gridline.utils.Constants
-import com.lightningtow.gridline.utils.Constants.TESTLIST
-import com.lightningtow.gridline.utils.Constants.TESTLIST2
-
 
 
 @Composable
-fun HomeScreen() {
+fun LandingScreen() {
     val context = LocalContext.current
     var toggle = true
     var msg = "default"
@@ -43,6 +32,20 @@ fun HomeScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
+            GridlineButton(
+                onClick = {
+                    msg = if (toggle) "owie" else "ouch"
+                    toasty(context, msg)
+                    toggle = !toggle
+
+                }) {
+                Text("send memes")
+
+            }
+
+            Spacer(modifier = Modifier.padding(10.dp))
+
             GridlineButton(
                 onClick = {
                     var returns: Int = 0
@@ -54,21 +57,9 @@ fun HomeScreen() {
 
 
                 }) {
-                Text("launch nukes")
+                Text("send nudes")
             }
 
-            Spacer(modifier = Modifier.padding(10.dp))
-
-            GridlineButton(
-                onClick = {
-                    msg = if (toggle) "owie" else "oof"
-                    toasty(context, msg)
-                    toggle = !toggle
-
-            }) {
-                Text("poke me for lulz")
-
-            }
         }
     }
 }

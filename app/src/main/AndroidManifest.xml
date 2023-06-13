@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.lightningtow.gridline.activities.TrackViewActivity" />
+        <activity android:name="com.lightningtow.gridline.ui.home.Broadcasts" />
         <activity android:name="com.lightningtow.gridline.player.Player" />
 <!--        <activity android:name="com.lightningtow.gridline.activities.PlaylistViewActivity" />-->
 <!--        <activity android:name="com.lightningtow.gridline.activities.ActionHomeActivity" />-->

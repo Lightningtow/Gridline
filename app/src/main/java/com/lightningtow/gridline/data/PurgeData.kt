@@ -4,10 +4,15 @@ import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.Serializer
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.protobuf.InvalidProtocolBufferException
 import com.lightningtow.gridline.ui.home.dataStore
 import com.lightningtow.gridline.utils.toasty
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +21,31 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.InputStream
+import java.io.OutputStream
 
+
+
+//object SettingsSerializer : Serializer<NewName> {
+//    override val defaultValue: Settings = Settings.getDefaultInstance()
+//
+//    override suspend fun readFrom(input: InputStream): Settings {
+//        try {
+//            return Settings.parseFrom(input)
+//        } catch (exception: InvalidProtocolBufferException) {
+//            throw CorruptionException("Cannot read proto.", exception)
+//        }
+//    }
+//
+//    override suspend fun writeTo(
+//        t: Settings,
+//        output: OutputStream) = t.writeTo(output)
+//}
+//
+//val Context.settingsDataStore: DataStore<Settings> by dataStore(
+//    fileName = "settings.pb",
+//    serializer = SettingsSerializer
+//)
 object PurgeData {
 
     var currentSlot: Int = 1;

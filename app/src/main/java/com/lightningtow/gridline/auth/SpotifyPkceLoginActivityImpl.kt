@@ -36,7 +36,8 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
         model.credentialStore.setSpotifyApi(api)
         val classBackTo = pkceClassBackTo ?: MainActivity::class.java
         pkceClassBackTo = null
-        toasty("Authentication via PKCE has completed. Launching ${classBackTo.simpleName}..")
+        toasty("PKCE auth completed. Launching ${classBackTo.simpleName}..")
+//        toasty("Authentication via PKCE has completed. Launching ${classBackTo.simpleName}..")
         startActivity(Intent(this, classBackTo))
     }
 

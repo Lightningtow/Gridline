@@ -42,8 +42,6 @@ private fun AuthPageInner(activity: Activity? = null) {
 
 //        Surface(
 ////            color = MaterialTheme.colors.background
-//
-//
 //        ) {
 
     Column(
@@ -127,43 +125,5 @@ fun AuthPage(activity: Activity? = null) {
         AuthPageInner(activity)
 //        }
 
-        // idk what the below was supposed to do but it duplicates the nav bar
-
-
-//        val navController = rememberNavController()
-//
-////                Surface(color = Color.White) {
-//        // Scaffold Component
-//        GridlineScaffold(bottomBar = {
-//            BottomNavigationBar(navController = navController)
-//        }, content = { innerPadding ->
-//            // Apply the padding globally to the whole BottomNavScreensController
-////                            Box(modifier = Modifier.padding(innerPadding)) {
-//            NavHostContainer(navController = navController, padding = innerPadding)
-////            AuthPageInner()
-//
-//
-////         remember navController Language.so it does not
-////         get recreated on recomposition
-//            val navController = rememberNavController()
-//
-//            Surface(color = Color.White) {
-////         Scaffold Component
-//                Scaffold(
-////         Bottom navigation
-//                    bottomBar = {
-//                        BottomNavigationBar(navController = navController)
-//                    }, content = { innerPadding ->
-//                        // Apply the padding globally to the whole BottomNavScreensController
-////                            Box(modifier = Modifier.padding(innerPadding)) {
-//                        NavHostContainer(navController = navController, padding = innerPadding)
-//
-//
-//                    }
-//
-//                )
-//
-//            }
-//        })
     }
 }

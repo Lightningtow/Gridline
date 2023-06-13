@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.adamratzman.spotify.models.Playable
+import com.lightningtow.gridline.utils.Constants
 import com.skydoves.landscapist.glide.GlideImage
 
 /**
@@ -40,7 +41,7 @@ fun GridlineCoverImage(
 // todo directly pass playlist uri
 // but that would require async, fuuuck
 ) {
-    val missing = "https://picsum.photos/300/300"
+    val missing = Constants.DEFAULT_MISSING
 
     var newImageModel: Any = missing
 
@@ -108,7 +109,7 @@ fun GridlineCoverImage(
 //// playlistView playlist image
 //        GlideImage(
 //            imageModel = (playlistItem.images.firstOrNull()?.url
-//                ?: "https://picsum.photos/300/300"),
+//                ?: Constants.DEFAULT_MISSING),
 //            modifier = Modifier
 //            .height(40.dp)
 //            .width(40.dp)
@@ -118,7 +119,7 @@ fun GridlineCoverImage(
 //        GlideImage(
 ////            imageModel = (TrackHolder1.imageuri
 //            imageModel = (TrackHolder1.actualist.images.firstOrNull()?.url
-//                ?: "https://picsum.photos/300/300"),
+//                ?: Constants.DEFAULT_MISSING),
 //            modifier = Modifier
 //                .height(80.dp)
 //                .width(80.dp)
@@ -151,10 +152,10 @@ fun GridlineCoverImage(
 //                },
 //            imageModel = (
 //                    if (playable.asTrack != null) playable.asTrack!!.album.images.firstOrNull()?.url
-//                        ?: "https://picsum.photos/300/300"
-//                    else if (playable.asLocalTrack != null) "https://picsum.photos/300/300"
+//                        ?: Constants.DEFAULT_MISSING
+//                    else if (playable.asLocalTrack != null) Constants.DEFAULT_MISSING
 //                    else if (playable.asPodcastEpisodeTrack != null) playable.asPodcastEpisodeTrack!!.album.images.firstOrNull()?.url
-//                        ?: "https://picsum.photos/300/300"
+//                        ?: Constants.DEFAULT_MISSING
 //                    else {
 //                        Log.e("ctrlfme", "???")
 //                        "???" // text =

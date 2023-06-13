@@ -7,6 +7,12 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.adamratzman.spotify.models.PlayableUri
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // safeLet retrieved from: https://stackoverflow.com/a/35522422/6422820
 fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? =
@@ -37,7 +43,20 @@ fun safeLoadImage(action: () -> Unit) {
         // Possible error: You cannot start a load for a destroyed activity
     }
 }
-
+// todo deal with coroutines
+//fun getCover(uri: String, type: SHORTCUT_TYPE): Any {
+//    return withContext(Dispatchers.IO) {
+//
+//
+//        val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//
+//        val cover =
+//            if (type == SHORTCUT_TYPE.PLAYLIST) api.playlists.getPlaylistCovers(uri)
+//            else Constants.DEFAULT_MISSING
+//        return@launch cover
+////    }
+//}
+//}
 suspend fun StringToPlayableURI(arg: String): PlayableUri {
     val api = Model.credentialStore.getSpotifyClientPkceApi()!!
     val trackUri: PlayableUri = api.tracks.getTrack(arg)!!.uri

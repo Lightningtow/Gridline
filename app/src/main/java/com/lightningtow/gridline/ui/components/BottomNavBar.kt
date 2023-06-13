@@ -1,5 +1,6 @@
 package com.lightningtow.gridline.ui.components
 
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
@@ -26,12 +27,14 @@ import com.lightningtow.gridline.ui.home.shouldLoadTracks
 import com.lightningtow.gridline.data.TrackHolder1
 import com.lightningtow.gridline.player.Player.PlayerPage
 import com.lightningtow.gridline.ui.home.AuthPage
+import com.lightningtow.gridline.ui.home.Broadcasts
+import com.lightningtow.gridline.ui.home.HomePage
 
-import com.lightningtow.gridline.ui.home.PlaylistViewMaster
+import com.lightningtow.gridline.ui.home.AllPlaylistsViewEntry
 //import com.lightningtow.gridline.activities.PlaylistViewActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 //import com.lightningtow.gridline.ui.home.AuthPage
-import com.lightningtow.gridline.ui.home.HomeScreen
+import com.lightningtow.gridline.ui.home.LandingScreen
 //import com.lightningtow.gridline.ui.home.MainActivity
 import com.lightningtow.gridline.ui.home.PurgeViewMaster
 import com.lightningtow.gridline.ui.home.listPicking
@@ -58,26 +61,25 @@ fun NavHostContainer(
 
         builder = {
 
-            composable("login") {
-//                context.startActivity(Intent(context, Player::class.java))
-                AuthPage()
-                showTracksNow = false
 
+            composable("broadcasts") {
+                context.startActivity(Intent(context, Broadcasts::class.java))
             }
             composable("idk") {
 //                HelloWorld()
-                HomeScreen()
+                LandingScreen()
                 showTracksNow = false
-
+            }
+            composable("home") {
+                HomePage.HomePageEntry()
+//                showTracksNow = false
             }
             composable("player") {
-//                context.startActivity(Intent(context, Player::class.java)) // its not a damn activity lmao
-//                context.startActivity(Intent(context, AuthPage::class.java))
                 PlayerPage()
                 showTracksNow = false
             }
 
-
+            // todo what is showTracksNow
             composable("purge") {
                 PurgeViewMaster()
                 BackHandler(
@@ -88,7 +90,11 @@ fun NavHostContainer(
 
                 })
             }
-
+            composable("login") {
+//                context.startActivity(Intent(context, Player::class.java))
+                AuthPage()
+                showTracksNow = false
+            }
             composable("shuffle") {
 //
 //                masterMaster(callback = {
@@ -103,7 +109,7 @@ fun NavHostContainer(
 
                 })
                 if(!showTracksNow) {
-                    PlaylistViewMaster("Shuffle Playlists", onPlaylistClick = {
+                    AllPlaylistsViewEntry("Shuffle Playlists", onPlaylistClick = {
 //                    loadingTracks = true
 
                         // todo what in the actual fuck is this spaghetti
@@ -113,7 +119,7 @@ fun NavHostContainer(
 //                    PlaylistGetter.getPlaylistByURI(URI=it.uri.uri, holder=1) // done in asyncGetData
 
                         TrackHolder1.playlistName = it.name
-                        TrackHolder1.uri = it.uri.uri
+                        TrackHolder1.TrackHolder1Uri = it.uri.uri
                         showTracksNow = true
 
 //                    asyncGetPlaylistTracks()
@@ -124,7 +130,7 @@ fun NavHostContainer(
 
                 else if (showTracksNow) {
 //                    Test()
-                    TrackViewMaster(uri=TrackHolder1.uri)
+                    TrackViewMaster(uri=TrackHolder1.TrackHolder1Uri)
 
 
                 }

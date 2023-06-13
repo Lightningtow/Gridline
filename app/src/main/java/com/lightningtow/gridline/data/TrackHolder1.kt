@@ -15,7 +15,7 @@ fun WipeHolders(
 ) {
     if (wipeOne) {
         TrackHolder1.playlistName = "default"
-        TrackHolder1.uri = "default"
+        TrackHolder1.TrackHolder1Uri = "default"
         TrackHolder1.contents = listOf();
 //        TrackHolder1.templist
         // todo actually wipe templist
@@ -43,8 +43,8 @@ object TrackHolder1 {//} : ViewModel() {
     // should maybe just leave these be
     // if it ain't broke, don't fix it
     var playlistName = "DEFAULT_NAME"; // used in TrackView for header
-    var uri = "URI" // used for important stuff in shuffle, upload() and such
-
+    var TrackHolder1Uri = "URI" // used for important stuff in shuffle, upload() and such
+    // todo
 
     // todo just use the one list
     // just delete it if its shuffled and user backs out

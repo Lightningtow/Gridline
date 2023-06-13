@@ -2,7 +2,11 @@ package com.lightningtow.gridline.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SliderColors
+import androidx.compose.material.SliderDefaults
+import androidx.compose.material.contentColorFor
 //import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -14,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.compositeOver
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lightningtow.gridline.ui.components.GridlineSurface
 
@@ -54,6 +60,15 @@ fun GridlineTheme(
     }
 }
 
+@Composable
+fun GridlineSliderColors(): SliderColors = SliderDefaults.colors(
+    activeTickColor = GridlineTheme.colors.brand,
+    inactiveTickColor = GridlineTheme.colors.brand,
+    inactiveTrackColor = GridlineTheme.colors.uiBorder,
+    activeTrackColor = GridlineTheme.colors.brand,
+    thumbColor = GridlineTheme.colors.brand,
+)
+
 object GridlineTheme {
     val colors: GridlineColors
         @Composable
@@ -79,6 +94,42 @@ fun ProvideGridlineColors(
 private val LocalGridlineColors = staticCompositionLocalOf<GridlineColors> {
     error("No GridlineColorPalette provided") // means you need to wrap with GridlineTheme
 }
+
+private val DarkColorPalette = GridlineColors(
+//    background = gridline_pink,
+
+    brand = gridline_pink,
+    brandSecondary = Ocean2,
+    uiBackground = Neutral8,
+//    uiBorder = Neutral3,
+    uiBorder = Color.DarkGray, // divider colors
+
+//    uiFloated = Neutral7,
+    uiFloated = Color.Black, // this fixes whatever makes the taskbar green
+//    uiFloated =
+//    uiFloated = gridline_pink,
+    textPrimary = dark_white,
+    textSecondary = Color.LightGray,
+    textHelp = Color.Red,
+    textInteractive = Neutral7,
+    textLink = Ocean2,
+    iconPrimary = Neutral0,
+    iconSecondary = Neutral0,
+    iconInteractive = Neutral7,
+    iconInteractiveInactive = Neutral6,
+    error = FunctionalRedDark,
+    gradient6_1 = listOf(Shadow5, Ocean7, Shadow9, Ocean7, Shadow5),
+    gradient6_2 = listOf(Rose11, Lavender7, Rose8, Lavender7, Rose11),
+    gradient3_1 = listOf(Shadow9, Ocean7, Shadow5),
+    gradient3_2 = listOf(Rose8, Lavender7, Rose11),
+//    gradient2_1 = listOf(Ocean3, Shadow3),
+    gradient2_1 = listOf(Rose5, gridline_pink),
+
+    gradient2_2 = listOf(Ocean4, Shadow2),
+    gradient2_3 = listOf(Lavender3, Rose3),
+    tornado1 = listOf(Shadow4, Ocean3),
+    isDark = true
+)
 
 /**
  * A Material [Colors] implementation which sets all colors to [debugColor] to discourage usage of
@@ -108,8 +159,6 @@ private val LightColorPalette = GridlineColors(
 //    textMain
 
 
-
-
     brand = Shadow5,
     brandSecondary = Ocean3,
     uiBackground = Neutral0,
@@ -132,42 +181,6 @@ private val LightColorPalette = GridlineColors(
     gradient2_3 = listOf(Lavender3, Rose2),
     tornado1 = listOf(Shadow4, Ocean3),
     isDark = false
-)
-
-private val DarkColorPalette = GridlineColors(
-//    background = gridline_pink,
-
-    brand = gridline_pink,
-    brandSecondary = Ocean2,
-    uiBackground = Neutral8,
-//    uiBorder = Neutral3,
-    uiBorder = Color.DarkGray, // divider colors
-
-//    uiFloated = Neutral7,
-    uiFloated = Color.Black, // this fixes whatever makes the taskbar green
-//    uiFloated =
-//    uiFloated = gridline_pink,
-    textPrimary = dark_white,
-    textSecondary = Color.LightGray,
-    textHelp = Color.Red,
-    textInteractive = Neutral7,
-    textLink = Ocean2,
-    iconPrimary = Shadow1,
-    iconSecondary = Neutral0,
-    iconInteractive = Neutral7,
-    iconInteractiveInactive = Neutral6,
-    error = FunctionalRedDark,
-    gradient6_1 = listOf(Shadow5, Ocean7, Shadow9, Ocean7, Shadow5),
-    gradient6_2 = listOf(Rose11, Lavender7, Rose8, Lavender7, Rose11),
-    gradient3_1 = listOf(Shadow9, Ocean7, Shadow5),
-    gradient3_2 = listOf(Rose8, Lavender7, Rose11),
-//    gradient2_1 = listOf(Ocean3, Shadow3),
-    gradient2_1 = listOf(Rose5, gridline_pink),
-
-    gradient2_2 = listOf(Ocean4, Shadow2),
-    gradient2_3 = listOf(Lavender3, Rose3),
-    tornado1 = listOf(Shadow4, Ocean3),
-    isDark = true
 )
 
 @Stable

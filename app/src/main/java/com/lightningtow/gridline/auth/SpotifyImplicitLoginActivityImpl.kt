@@ -32,7 +32,9 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
 
         val model = (application as com.lightningtow.gridline.GridlineApplication).model
         model.credentialStore.setSpotifyApi(spotifyApi)
-        toasty("Authentication via spotify-auth has completed. Launching TrackViewActivity..")
+
+//        toasty("Authentication via spotify-auth has completed. Launching TrackViewActivity..")
+        toasty("Implicit auth completed")
         startActivity(Intent(this, MainActivity::class.java))
     }
 

@@ -22,7 +22,7 @@ class PlaylistGetter() {
 
                 val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 
-                api.playlists.removeAllClientPlaylistPlayables(TrackHolder1.uri)
+                api.playlists.removeAllClientPlaylistPlayables(TrackHolder1.TrackHolder1Uri)
 
                 val newlist: MutableList<PlayableUri> =
                     mutableListOf(); //PlaylistHolder.templist.toTypedArray()
@@ -32,7 +32,7 @@ class PlaylistGetter() {
                     newlist.add(item.uri)
                 }
                 api.playlists.addPlayablesToClientPlaylist(
-                    playlist = TrackHolder1.uri,
+                    playlist = TrackHolder1.TrackHolder1Uri,
                     *newlist.toTypedArray()
                 ) // todo prevent trying to uploading to unowned playlist, causes crash
 //                val toast = Toast.makeText(context, "sometext", Toast.LENGTH_SHORT)

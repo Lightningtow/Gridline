@@ -24,18 +24,18 @@ import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.components.GridlineDivider
 
 @Composable
-fun PlaylistViewMaster(headername: String = "DEFAULT", onPlaylistClick: (SimplePlaylist) -> Unit) {
+fun AllPlaylistsViewEntry(headername: String = "DEFAULT", onPlaylistClick: (SimplePlaylist) -> Unit) {
     GridlineTheme {
 
         if (PlaylistsHolder.loading) // since `loading` is a mutableStateOf, PlaylistViewMaster automatically recomposes when loading changes
             LoadingScreen(message = "Loading playlists...")
         else
-            PlaylistViewPage(headername = headername, onPlaylistClick = onPlaylistClick)
+            AllPlaylistsView(headername = headername, onPlaylistClick = onPlaylistClick)
     }
 }
 
 @Composable
-private fun PlaylistViewPage(headername: String, onPlaylistClick: (SimplePlaylist) -> Unit) {
+private fun AllPlaylistsView(headername: String, onPlaylistClick: (SimplePlaylist) -> Unit) {
 
     Column() { // don't put padding here or you'll move the dividers
         GridlineHeader() {
@@ -89,7 +89,7 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
 
     ) {
         GridlineCoverImage(
-//            imageModelArg = playlistItem.images.firstOrNull()?.url ?: "https://picsum.photos/300/300",
+//            imageModelArg = playlistItem.images.firstOrNull()?.url ?: Constants.DEFAULT_MISSING,
             image_url = playlistItem.images.first().url,
             deeplink_url = playlistItem.uri.uri
         )

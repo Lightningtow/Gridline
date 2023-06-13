@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Scaffold
 import androidx.navigation.compose.rememberNavController
+import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.player.Player
@@ -39,37 +40,29 @@ class MainActivity : AppCompatActivity() {
 
     //    private var spotifyAppRemote: SpotifyAppRemote? = null
     private fun connected() {
-        spotifyAppRemote?.let { it ->
-            // Subscribe to PlayerState
-            /**
-             * automatically update isPlaying
-             */
-            it.playerApi.subscribeToPlayerState().setEventCallback {
-//                val track: Track = it.track
-//                Log.d("MainActivity", track.name + " by " + track.artist.name)
-                Player.isPlaying.value = !it.isPaused
-            }
+        spotifyAppRemote?.playerApi?.subscribeToPlayerContext()?.setEventCallback { playerContext ->
+            Player.currentPlayerContext.value = playerContext
         }
         spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
-                Player.isPlaying.value = !playerState.isPaused
-                Player.currentTrack.value = playerState.track
 
 
-//                Player.trackname.value = playerState.track.name
-//                Player.albumname.value = playerState.track.album.name
-//                Player.artistname.value = playerState.track.artist.name
-
-//                playerState.track.imageUri?.let { Log.e("image uri", it.toString()) }
-                Player.coverUri = playerState.track.imageUri
-                Player.tempPlayerStateFILLME = playerState
+                Player.currentPlayerState.value = playerState
+                Player.currentPos.value = playerState.playbackPosition
 
                 // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
-//                val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-//                scope.launch {
-//                    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
-//                    Log.e("within coroutine", playerState.track.album.uri.toString())
-//                    Player.cover.value = (api.albums.getAlbum(album = playerState.track.album.uri.toString())!!.images.firstOrNull()?.url)
-//                }
+//            Player.coverUri = playerState.track.imageUri
+
+            scope.launch {
+                try {
+                    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
+                    val albumUri = Player.currentPlayerState.value!!.track.album.uri.toString()
+                    Player.currentTrackCover.value = (api.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
+                } catch (e: NullPointerException) {
+                    Log.e("Player.coverUri", "failed to get album art")
+//                toasty( "failed to get album art")
+                }
+            }
                 // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
 
 
