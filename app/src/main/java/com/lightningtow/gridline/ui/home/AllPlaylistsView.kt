@@ -1,16 +1,23 @@
 package com.lightningtow.gridline.ui.home
 
 import LoadingScreen
+import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.SemanticsActions.OnClick
+import androidx.compose.ui.semantics.SemanticsActions.OnLongClick
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,6 +29,10 @@ import com.lightningtow.gridline.ui.components.GridlineCoverImage
 import com.lightningtow.gridline.ui.components.GridlineHeader
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.components.GridlineDivider
+import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
+import com.lightningtow.gridline.R
+import com.lightningtow.gridline.ui.components.KotlinShortcut
+import com.lightningtow.gridline.ui.components.masterListOfShortcuts
 
 @Composable
 fun AllPlaylistsViewEntry(headername: String = "DEFAULT", onPlaylistClick: (SimplePlaylist) -> Unit) {
@@ -74,6 +85,39 @@ private fun PlaylistList(lists: List<SimplePlaylist>, onPlaylistClick: (SimplePl
     }
 }
 
+@Composable
+private fun FavoriteStar(
+    accessUri: String,
+    coverUri: String,
+    type: SHORTCUT_TYPE,
+    displayname: String
+) {
+    val item = KotlinShortcut(accessUri = accessUri, coverUri = coverUri, type, displayname)
+
+    val favorited: Boolean = item in masterListOfShortcuts
+
+    Icon(
+        ImageVector.vectorResource(if (favorited) R.drawable.baseline_star_24 else R.drawable.outline_star_border_24),
+        contentDescription = "who cares",
+        tint = if (favorited) GridlineTheme.colors.brand else GridlineTheme.colors.iconPrimary,
+        modifier = Modifier
+            .size(size = 32.dp)
+            .clickable(
+                onClick = {
+                    val newvalue = !favorited
+
+                    if (newvalue) {
+                        masterListOfShortcuts += (item)
+                    } else {
+                        masterListOfShortcuts -= (item)
+                    }
+                    Log.e("FavoriteStar", masterListOfShortcuts.toString())
+//                    favorited = newvalue
+                }
+
+            )
+    )
+}
 
 @Composable
 private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePlaylist) -> Unit) {
@@ -108,10 +152,18 @@ private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePl
                 style = MaterialTheme.typography.body1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+
 //                modifier = Modifier
 //                    .padding(start = 8.dp)
 //                    .align(Alignment.CenterVertically)
             )
         }
+        FavoriteStar(
+            accessUri = playlistItem.uri.uri,
+            coverUri = playlistItem.images.first().url,
+            type = SHORTCUT_TYPE.PLAYLIST,
+            displayname = playlistItem.name
+        )
+
     }
 }

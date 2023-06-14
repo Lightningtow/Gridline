@@ -24,47 +24,10 @@ object Constants {
     val RK_ARCHIVE: String = "spotify:playlist:0HBq6MvLLiQBY9hTFw0JVE"
 
     val RK_BUNDLE: List<String> = listOf(ROADKILL, RK_REPO, RK_ARCHIVE)
+    val RK_COVER: String = "https://i.scdn.co/image/ab67706c0000bebbce70dd919d2c0c6bf8e2bb8c"
 
+    val OMNI_COVER: String = "https://i.scdn.co/image/ab67706c0000bebbf0076d5b00c6668246cfaa30"
 
-    val BottomNavItems = listOf(
-        BottomNavItem(
-            label = "Broadcasts",
-            icon = R.drawable.api,
-            route = "broadcasts"
-        ),
-//        BottomNavItem(
-//            label = "Login",
-//            icon = R.drawable.account_circle,
-//            route = "login"
-//        ),
-
-        BottomNavItem(
-            label = "Home",
-            icon = R.drawable.home,
-            route = "home"
-        ),
-        BottomNavItem(
-            label = "Player",
-            icon = R.drawable.baseline_play_circle_24,
-            route = "player"
-        ),
-
-//        BottomNavItem(
-//            label = "Purge",
-//            icon = R.drawable.knife,
-//            route = "purge"
-//        ),
-        BottomNavItem(
-            label = "Idk",
-            icon = R.drawable.settings_backup_restore,
-            route = "idk"
-        ),
-        BottomNavItem(
-            label = "Shuffle",
-            icon = R.drawable.shuffle,
-            route = "shuffle"
-        ),
-    )
 }
 // icon credits:
 // shuffle https://iconscout.com/contributors/benjamin-j-sperry
@@ -72,8 +35,3 @@ object Constants {
 // solid knife https://iconscout.com/contributors/icon-click
 
 // the rest are from https://fonts.google.com/icons
-data class BottomNavItem(
-    val label: String,
-    val icon: Int,
-    val route: String,
-)

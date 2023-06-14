@@ -12,14 +12,13 @@ message ShortcutStruct {
   string accessUri = 1;
   string coverUri = 2;
   ShortcutType type = 3;
+  string displayname = 4;
 
   enum ShortcutType {
-    reserved 1 to 3;
-    PLAYLIST = 0;
-    TRACK = 5;
-    ARTIST = 6;
-    ALBUM = 7;
-
+      PLAYLIST = 0;
+      TRACK =  1;
+      ARTIST = 2;
+      ALBUM =  3;
   }
 
 }

@@ -22,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.lightningtow.gridline.R
 import com.lightningtow.gridline.ui.home.TrackViewMaster
 import com.lightningtow.gridline.ui.home.shouldLoadTracks
 import com.lightningtow.gridline.data.TrackHolder1
@@ -95,7 +96,7 @@ fun NavHostContainer(
                 AuthPage()
                 showTracksNow = false
             }
-            composable("shuffle") {
+            composable("library") {
 
                 BackHandler(enabled = showTracksNow, onBack = {
                     shouldLoadTracks = false
@@ -103,7 +104,7 @@ fun NavHostContainer(
 
                 })
                 if(!showTracksNow) {
-                    AllPlaylistsViewEntry("Shuffle Playlists", onPlaylistClick = {
+                    AllPlaylistsViewEntry("Playlists", onPlaylistClick = {
 //                    loadingTracks = true
 
                         shouldLoadTracks = true
@@ -121,6 +122,50 @@ fun NavHostContainer(
 
         })
 }
+data class BottomNavItem(
+    val label: String,
+    val icon: Int,
+    val route: String,
+)
+private val BottomNavItems = listOf(
+    BottomNavItem(
+        label = "Broadcasts",
+        icon = R.drawable.api,
+        route = "broadcasts"
+    ),
+//        BottomNavItem(
+//            label = "Login",
+//            icon = R.drawable.account_circle,
+//            route = "login"
+//        ),
+
+    BottomNavItem(
+        label = "Home",
+        icon = R.drawable.home,
+        route = "home"
+    ),
+    BottomNavItem(
+        label = "Player",
+        icon = R.drawable.baseline_play_circle_24,
+        route = "player"
+    ),
+
+//        BottomNavItem(
+//            label = "Purge",
+//            icon = R.drawable.knife,
+//            route = "purge"
+//        ),
+    BottomNavItem(
+        label = "Idk",
+        icon = R.drawable.settings_backup_restore,
+        route = "idk"
+    ),
+    BottomNavItem(
+        label = "Library",
+        icon = R.drawable.round_inventory_2_24,
+        route = "library"
+    ),
+)
 private var showTracksNow by mutableStateOf(false)
 
 
@@ -152,7 +197,7 @@ pass navigation callbacks as parameters. This allows all your composables to be 
 
 
         // Bottom nav items we declared
-        Constants.BottomNavItems.forEach { navItem ->
+        BottomNavItems.forEach { navItem ->
 
             // Place the bottom nav items
             BottomNavigationItem(

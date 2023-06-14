@@ -1,23 +1,33 @@
 package com.lightningtow.gridline.ui.home
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
+import androidx.compose.foundation.clickable
 import com.lightningtow.gridline.utils.toasty
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.lightningtow.gridline.ui.components.GridlineButton
+import com.lightningtow.gridline.ui.components.KotlinShortcut
+import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.lightningtow.gridline.ui.components.downloadShortcutData
 import com.lightningtow.gridline.ui.components.uploadShortcutData
 //import com.lightningtow.gridline.ui.components.uploadStuff
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.theme.gridline_pink
+import com.lightningtow.gridline.utils.Constants
+import com.skydoves.landscapist.glide.GlideImage
 
 
 @Composable
@@ -73,22 +83,4 @@ fun LandingScreen() {
             }
         }
     }
-}
-
-@Composable
-fun HelloWorld() {
-    GridlineTheme() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-//                .background(Color.DarkGray),
-            // parameters set to place the items in center
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center)
-        {
-            Text(text = "Hello fuckin world", color = gridline_pink)
-
-        }
-    }
-
 }

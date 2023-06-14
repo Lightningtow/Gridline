@@ -376,59 +376,7 @@ object Player {
         }
 
     }
-    /*
-//    @Composable
-//    fun SliderDemo() {
-//        // In this demo, ViewModel updates its progress periodically from 0f..1f
-////        val viewModel by remember { mutableStateOf(SliderDemoViewModel()) }
-//
-//        val currentPos = currentPlayerState.value?.playbackPosition?.toFloat()
-//
-//        Column(
-//            verticalArrangement = Arrangement.spacedBy(16.dp)
-//        ) {
-////            val currentPos by remember { mutableStateOf(currentPlayerState.value!!.playbackPosition.toFloat()) }
-//
-//            // local slider value state
-//            var sliderValueRaw by remember { mutableStateOf(currentPos) }
-//
-//            // getting current interaction with slider - are we pressing or dragging?
-//            val interactionSource = remember { MutableInteractionSource() }
-//            val isPressed by interactionSource.collectIsPressedAsState()
-//            val isDragged by interactionSource.collectIsDraggedAsState()
-//            val isInteracting = isPressed || isDragged
-//
-//            // calculating actual slider value to display
-//            // depending on wether we are interacting or not
-//            // using either the local value, or the ViewModels / server one
-//            val sliderValue by derivedStateOf {
-//                if (isInteracting) {
-//                    sliderValueRaw
-//                } else {
-//                    currentPos
-////                    currentPlayerState.value!!.playbackPosition.toFloat()
-//                }
-//            }
-//
-//
-//            sliderValue?.let {
-//                Slider(
-//                    value = it, // using calculated sliderValue here from above
-//                    onValueChange = {
-//                        sliderValueRaw = it
-//                    },
-//                    onValueChangeFinished = {
-//                        sliderValueRaw?.let { it1 -> spotifyAppRemote!!.playerApi.seekTo(it1.toLong()) }
-//        //                    viewModel.updateProgress(sliderValue)
-//                    },
-//                    interactionSource = interactionSource
-//                )
-//            }
-//
-//            // Debug interaction info
-//            Text("isPressed: $isPressed | isDragged: $isDragged | currentPos $currentPos" )
-//        }
-//    } */
+
     @OptIn(ExperimentalFoundationApi::class) // for basicMarquee
     @Composable
     private fun BottomPart() {
@@ -568,8 +516,7 @@ object Player {
     }
 
     @Composable
-    private fun UtilRow( modifier: Modifier = Modifier,
-    ) {
+    private fun UtilRow( modifier: Modifier = Modifier, ) {
         val context = LocalContext.current
         val spacing = Modifier.padding(8.dp)
 
@@ -664,32 +611,5 @@ object Player {
                 )
         )
 
-
-        /*IconButton(
-            onClick = OnClick,
-//            modifier =
-            modifier = Modifier
-//                .pointerInput(Unit) {
-//                    detectTapGestures( onLongPress = {
-//                        Log.e("ctrlfme", "long pressed")
-//                        OnLongClick() }
-//                    ) }
-                .combinedClickable(
-                    onClick = {},
-                    onLongClick = {
-                        Log.e("ctrlfme", "long pressed")
-
-                        OnLongClick() }
-                )
-
-            , content = {
-                Icon(
-                    ImageVector.vectorResource(id = icon),
-                    modifier = modifier,
-                    contentDescription = contentDescription,
-                    tint = color
-                )
-            }
-        )*/
     }
 }
