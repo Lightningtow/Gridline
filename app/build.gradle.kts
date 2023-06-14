@@ -1,4 +1,9 @@
-import com.google.protobuf.gradle.protobuf
+//import com.google.protobuf.gradle.generateProtoTasks
+//import com.google.protobuf.gradle.plugins
+//import com.google.protobuf.gradle.protobuf
+//import com.google.protobuf.gradle.protoc
+import com.google.protobuf.gradle.*
+import com.google.protobuf.*
 
 plugins {
     id("com.android.application")
@@ -6,6 +11,7 @@ plugins {
 //    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
 //    id("com.google.protobuf")
+    id("com.google.protobuf") version "0.8.12"
 
 //    id ("com.android.application") version "7.2.1" apply false
 //    id ("com.android.library") version "7.2.1" apply false
@@ -96,16 +102,22 @@ android {
 var compose_version = "1.4.1"
 var datastore_version = "1.1.0-alpha04"
 var lifecycle_version = "2.4.1"
+val protobuf_version = "3.21.7"
+
 dependencies {
+    implementation("com.google.protobuf:protobuf-javalite:$protobuf_version")
+
+
     implementation("androidx.datastore:datastore:$datastore_version")
-//    implementation("androidx.datastore:datastore-rxjava3:1.0.0")
-//    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("androidx.datastore:datastore-rxjava2:1.0.0")
+    implementation("androidx.datastore:datastore-rxjava3:1.0.0")
+    implementation("androidx.datastore:datastore-core:1.0.0")
 
     
     implementation("com.google.code.gson:gson:2.6.1")
 
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+//    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("androidx.lifecycle:lifecycle-common:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-process:$lifecycle_version")
@@ -157,4 +169,22 @@ dependencies {
 
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+}
+//  https://stackoverflow.com/questions/64811006/jetpack-proto-datastore-gradle-config-with-kotlin-dsl
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protobuf_version"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+//            task.plugins{
+//                create("java") {
+//                    option("lite")
+//                }
+//            }
+            task.plugins.create("java") {
+                option("lite")
+            }
+        }
+    }
 }

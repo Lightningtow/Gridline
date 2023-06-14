@@ -44,8 +44,8 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
     override fun onFailure(exception: Exception) {
         exception.printStackTrace()
         pkceClassBackTo = null
-        toasty("Auth failed: ${exception.message}")
-        Log.e("Auth failed:", "${exception.message}")
+        toasty("PKCE auth failed: ${exception.message}")
+        Log.e("PKCE auth failed:", "${exception.message}")
 
     }
 }

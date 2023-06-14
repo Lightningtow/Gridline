@@ -35,12 +35,12 @@ object HomePage {
 //                cover = "https://i.scdn.co/image/ab67706c0000bebbce70dd919d2c0c6bf8e2bb8c",
                 displayname = "Roadkill"
             )
-            ShortcutIcon(
-                type = SHORTCUT_TYPE.PLAYLIST,
-                uri = Constants.OMNI,
-//                cover = "https://i.scdn.co/image/ab67706c0000bebbce70dd919d2c0c6bf8e2bb8c",
-                displayname = "Omniscience"
-            )
+//            ShortcutIcon(
+//                type = SHORTCUT_TYPE.PLAYLIST,
+//                uri = Constants.OMNI,
+////                cover = "https://i.scdn.co/image/ab67706c0000bebbce70dd919d2c0c6bf8e2bb8c",
+//                displayname = "Omniscience"
+//            )
 
 
 

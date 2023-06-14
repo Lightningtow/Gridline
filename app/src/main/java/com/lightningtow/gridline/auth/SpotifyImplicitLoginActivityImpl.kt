@@ -39,7 +39,7 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
     }
 
     override fun onFailure(errorMessage: String) {
-        toasty("Auth failed: $errorMessage")
-        Log.e("Auth failed:", errorMessage)
+        toasty("Implicit auth failed: $errorMessage")
+        Log.e("Implicit auth failed:", errorMessage)
     }
 }

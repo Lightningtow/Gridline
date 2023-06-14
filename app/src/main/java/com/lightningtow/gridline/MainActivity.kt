@@ -9,9 +9,9 @@ import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.player.Player
-import com.lightningtow.gridline.player.Player.spotifyAppRemote
 import com.lightningtow.gridline.ui.components.BottomNavigationBar
 import com.lightningtow.gridline.ui.components.NavHostContainer
+import com.lightningtow.gridline.ui.components.getStuff
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
                 PlaylistsHolder.lists = api.playlists.getClientPlaylists().getAllItemsNotNull()
             }
-            PlaylistsHolder.loading = false;
+            PlaylistsHolder.loading = false
 
         }
 
@@ -40,20 +40,30 @@ class MainActivity : AppCompatActivity() {
 
     //    private var spotifyAppRemote: SpotifyAppRemote? = null
     private fun connected() {
-        spotifyAppRemote?.playerApi?.subscribeToPlayerContext()?.setEventCallback { playerContext ->
+        getStuff()
+        Player.spotifyAppRemote?.playerApi?.subscribeToPlayerContext()?.setEventCallback { playerContext ->
             Player.currentPlayerContext.value = playerContext
+            scope.launch {
+                try {
+                    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+                    val playlist = api.playlists.getPlaylist(playerContext.uri)
+                    Player.contextLen.value = playlist!!.tracks.size
+
+                } catch (ex: Exception) { Log.e("MainActivity.connected", "error getting context length: $ex") }
+
+            }
+// todo for albums
         }
-        spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
+        Player.spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
 
 
                 Player.currentPlayerState.value = playerState
                 Player.currentPos.value = playerState.playbackPosition
-
                 // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
 //            Player.coverUri = playerState.track.imageUri
 
             scope.launch {
-                try {
+                try { // get album art
                     val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 //                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
                     val albumUri = Player.currentPlayerState.value!!.track.album.uri.toString()
@@ -77,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        spotifyAppRemote?.let {
+        Player.spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
         }
 

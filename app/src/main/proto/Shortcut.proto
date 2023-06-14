@@ -1,9 +1,14 @@
 syntax = "proto3";
-package tutorial;
+package com.lightningtow.gridline;
 
-import "google/protobuf/timestamp.proto";
+option java_package = "com.lightningtow.gridline";
+option java_multiple_files = true;
 
-message Shortcut {
+//message Settings {
+//  int32 example_counter = 1;
+//}
+
+message ShortcutStruct {
   string accessUri = 1;
   string coverUri = 2;
   ShortcutType type = 3;
@@ -17,7 +22,7 @@ message Shortcut {
 }
 
 message ShortcutList {
-  repeated Shortcut entries = 1;
+  repeated ShortcutStruct entries = 1;
 }
 
 

@@ -81,6 +81,7 @@ fun GridlineCoverImage(
                     val browserIntent =
                         Intent(Intent.ACTION_VIEW, Uri.parse(deeplink_url))
                     //  Uri.parse(track.externalUrls.first { it.name == "spotify" }.url) // what does this do
+                    browserIntent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://" + context.packageName))
 
                     Log.e("deeplink", "deeplinking to $deeplink_url")
                     ContextCompat.startActivity(context, browserIntent, null)

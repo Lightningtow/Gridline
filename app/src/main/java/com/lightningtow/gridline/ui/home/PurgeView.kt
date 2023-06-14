@@ -25,10 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import com.adamratzman.spotify.models.SimplePlaylist
 import com.lightningtow.gridline.data.PurgeData
+//import com.lightningtow.gridline.data.PurgeData
 import com.lightningtow.gridline.grid.purgePlaylist
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.GridlineCoverImage
@@ -40,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.util.prefs.Preferences
 
 /* private */ var listPicking by mutableStateOf(false)
 /* private */ var shouldPurge by mutableStateOf(false)
@@ -47,7 +47,7 @@ private var displayLoadingScreen by mutableStateOf(false)
 var loadingMessage by mutableStateOf("default")
 // At the top level of your kotlin file:
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+//val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 @Composable
 fun PurgeViewMaster() {

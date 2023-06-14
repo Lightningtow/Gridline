@@ -96,13 +96,7 @@ fun NavHostContainer(
                 showTracksNow = false
             }
             composable("shuffle") {
-//
-//                masterMaster(callback = {
-//                    shouldLoadTracks = true
-//                    uiState.currentPage = "TRACKS"
-//
-//                })
-//                var playlist: SimplePlaylist;
+
                 BackHandler(enabled = showTracksNow, onBack = {
                     shouldLoadTracks = false
                     showTracksNow = false
@@ -112,28 +106,16 @@ fun NavHostContainer(
                     AllPlaylistsViewEntry("Shuffle Playlists", onPlaylistClick = {
 //                    loadingTracks = true
 
-                        // todo what in the actual fuck is this spaghetti
-                        // todo    https://stackoverflow.com/questions/54186231/detecting-when-a-value-changed-in-a-specific-variable-in-android
-                        // todo    https://stackoverflow.com/questions/7157123/in-android-how-do-i-take-an-action-whenever-a-variable-changes
                         shouldLoadTracks = true
-//                    PlaylistGetter.getPlaylistByURI(URI=it.uri.uri, holder=1) // done in asyncGetData
-
                         TrackHolder1.playlistName = it.name
                         TrackHolder1.TrackHolder1Uri = it.uri.uri
                         showTracksNow = true
 
-//                    asyncGetPlaylistTracks()
-//                    val intent = Intent(context, TrackViewActivity::class.java)
-//                    ContextCompat.startActivity(context, intent, null)
                     })
-                }
-
-                else if (showTracksNow) {
-//                    Test()
+                } else if (showTracksNow) {
                     TrackViewMaster(uri=TrackHolder1.TrackHolder1Uri)
-
-
                 }
+
             }
 
 
