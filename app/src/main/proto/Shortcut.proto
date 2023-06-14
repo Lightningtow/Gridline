@@ -14,9 +14,12 @@ message ShortcutStruct {
   ShortcutType type = 3;
 
   enum ShortcutType {
+    reserved 1 to 3;
     PLAYLIST = 0;
-    ARTIST = 1;
-    SONG = 2;
+    TRACK = 5;
+    ARTIST = 6;
+    ALBUM = 7;
+
   }
 
 }

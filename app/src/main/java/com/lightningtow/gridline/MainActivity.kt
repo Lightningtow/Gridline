@@ -11,7 +11,8 @@ import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.player.Player
 import com.lightningtow.gridline.ui.components.BottomNavigationBar
 import com.lightningtow.gridline.ui.components.NavHostContainer
-import com.lightningtow.gridline.ui.components.getStuff
+import com.lightningtow.gridline.ui.components.downloadShortcutData
+//import com.lightningtow.gridline.ui.components.getStuff
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     //    private var spotifyAppRemote: SpotifyAppRemote? = null
     private fun connected() {
-        getStuff()
+        // todo todooooooo
         Player.spotifyAppRemote?.playerApi?.subscribeToPlayerContext()?.setEventCallback { playerContext ->
             Player.currentPlayerContext.value = playerContext
             scope.launch {
