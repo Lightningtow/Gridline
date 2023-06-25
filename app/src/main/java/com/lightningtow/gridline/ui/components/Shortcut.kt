@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -41,74 +42,52 @@ import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import com.adamratzman.spotify.models.PlaylistTrack
+import com.lightningtow.gridline.PlaylistShortcut
+import com.lightningtow.gridline.R
+import com.lightningtow.gridline.TrackShortcut
+import com.lightningtow.gridline.TrackShortcutStore
+import com.lightningtow.gridline.data.PlaylistShortcutStoreDataStore
+import com.lightningtow.gridline.data.TrackHolder1.templist
+import com.lightningtow.gridline.data.TrackShortcutStoreDataStore
+import com.lightningtow.gridline.p_TrackList
+import com.lightningtow.gridline.ui.theme.GridlineTheme
 
 public enum class SHORTCUT_TYPE { PLAYLIST, TRACK, ARTIST, ALBUM }
 
-object ShortcutStructSerializer : Serializer<ShortcutStruct> {
-    override val defaultValue: ShortcutStruct = ShortcutStruct.getDefaultInstance()
-    override suspend fun readFrom(input: InputStream): ShortcutStruct {
-        try {
-            return ShortcutStruct.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read proto.", exception)
-        }
-    }
 
-    override suspend fun writeTo(
-        t: ShortcutStruct,
-        output: OutputStream
-    ) = t.writeTo(output)
-}
-
-val Context.shortcutStructDataStore: DataStore<ShortcutStruct> by dataStore(
-    fileName = "ShortcutStruct.pb",
-    serializer = ShortcutStructSerializer
-)
-
-object ShortcutListSerializer : Serializer<ShortcutList> {
-    override val defaultValue: ShortcutList = ShortcutList.getDefaultInstance()
-    override suspend fun readFrom(input: InputStream): ShortcutList {
-        try {
-            return ShortcutList.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read proto.", exception)
-        }
-    }
-
-    override suspend fun writeTo(
-        t: ShortcutList,
-        output: OutputStream
-    ) = t.writeTo(output)
-}
-
-val Context.shortcutListDataStore: DataStore<ShortcutList> by dataStore(
-    fileName = "ShortcutList.pb",
-    serializer = ShortcutListSerializer
-)
 
 //var masterListOfShortcuts: MutableList<KotlinShortcut> = mutableStateListOf()
-var realList: List<KotlinShortcut> = listOf()
+var realList: List<TrackShortcut> = listOf()
 
-var masterListOfShortcuts by mutableStateOf(listOf<KotlinShortcut>())
+var masterListOfTracks by mutableStateOf(listOf<TrackShortcut>())
+var masterListOfPlaylists by mutableStateOf(listOf<PlaylistShortcut>())
 
 fun downloadShortcutData() {
     val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    val tempList: MutableList<KotlinShortcut> = mutableListOf()
-    var listObj: ShortcutList
+    val templist: MutableList<TrackShortcut> = mutableListOf()
+    var listObj: TrackShortcutStore
 
     scope.launch {// TODO ITS A COROUTINE DUH, RACE CONDITIONS
-        listObj = context.shortcutListDataStore.data.first()
+//        listObj = context.TrackShortcutStoreDataStore.data.first()
 
-        Log.e("scoped", "scoped $listObj")
+//        Log.e("scoped", "scoped $listObj")
 //        list = runBlocking { context.shortcutListDataStore.data.first()
 
-        for (item in listObj.entriesList) {
-
-            tempList += protoToKotlin(item)
-        }
+//        for (item in listObj.entriesList) {
+//
+////            tempList += protoToKotlin(item)
+//            templist += item.
+//        }
 //        realList = listThing
-        masterListOfShortcuts = tempList
+//        masterListOfTracks = tempList
+
+        masterListOfTracks = context.TrackShortcutStoreDataStore.data.first().entriesList
+        masterListOfPlaylists = context.PlaylistShortcutStoreDataStore.data.first().entriesList
+
         toasty(context, "downloaded shortcut data")
     }
 
@@ -117,132 +96,94 @@ fun downloadShortcutData() {
 fun uploadShortcutData() {
     val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     scope.launch {
-        val tempList = mutableListOf<ShortcutStruct>()
+//        val tempList = mutableListOf<ShortcutStruct>()
+//
+//        for (item in masterListOfShortcuts) {
+////      for (item in datas) {
+//
+//                tempList += kotlinToProto(item)
+//        }
 
-        for (item in masterListOfShortcuts) {
-//      for (item in datas) {
-
-                tempList += kotlinToProto(item)
-        }
-
-        context.shortcutListDataStore.updateData { loginResponse ->
-            loginResponse.toBuilder()
+        context.TrackShortcutStoreDataStore.updateData { data ->
+            data.toBuilder()
                 .clearEntries()
-                .addAllEntries(tempList)
+                .addAllEntries(masterListOfTracks)
+                .build()
+        }
+        context.PlaylistShortcutStoreDataStore.updateData { data ->
+            data.toBuilder()
+                .clearEntries()
+                .addAllEntries(masterListOfPlaylists)
                 .build()
         }
         toasty(context, "uploaded shortcut data") // todo i dont think this fake context works
     }
 }
 
-fun kotlinToProto(item: KotlinShortcut): ShortcutStruct {
-    val new = ShortcutStruct.newBuilder()
-    new.accessUri = item.accessUri
-    new.coverUri = item.coverUri
-    new.type =
-        if (item.type == SHORTCUT_TYPE.PLAYLIST) ShortcutStruct.ShortcutType.PLAYLIST
-        else if (item.type == SHORTCUT_TYPE.TRACK) ShortcutStruct.ShortcutType.TRACK
-        else if (item.type == SHORTCUT_TYPE.ARTIST) ShortcutStruct.ShortcutType.ARTIST
-        else ShortcutStruct.ShortcutType.ALBUM
-    new.displayname = item.displayname
-    return new.build()
-}
-
-fun protoToKotlin(item: ShortcutStruct): KotlinShortcut {
-    val new = KotlinShortcut(
-        accessUri = item.accessUri,
-        coverUri = item.coverUri,
-        type =
-        if (item.type == ShortcutStruct.ShortcutType.PLAYLIST) SHORTCUT_TYPE.PLAYLIST
-        else if (item.type == ShortcutStruct.ShortcutType.TRACK) SHORTCUT_TYPE.TRACK
-        else if (item.type == ShortcutStruct.ShortcutType.ARTIST) SHORTCUT_TYPE.ARTIST
-        else SHORTCUT_TYPE.ALBUM,
-        displayname = item.displayname,
-
-        )
-    return new
-}
-
-
-val datas = listOf(
-    KotlinShortcut(
-        accessUri = Constants.ROADKILL,
-        coverUri = Constants.RK_COVER,
-        type = SHORTCUT_TYPE.PLAYLIST,
-        displayname = "Roadkill"
-
-    ),
-
-    KotlinShortcut(
-        accessUri = Constants.OMNI,
-        coverUri = Constants.OMNI_COVER,
-        type = SHORTCUT_TYPE.PLAYLIST,
-        displayname = "Omniscience"
-    )
-)
-
-
-// https://stackoverflow.com/questions/64430872/how-to-save-a-list-of-objects-with-proto-datastore
-//suspend fun uploadStuff() {
-//fun uploadStuff() {
-//    val cover: String = "default2"
-//    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-//    scope.launch {
-////        val thing: ShortcutStruct (
-////            accessUri = Constants.ROADKILL,
-////            coverUri = "https://i.scdn.co/image/ab67706c0000bebbfee4892fcb2d95910502c238",
-////            type = SHORTCUT_TYPE.PLAYLIST
-////        )
-//        updateShortcutData(datas)
-////        context.shortcutListDataStore.updateData { thing ->
-////            thing.toBuilder()
-////                .clearEntries()
-////                .setEntries(datas)
-////                .build()
-////        }
-//
-//    }
-//}
-// todo uncomment funcs
-/*
-fun getStuff() {
-    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
-    var ffs: String? = null
-    var exampleData: ShortcutStruct? = null
-    var scoped: String? = null
-
-    scope.launch  {// TODO ITS A FUCKIN COROUTINE DUH, RACE CONDITIONS
-        scoped = context.shortcutStructDataStore.data.first().coverUri
-        Log.e("scoped", "scoped $scoped")
-        exampleData = runBlocking { context.shortcutStructDataStore.data.first() }
-        realCover = scoped ?: "null"
-    }
-}
-
-//suspend fun uploadStuff() {
-fun uploadStuff() {
-    val cover: String = "default2"
-    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    scope.launch {
-        context.shortcutStructDataStore.updateData { shortcut ->
-            shortcut.toBuilder()
-                .setCoverUri("https://i.scdn.co/image/ab67706c0000bebbfee4892fcb2d95910502c238")
-                .build()
-        }
-
-    }
-}*/
-
-data class KotlinShortcut(
-    val accessUri: String,
-    val coverUri: String,
-    val type: SHORTCUT_TYPE,
-    val displayname: String
+@Composable
+fun FavoriteStar(
+    accessUri: String,
+    coverUri: String,
+    type: SHORTCUT_TYPE,
+    displayname: String
 ) {
+//    var thing: Any
+    val thing = PlaylistShortcut.newBuilder()
+    thing.accessUri = accessUri
+    thing.coverUri = coverUri
+    thing.displayname = displayname
+    val newList: PlaylistShortcut = thing.build()
 
 
+    val thing2 = TrackShortcut.newBuilder()
+    thing2.accessUri = accessUri
+    thing2.coverUri = coverUri
+    thing2.displayname = displayname
+    val newTrack: TrackShortcut = thing2.build()
+
+
+//    val listItem =
+
+    val favorited: Boolean = if (type == SHORTCUT_TYPE.PLAYLIST) newList in masterListOfPlaylists
+    else newTrack in masterListOfTracks
+
+    Icon(
+        ImageVector.vectorResource(if (favorited) R.drawable.baseline_star_24 else R.drawable.outline_star_border_24),
+        contentDescription = "who cares",
+        tint = if (favorited) GridlineTheme.colors.brand else GridlineTheme.colors.iconPrimary,
+        modifier = Modifier
+            .size(size = 32.dp)
+            .clickable(
+                onClick = {
+                    val newvalue = !favorited
+
+                    if (newvalue) {
+                        if (type == SHORTCUT_TYPE.PLAYLIST)  masterListOfPlaylists += newList
+                        else masterListOfTracks += newTrack
+//                        masterListOfShortcuts += (item)
+                    } else {
+                        if (type == SHORTCUT_TYPE.PLAYLIST)  masterListOfPlaylists -= newList
+                        else masterListOfTracks -= newTrack
+//                        masterListOfShortcuts -= (item)
+                    }
+                    uploadShortcutData()
+
+//                    Log.e("FavoriteStar", masterListOfShortcuts.toString())
+                    // todo combine remove with HomePageIcon
+//                    favorited = newvalue
+                }
+
+            )
+    )
 }
+
+
+//data class KotlinShortcut(
+//    val accessUri: String,
+//    val coverUri: String,
+////    val type: SHORTCUT_TYPE,
+//    val displayname: String
+//)
 
 
 

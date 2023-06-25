@@ -31,8 +31,8 @@ import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.components.GridlineDivider
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.lightningtow.gridline.R
-import com.lightningtow.gridline.ui.components.KotlinShortcut
-import com.lightningtow.gridline.ui.components.masterListOfShortcuts
+import com.lightningtow.gridline.ui.components.FavoriteStar
+import com.lightningtow.gridline.ui.components.uploadShortcutData
 
 @Composable
 fun AllPlaylistsViewEntry(headername: String = "DEFAULT", onPlaylistClick: (SimplePlaylist) -> Unit) {
@@ -85,39 +85,7 @@ private fun PlaylistList(lists: List<SimplePlaylist>, onPlaylistClick: (SimplePl
     }
 }
 
-@Composable
-private fun FavoriteStar(
-    accessUri: String,
-    coverUri: String,
-    type: SHORTCUT_TYPE,
-    displayname: String
-) {
-    val item = KotlinShortcut(accessUri = accessUri, coverUri = coverUri, type, displayname)
 
-    val favorited: Boolean = item in masterListOfShortcuts
-
-    Icon(
-        ImageVector.vectorResource(if (favorited) R.drawable.baseline_star_24 else R.drawable.outline_star_border_24),
-        contentDescription = "who cares",
-        tint = if (favorited) GridlineTheme.colors.brand else GridlineTheme.colors.iconPrimary,
-        modifier = Modifier
-            .size(size = 32.dp)
-            .clickable(
-                onClick = {
-                    val newvalue = !favorited
-
-                    if (newvalue) {
-                        masterListOfShortcuts += (item)
-                    } else {
-                        masterListOfShortcuts -= (item)
-                    }
-                    Log.e("FavoriteStar", masterListOfShortcuts.toString())
-//                    favorited = newvalue
-                }
-
-            )
-    )
-}
 
 @Composable
 private fun PlaylistRow(playlistItem: SimplePlaylist, onPlaylistClick: (SimplePlaylist) -> Unit) {

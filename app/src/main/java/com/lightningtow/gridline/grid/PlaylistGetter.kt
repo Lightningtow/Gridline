@@ -1,12 +1,16 @@
 package com.lightningtow.gridline.grid
 
 import android.util.Log
+import android.widget.Toast
 import com.adamratzman.spotify.models.Playable
 import com.adamratzman.spotify.models.PlayableUri
 import com.adamratzman.spotify.utils.Market
+import com.lightningtow.gridline.GridlineApplication.Companion.context
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.data.API_State.kotlinApi
 import com.lightningtow.gridline.data.TrackHolder2
 import com.lightningtow.gridline.data.TrackHolder1
+import com.lightningtow.gridline.utils.toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,9 +24,10 @@ class PlaylistGetter() {
         fun upload() = runBlocking {
             launch {
 
-                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                val api = kotlinApi
 
-                api.playlists.removeAllClientPlaylistPlayables(TrackHolder1.TrackHolder1Uri)
+                kotlinApi.playlists.removeAllClientPlaylistPlayables(TrackHolder1.TrackHolder1Uri)
 
                 val newlist: MutableList<PlayableUri> =
                     mutableListOf(); //PlaylistHolder.templist.toTypedArray()
@@ -31,11 +36,12 @@ class PlaylistGetter() {
                     if (item.asLocalTrack != null) continue;  // todo let it keep local tracks
                     newlist.add(item.uri)
                 }
-                api.playlists.addPlayablesToClientPlaylist(
+                kotlinApi.playlists.addPlayablesToClientPlaylist(
                     playlist = TrackHolder1.TrackHolder1Uri,
                     *newlist.toTypedArray()
                 ) // todo prevent trying to uploading to unowned playlist, causes crash
 //                val toast = Toast.makeText(context, "sometext", Toast.LENGTH_SHORT)
+//                toasty(context, "test")
 //                toast.show()
             }
         }
@@ -48,7 +54,8 @@ class PlaylistGetter() {
 //        = runBlocking { launch {// this gets local tracks too
 
                 Log.e("getPlaylistByURI", "getting playlist $URI")
-                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                val api = kotlinApi
 
 //                val contents = playlistTrackToPlayable(
 ////                    val contents = playlistTrackToTrack(
@@ -62,10 +69,10 @@ class PlaylistGetter() {
 
 //                PlaylistHolder.contents = contents;
 //                PlaylistHolder.templist = contents as MutableList<Track>;
-                val mutlist = (api.playlists.getPlaylistTracks(URI).getAllItemsNotNull()
+                val mutlist = (kotlinApi.playlists.getPlaylistTracks(URI).getAllItemsNotNull()
                     .map { it.track!! }) as MutableList<Playable>;
 
-                val realPlaylist = api.playlists.getPlaylist(URI, Market.US)!!
+                val realPlaylist = kotlinApi.playlists.getPlaylist(URI, Market.US)!!
                 if (holder == 1) {
                     TrackHolder1.templist = mutlist
                     TrackHolder1.contents = mutlist // todo wildly inefficient

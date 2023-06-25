@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.adamratzman.spotify.models.PlayableUri
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.data.API_State
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,8 +59,10 @@ fun safeLoadImage(action: () -> Unit) {
 //}
 //}
 suspend fun StringToPlayableURI(arg: String): PlayableUri {
-    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
-    val trackUri: PlayableUri = api.tracks.getTrack(arg)!!.uri
+//    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//    val api = API_State.kotlinApi
+
+    val trackUri: PlayableUri = API_State.kotlinApi.tracks.getTrack(arg)!!.uri
     return trackUri;
 }
 

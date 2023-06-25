@@ -105,8 +105,10 @@ var lifecycle_version = "2.4.1"
 val protobuf_version = "3.21.7"
 
 dependencies {
-    implementation("com.google.protobuf:protobuf-javalite:$protobuf_version")
+//    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
+    implementation("com.google.protobuf:protobuf-javalite:$protobuf_version")
 
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-rxjava2:1.0.0")

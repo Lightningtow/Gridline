@@ -10,32 +10,26 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.adamratzman.spotify.models.Playable
-import com.lightningtow.gridline.R
 import com.lightningtow.gridline.data.TrackHolder1
+import com.lightningtow.gridline.data.TrackHolder1.playlistName
 import com.lightningtow.gridline.grid.PlaylistGetter
 import com.lightningtow.gridline.player.Player
 //import com.lightningtow.gridline.grid.ShuffleInPlace
@@ -72,7 +66,7 @@ fun TrackViewMaster(uri: String = "default") {
 
 //            }
         else
-            PlayableViewPage(tracks = TrackHolder1.templist, name = TrackHolder1.playlistName)
+            PlayableViewPage(tracks = TrackHolder1.templist, playlistname = TrackHolder1.playlistName)
 }
 
 
@@ -80,7 +74,7 @@ fun TrackViewMaster(uri: String = "default") {
 @Composable
 private fun PlayableViewPage(
     tracks: List<Playable>,
-    name: String
+    playlistname: String
 ) {
 // todo howsabout make tracks just directly accessed    ??? what does this mean
 
@@ -89,7 +83,7 @@ private fun PlayableViewPage(
         Column( // padding here messes with the dividers too
         ) {
 
-            Header(name)//, context)
+            Header(playlistname)//, context)
 
 //        Divider(color = gridline_pink)
             PlayableList(tracks)
@@ -100,7 +94,7 @@ private fun PlayableViewPage(
 
 @Composable
 private fun Header(
-    name: String,
+    playlistname: String,
 ) {
     val context = LocalContext.current
 
@@ -125,7 +119,7 @@ private fun Header(
                     .padding(start = 12.dp) // padding to left of playlist title
             ) {
                 Text(
-                    text = name, // playlist title
+                    text = playlistname, // playlist title
                     color = GridlineTheme.colors.textPrimary,
                     fontWeight = FontWeight.Bold,
                     style = typography.h5,
@@ -134,7 +128,7 @@ private fun Header(
 
                     )
             }
-            ButtonRow()
+            ButtonRow(playlistName)
 
         }
     }
@@ -142,7 +136,7 @@ private fun Header(
 
 // creates a row of buttons
 @Composable
-private fun ButtonRow() { // here
+private fun ButtonRow(playlistname: String) { // here
 //private fun ButtonRow(activity: BaseActivity? = null) {
     val context = LocalContext.current
 
@@ -169,10 +163,8 @@ private fun ButtonRow() { // here
             GridlineButton(onClick = {  // upload button
 //                if (activity == null) return@GridlineButton //here
                 PlaylistGetter.upload()
-                toasty(
-                    context,
-                    "Successfully uploaded playlist"
-                ) // todo what happens if unsuccessful? wrap this with trycatch?
+                toasty(context, "Successfully uploaded $playlistname")
+                 // todo what happens if unsuccessful? wrap this with trycatch?
 
             }, modifier = Modifier.padding(end = 8.dp))
             { Text("Upload") }
@@ -181,7 +173,7 @@ private fun ButtonRow() { // here
 }
 
 @Composable
-private fun PlayableList(playables: List<Playable>) {
+fun PlayableList(playables: List<Playable>) {
     LazyColumn(
 //        modifier = Modifier
 //        .padding(start = 8.dp)
@@ -201,7 +193,7 @@ private fun PlayableList(playables: List<Playable>) {
 
 // one playable item
 @Composable
-private fun PlayableRow(playable: Playable) {
+fun PlayableRow(playable: Playable) {
     val context = LocalContext.current
 //    var offsetX by remember { mutableStateOf(0f) }
 //    var offsetY by remember { mutableStateOf(0f) }
@@ -329,6 +321,8 @@ private fun PlayableRow(playable: Playable) {
             )
         }
     }
+
+
     GridlineDivider()
 
 } // end of playableRow

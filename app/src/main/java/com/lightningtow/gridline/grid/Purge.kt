@@ -2,6 +2,7 @@ package com.lightningtow.gridline.grid
 
 import android.util.Log
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.data.API_State
 import kotlinx.coroutines.launch
 import com.lightningtow.gridline.data.TrackHolder2
 import com.lightningtow.gridline.ui.home.loadingMessage
@@ -27,7 +28,8 @@ fun purgePlaylist(
     callback: () -> Unit
 ) {
 
-    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//    val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//    val api = API_State.kotlinApi
 
 
 
@@ -49,7 +51,7 @@ fun purgePlaylist(
 
             scope.launch {
             Log.e("purge", "removing")
-            api.playlists.removePlayablesFromClientPlaylist(
+                API_State.kotlinApi.playlists.removePlayablesFromClientPlaylist(
                 playlist = victim,
 //            snapshotId = uh,
                 playables = TrackHolder2.contents.map { it.uri }.toTypedArray()

@@ -1,5 +1,6 @@
 package com.lightningtow.gridline.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -23,10 +25,34 @@ import com.adamratzman.spotify.notifications.*
 import com.lightningtow.gridline.GridlineApplication
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.notifications.SpotifyBroadcastReceiver
+import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.toasty
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 import java.util.*
+
+@Composable
+fun BroadcastButton() {
+    val context = LocalContext.current
+    GridlineTheme() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize(),
+
+            ) {
+            GridlineButton(onClick = {
+                context.startActivity(Intent(context, Broadcasts::class.java))
+            }) {
+                Text("broadcasts")
+            }
+        }
+
+    }
+
+}
 
 class Broadcasts : AppCompatActivity() {
     lateinit var spotifyBroadcastReceiver: SpotifyBroadcastReceiver
@@ -49,7 +75,7 @@ class Broadcasts : AppCompatActivity() {
 }
 
 @Composable
-fun ViewBroadcastsPage(broadcasts: List<SpotifyBroadcastEventData>) {
+private fun ViewBroadcastsPage(broadcasts: List<SpotifyBroadcastEventData>) {
     GridlineTheme() {
         val typography = MaterialTheme.typography
 
@@ -57,7 +83,10 @@ fun ViewBroadcastsPage(broadcasts: List<SpotifyBroadcastEventData>) {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                "Most recent 3 broadcasts", style = typography.h4, maxLines = 2, overflow = TextOverflow.Ellipsis
+                "Most recent 3 broadcasts",
+                style = typography.h4,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -71,7 +100,10 @@ fun ViewBroadcastsPage(broadcasts: List<SpotifyBroadcastEventData>) {
                     overflow = TextOverflow.Ellipsis
                 )
             } else Text(
-                "There are no broadcasts!", style = typography.body1, maxLines = 2, overflow = TextOverflow.Ellipsis
+                "There are no broadcasts!",
+                style = typography.body1,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -95,20 +127,27 @@ private fun BroadcastRow(
     broadcastEventData: SpotifyBroadcastEventData, onClick: (SpotifyBroadcastEventData) -> Unit
 ) {
     Row(
-        modifier = Modifier.clickable(onClick = { onClick(broadcastEventData) }).fillMaxWidth().padding(8.dp)
+        modifier = Modifier
+            .clickable(onClick = { onClick(broadcastEventData) })
+            .fillMaxWidth()
+            .padding(8.dp)
     ) {
         Column(modifier = Modifier.padding(start = 8.dp)) {
             Text(
-                text = broadcastEventData.type.id, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h6
+                text = broadcastEventData.type.id,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.h6
             )
             when (broadcastEventData) {
                 is SpotifyQueueChangedData -> {
                     Text(
                         text = "Time sent: ${
-                            DateFormat.getDateFormat(LocalContext.current).format(Date(broadcastEventData.timeSentInMs))
+                            DateFormat.getDateFormat(LocalContext.current)
+                                .format(Date(broadcastEventData.timeSentInMs))
                         }", style = MaterialTheme.typography.body2
                     )
                 }
+
                 is SpotifyMetadataChangedData -> {
                     mapOf(
                         "Spotify URI" to broadcastEventData.playableUri,
@@ -124,6 +163,7 @@ private fun BroadcastRow(
                         )
                     }
                 }
+
                 is SpotifyPlaybackStateChangedData -> {
                     mapOf(
                         "Is playing?" to broadcastEventData.playing,

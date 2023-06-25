@@ -32,6 +32,7 @@ import com.lightningtow.gridline.ui.home.Broadcasts
 import com.lightningtow.gridline.ui.home.HomePage
 
 import com.lightningtow.gridline.ui.home.AllPlaylistsViewEntry
+import com.lightningtow.gridline.ui.home.BroadcastButton
 //import com.lightningtow.gridline.activities.PlaylistViewActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 //import com.lightningtow.gridline.ui.home.AuthPage
@@ -61,10 +62,11 @@ fun NavHostContainer(
         modifier = Modifier.padding(paddingValues = padding),
 
         builder = {
-
+            /**  the order of these do not matter!  */
 
             composable("broadcasts") {
-                context.startActivity(Intent(context, Broadcasts::class.java))
+                BroadcastButton()
+//                context.startActivity(Intent(context, Broadcasts::class.java))
             }
             composable("idk") {
 //                HelloWorld()
@@ -73,29 +75,33 @@ fun NavHostContainer(
             }
             composable("home") {
                 HomePage.HomePageEntry()
-//                showTracksNow = false
+                showTracksNow = false
             }
             composable("player") {
                 PlayerPage()
                 showTracksNow = false
             }
-
-            // todo what is showTracksNow
-            composable("purge") {
-                PurgeViewMaster()
-                BackHandler(
-                    enabled = listPicking, // runs this only while trackPicking
-                    onBack = {
-                        listPicking = false
-//                    PurgeData.choosingPurgelist = false
-
-                })
-            }
-            composable("login") {
-//                context.startActivity(Intent(context, Player::class.java))
-                AuthPage()
+            composable("queue") {
+                PlayerPage()
                 showTracksNow = false
             }
+
+//            // todo what is showTracksNow
+//            composable("purge") {
+//                PurgeViewMaster()
+//                BackHandler(
+//                    enabled = listPicking, // runs this only while trackPicking
+//                    onBack = {
+//                        listPicking = false
+////                    PurgeData.choosingPurgelist = false
+//
+//                })
+//            }
+//            composable("login") {
+////                context.startActivity(Intent(context, Player::class.java))
+//                AuthPage()
+//                showTracksNow = false
+//            }
             composable("library") {
 
                 BackHandler(enabled = showTracksNow, onBack = {
@@ -128,11 +134,18 @@ data class BottomNavItem(
     val route: String,
 )
 private val BottomNavItems = listOf(
+    /**  order of these determine order and which ones are shown  */
     BottomNavItem(
-        label = "Broadcasts",
-        icon = R.drawable.api,
-        route = "broadcasts"
+        label = "Idk",
+        icon = R.drawable.round_start_24,
+        route = "idk"
     ),
+
+//    BottomNavItem(
+//        label = "API",
+//        icon = R.drawable.api,
+//        route = "broadcasts"
+//    ),
 //        BottomNavItem(
 //            label = "Login",
 //            icon = R.drawable.account_circle,
@@ -150,16 +163,17 @@ private val BottomNavItems = listOf(
         route = "player"
     ),
 
+    BottomNavItem(
+        label = "Queue",
+        icon = R.drawable.round_queue_music_24,
+        route = "queue"
+    ),
 //        BottomNavItem(
 //            label = "Purge",
 //            icon = R.drawable.knife,
 //            route = "purge"
 //        ),
-    BottomNavItem(
-        label = "Idk",
-        icon = R.drawable.settings_backup_restore,
-        route = "idk"
-    ),
+
     BottomNavItem(
         label = "Library",
         icon = R.drawable.round_inventory_2_24,
@@ -175,9 +189,10 @@ fun BottomNavigationBar(navController: NavHostController) {
 // todo dont pass nav controller
 // todo https://developer.android.com/jetpack/compose/navigation#nav-from-composable
 /*
-It is strongly recommended that you decouple the Navigation code from your composable destinations to enable testing each composable in isolation,
-separate from the NavHost composable. This means that you shouldn't pass the navController directly into any composable and instead
-pass navigation callbacks as parameters. This allows all your composables to be individually testable, as they don't require an instance of navController in tests.
+It is strongly recommended that you decouple the Navigation code from your composable destinations to enable
+testing each composable in isolation, separate from the NavHost composable. This means that you shouldn't
+pass the navController directly into any composable and instead pass navigation callbacks as parameters.
+This allows all your composables to be individually testable, as they don't require an instance of navController in tests.
  */
     BottomNavigation(
 

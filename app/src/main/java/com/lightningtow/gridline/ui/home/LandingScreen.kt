@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.lightningtow.gridline.ui.components.GridlineButton
-import com.lightningtow.gridline.ui.components.KotlinShortcut
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.lightningtow.gridline.ui.components.downloadShortcutData
 import com.lightningtow.gridline.ui.components.uploadShortcutData
@@ -41,8 +40,16 @@ fun LandingScreen() {
             modifier = Modifier
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)
         ) {
+
+
+            GridlineButton(onClick = {
+                context.startActivity(Intent(context, Broadcasts::class.java))
+            }) {
+                Text("view broadcasts")
+            }
+
 
             GridlineButton(
                 onClick = {
@@ -51,11 +58,10 @@ fun LandingScreen() {
                     toggle = !toggle
 
                 }) {
-                Text("send memes")
+                Text("poke me")
 
             }
 
-            Spacer(modifier = Modifier.padding(10.dp))
             GridlineButton(
                 onClick = {
 
@@ -65,11 +71,10 @@ fun LandingScreen() {
 //                    )
                     uploadShortcutData()
 
-                    toasty(context, "(.)(.)")
+                    toasty(context, "uploaded")
                 }) {
-                Text("send nudes")
+                Text("upload shortcuts")
             }
-            Spacer(modifier = Modifier.padding(10.dp))
 
             GridlineButton(
                 onClick = {
@@ -77,9 +82,9 @@ fun LandingScreen() {
 
                     downloadShortcutData()
 
-                    toasty(context, "(_|_)")
+                    toasty(context, "downloaded")
                 }) {
-                Text("send more nudes")
+                Text("download shortcuts")
             }
         }
     }

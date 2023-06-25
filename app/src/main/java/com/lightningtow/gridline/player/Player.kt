@@ -52,8 +52,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.lightningtow.gridline.R
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.data.API_State
+import com.lightningtow.gridline.data.API_State.contextLen
+import com.lightningtow.gridline.data.API_State.currentPlayerContext
+import com.lightningtow.gridline.data.API_State.currentPlayerState
+import com.lightningtow.gridline.data.API_State.currentPos
+import com.lightningtow.gridline.data.API_State.currentTrackCover
+import com.lightningtow.gridline.data.API_State.spotifyAppRemote
 import com.lightningtow.gridline.data.TrackHolder1.TrackHolder1Uri
-import com.lightningtow.gridline.player.Player.spotifyAppRemote
+import com.lightningtow.gridline.ui.components.FavoriteStar
+import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.lightningtow.gridline.ui.theme.GridlineSliderColors
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
@@ -74,7 +82,6 @@ import kotlin.properties.Delegates
 
 object Player {
 
-    var spotifyAppRemote: SpotifyAppRemote? = null
 //    var tempPlayerStateFILLME: PlayerState? = null
 
 
@@ -154,14 +161,7 @@ object Player {
 ////            else -> Log.e("Player.skipTrack", "ERROR: updateSkip called when skipTo == null") }
 //        } catch (ex: Exception) { Log.e("Player.queueMe", "error: $ex") }
 //    }
-    /**     never update these manually  */
-    val currentPlayerState: MutableState<PlayerState?> = mutableStateOf(null)
-    val currentPlayerContext: MutableState<PlayerContext?> = mutableStateOf(null)
 
-    val contextLen: MutableState<Int?> = mutableStateOf(null)
-    val currentTrackCover: MutableState<Any?> = mutableStateOf(null)
-    val currentPos: MutableState<Long> = mutableStateOf(0)
-    /**     never update these manually  */
 
     private var debugging: MutableState<Boolean> = mutableStateOf(false)
     private var randSkipEnabled: MutableState<Boolean> = mutableStateOf(false)
@@ -185,13 +185,15 @@ object Player {
         try {
             val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
             scope.launch {
-                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//                val api = API_State.kotlinApi
+
                 val playable = StringToPlayableURI(trackUri)
 
                 // remove it first, to ensure no duplicates
-                api.playlists.removePlayableFromClientPlaylist(playlist = playlistUri, playable = playable)
+                API_State.kotlinApi.playlists.removePlayableFromClientPlaylist(playlist = playlistUri, playable = playable)
 
-                api.playlists.addPlayableToClientPlaylist(playlist = playlistUri, playable = playable)
+                API_State.kotlinApi.playlists.addPlayableToClientPlaylist(playlist = playlistUri, playable = playable)
                 toasty(context, "$trackDisplayName added to $playlistDisplayname")
             }
         } catch (ex: Exception) {
@@ -412,7 +414,7 @@ object Player {
 
 
                 Text( // artistname
-                    currentPlayerState.value?.track?.artist?.name ?: "Loading...",
+                    currentPlayerState.value!!.track?.artist?.name ?: "Loading...",
                     modifier = Modifier
                         .basicMarquee()
                         .clickable {
@@ -455,6 +457,7 @@ object Player {
 
     @Composable
     private fun PlaybackButtonRow( modifier: Modifier = Modifier, playerButtonSize: Dp = 72.dp, ) {
+        /** playback controls below the slider */
         val context = LocalContext.current
         Row( // todo create a giant database of playback funcs
             modifier = modifier.fillMaxWidth(),
@@ -526,6 +529,12 @@ object Player {
             horizontalArrangement = Arrangement.End
         ) {
 
+            FavoriteStar(
+                accessUri = currentPlayerState.value?.track?.uri ?: "NULL",
+                coverUri =  currentTrackCover.value?.toString() ?: "NULL", // todo disable this if null
+                type = SHORTCUT_TYPE.TRACK,
+                displayname = currentPlayerState.value?.track?.name ?: "NULL"
+            )
             PlayerButton (
                 icon = R.drawable.baseline_skip_next_24,
                 OnClick = {
@@ -541,9 +550,9 @@ object Player {
                 icon = R.drawable.knife,
                 OnClick = { // todo hardcoding
                             quickAdd(context,
-                                trackUri = currentPlayerState.value?.track?.uri,
+                                trackUri = currentPlayerState.value!!.track.uri,
                                 playlistUri = Constants.PURGELIST,
-                                trackDisplayName = currentPlayerState.value?.track?.name,
+                                trackDisplayName = currentPlayerState.value!!.track.name,
                                 playlistDisplayname = "Purgelist"
                             )
                     skipTrack = SkipVals.FORWARD // skip forward
