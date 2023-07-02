@@ -3,12 +3,14 @@ package com.lightningtow.gridline.utils
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.adamratzman.spotify.models.PlayableUri
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.data.API_State
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -37,12 +39,20 @@ fun Activity.toasty(message: String, duration: Int = Toast.LENGTH_SHORT) =
 fun Activity.toasty(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) =
     toasty(this, getString(message), duration)
 
+fun refreshSomethingIdk() {
+    // todo
+}
+
 fun safeLoadImage(action: () -> Unit) {
     try {
         action.invoke()
     } catch (e: IllegalArgumentException) {
         // Possible error: You cannot start a load for a destroyed activity
     }
+}
+val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+    Log.e("coroutine error", throwable.message.toString())
+    throwable.printStackTrace()
 }
 // todo deal with coroutines
 //fun getCover(uri: String, type: SHORTCUT_TYPE): Any {

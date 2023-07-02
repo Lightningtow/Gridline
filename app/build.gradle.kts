@@ -77,13 +77,25 @@ android {
             )
 
         }
-        /*release {
-            minifyEnabled = false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt'), "proguard-rules.pro"
-            buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"0d7afea9e025418892dd31674b6170ee\"")
+//        /*
+        release {
+//            signingConfig signingConfigs.debug
+//            minifyEnabled = false
+//            isMinifyEnabled = true
+// todo fix using debug keys
+
+//            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt'), "proguard-rules.pro"
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"ecb84aef29dc414d97e133c1984b1e0d\"")
             buildConfigField("String", "SPOTIFY_REDIRECT_URI_AUTH", "\"spotifyandroidplayground://spotify-auth\"")
             buildConfigField("String", "SPOTIFY_REDIRECT_URI_PKCE", "\"spotifyandroidplayground://spotify-pkce\"")
-        }*/
+            signingConfig = signingConfigs.getByName("debug")
+        }
+//        */
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

@@ -14,8 +14,8 @@ object API_State {
     val currentPlayerContext: MutableState<PlayerContext?> = mutableStateOf(null)
 
     val contextLen: MutableState<Int?> = mutableStateOf(null) // todo what tf is this
-    val currentTrackCover: MutableState<Any?> = mutableStateOf(null)
-    val currentPos: MutableState<Long> = mutableStateOf(0)
+    val currentTrackCover: MutableState<Any?> = mutableStateOf(null) // todo what format is this
+    val currentPos: MutableState<Long> = mutableStateOf(0) // current position of track todo in MS? seconds?
     var spotifyAppRemote: SpotifyAppRemote? = null
 
 //    val kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo yo wtf this gets initialized on its own by api_state

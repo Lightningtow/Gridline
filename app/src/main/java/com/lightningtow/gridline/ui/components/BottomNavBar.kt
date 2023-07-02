@@ -32,7 +32,6 @@ import com.lightningtow.gridline.ui.home.Broadcasts
 import com.lightningtow.gridline.ui.home.HomePage
 
 import com.lightningtow.gridline.ui.home.AllPlaylistsViewEntry
-import com.lightningtow.gridline.ui.home.BroadcastButton
 //import com.lightningtow.gridline.activities.PlaylistViewActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 //import com.lightningtow.gridline.ui.home.AuthPage
@@ -64,10 +63,7 @@ fun NavHostContainer(
         builder = {
             /**  the order of these do not matter!  */
 
-            composable("broadcasts") {
-                BroadcastButton()
-//                context.startActivity(Intent(context, Broadcasts::class.java))
-            }
+
             composable("idk") {
 //                HelloWorld()
                 LandingScreen()
@@ -83,6 +79,10 @@ fun NavHostContainer(
             }
             composable("queue") {
                 PlayerPage()
+                showTracksNow = false
+            }
+            composable("auth") {
+                AuthPage()
                 showTracksNow = false
             }
 
@@ -141,16 +141,14 @@ private val BottomNavItems = listOf(
         route = "idk"
     ),
 
-//    BottomNavItem(
-//        label = "API",
-//        icon = R.drawable.api,
-//        route = "broadcasts"
-//    ),
-//        BottomNavItem(
-//            label = "Login",
-//            icon = R.drawable.account_circle,
-//            route = "login"
-//        ),
+
+
+
+    BottomNavItem(
+        label = "Auth",
+        icon = R.drawable.account_circle,
+        route = "auth"
+    ),
 
     BottomNavItem(
         label = "Home",

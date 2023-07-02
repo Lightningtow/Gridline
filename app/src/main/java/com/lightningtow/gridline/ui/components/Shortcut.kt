@@ -155,9 +155,9 @@ fun FavoriteStar(
             .size(size = 32.dp)
             .clickable(
                 onClick = {
-                    val newvalue = !favorited
+                    val not_favorited = !favorited
 
-                    if (newvalue) {
+                    if (not_favorited) {
                         if (type == SHORTCUT_TYPE.PLAYLIST)  masterListOfPlaylists += newList
                         else masterListOfTracks += newTrack
 //                        masterListOfShortcuts += (item)

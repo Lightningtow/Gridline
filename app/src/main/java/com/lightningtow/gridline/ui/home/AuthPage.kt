@@ -52,7 +52,9 @@ private fun AuthPageInner(activity: Activity? = null) {
 
         GridlineButton(onClick = {
             Log.e("AuthPageInner", "implicit login")
-            activity?.startSpotifyImplicitLoginActivity<SpotifyImplicitLoginActivityImpl>()
+//            activity?.startSpotifyImplicitLoginActivity<SpotifyImplicitLoginActivityImpl>()
+            context.startActivity(Intent(context, SpotifyImplicitLoginActivityImpl::class.java))
+
         }) {
             Text("Connect to Spotify (spotify-auth integration, Implicit Grant)")
         };
@@ -64,7 +66,9 @@ private fun AuthPageInner(activity: Activity? = null) {
 
         GridlineButton(onClick = {
             Log.e("AuthPageInner", "pkce login")
-            activity?.startSpotifyClientPkceLoginActivity(SpotifyPkceLoginActivityImpl::class.java);
+//            activity?.startSpotifyClientPkceLoginActivity(SpotifyPkceLoginActivityImpl::class.java);
+            context.startActivity(Intent(context, SpotifyPkceLoginActivityImpl::class.java))
+
         }) {
             Text("Connect to Spotify (spotify-web-api-kotlin integration, PKCE auth)")
         }
@@ -91,7 +95,7 @@ private fun AuthPageInner(activity: Activity? = null) {
         GridlineButton(onClick = {
 //            activity?.model?.credentialStore?.spotifyAccessToken = "invalid"
             Log.e("AuthPageInner", "invalidating token")
-            credentialStore.spotifyAccessToken = "invalid"
+            credentialStore.spotifyAccessToken = "this is the text of an invalid token"
 //            Model?.credentialStore?.spotifyAccessToken = "invalid"
 
 //            activity?.let {
@@ -110,11 +114,11 @@ private fun AuthPageInner(activity: Activity? = null) {
 
 }
 
-@Preview
-@Composable
-private fun AuthPagePreview() {
-    AuthPage()
-}
+//@Preview
+//@Composable
+//private fun AuthPagePreview() {
+//    AuthPage()
+//}
 
 @Composable
 fun AuthPage(activity: Activity? = null) {

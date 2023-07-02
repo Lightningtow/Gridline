@@ -23,11 +23,13 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
 
     override fun onCreate(savedInstanceState: Bundle?) { // this didn't exist
         super.onCreate(savedInstanceState)
-        Log.e("auth", "LOGGING IN VIA IMPLICIT")
+        toasty("Logging in via implicit")
+
+        Log.e("implicit auth", "LOGGING IN VIA IMPLICIT")
     }
 
     override fun onSuccess(spotifyApi: SpotifyImplicitGrantApi) {
-        Log.e("auth", "implicit login success")
+        Log.e("implicit auth", "implicit login success")
         Log.e("implicit scopes", getRequestingScopes().toString())
 
         val model = (application as com.lightningtow.gridline.GridlineApplication).model

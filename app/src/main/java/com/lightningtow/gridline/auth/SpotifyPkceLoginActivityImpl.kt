@@ -14,6 +14,7 @@ import com.lightningtow.gridline.utils.toasty
 internal var pkceClassBackTo: Class<out Activity>? = null
 
 class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
+//    Log.e("ctrlfme", "is this thing working")
     override val clientId: String = BuildConfig.SPOTIFY_CLIENT_ID
     override val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_PKCE
 
@@ -26,11 +27,13 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) { // this didnt exist
         super.onCreate(savedInstanceState)
-        Log.e("auth", "LOGGING IN VIA PKCE")
+        toasty("Logging in via pkce")
+
+        Log.e("pkce auth", "LOGGING IN VIA PKCE")
     }
 
     override fun onSuccess(api: SpotifyClientApi) {
-        Log.e("auth", "pkce login success")
+        Log.e("pkce auth", "pkce login success")
         Log.e("pkce scopes", scopes.toString())
         val model = (application as com.lightningtow.gridline.GridlineApplication).model
         model.credentialStore.setSpotifyApi(api)

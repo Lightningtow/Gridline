@@ -414,7 +414,7 @@ object Player {
 
 
                 Text( // artistname
-                    currentPlayerState.value!!.track?.artist?.name ?: "Loading...",
+                    currentPlayerState.value?.track?.artist?.name ?: "Loading...",
                     modifier = Modifier
                         .basicMarquee()
                         .clickable {
@@ -529,6 +529,9 @@ object Player {
             horizontalArrangement = Arrangement.End
         ) {
 
+
+
+
             FavoriteStar(
                 accessUri = currentPlayerState.value?.track?.uri ?: "NULL",
                 coverUri =  currentTrackCover.value?.toString() ?: "NULL", // todo disable this if null
@@ -594,7 +597,6 @@ object Player {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun PlayerButton(
-        /**   a single button in the playerRow  */
         icon: Int,
         contentDescription: String = stringResource(R.string.FILLME),
         color: Color = GridlineTheme.colors.iconPrimary,
@@ -604,6 +606,7 @@ object Player {
         OnClick: () -> Unit,
         OnLongClick: () -> Unit = {}
     ) {
+        /**   a single button in the playerRow  */
 
         Icon(
             ImageVector.vectorResource(id = icon),

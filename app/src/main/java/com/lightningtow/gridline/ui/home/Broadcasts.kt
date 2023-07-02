@@ -32,27 +32,27 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 import java.util.*
 
-@Composable
-fun BroadcastButton() {
-    val context = LocalContext.current
-    GridlineTheme() {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize(),
-
-            ) {
-            GridlineButton(onClick = {
-                context.startActivity(Intent(context, Broadcasts::class.java))
-            }) {
-                Text("broadcasts")
-            }
-        }
-
-    }
-
-}
+//@Composable
+//fun BroadcastButton() {
+//    val context = LocalContext.current
+//    GridlineTheme() {
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Center,
+//            modifier = Modifier
+//                .fillMaxSize(),
+//
+//            ) {
+//            GridlineButton(onClick = {
+//                context.startActivity(Intent(context, Broadcasts::class.java))
+//            }) {
+//                Text("broadcasts")
+//            }
+//        }
+//
+//    }
+//
+//}
 
 class Broadcasts : AppCompatActivity() {
     lateinit var spotifyBroadcastReceiver: SpotifyBroadcastReceiver
