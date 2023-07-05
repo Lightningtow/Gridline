@@ -5,8 +5,8 @@ import com.adamratzman.spotify.notifications.AbstractSpotifyBroadcastReceiver
 import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
 import com.adamratzman.spotify.notifications.SpotifyPlaybackStateChangedData
 import com.adamratzman.spotify.notifications.SpotifyQueueChangedData
-import com.lightningtow.gridline.getAlbumArt
 import com.lightningtow.gridline.ui.home.Broadcasts
+import com.lightningtow.gridline.utils.getAlbumArt
 
 class SpotifyBroadcastReceiver(val activity: Broadcasts) : AbstractSpotifyBroadcastReceiver() {
     override fun onMetadataChanged(data: SpotifyMetadataChangedData) {
@@ -16,7 +16,7 @@ class SpotifyBroadcastReceiver(val activity: Broadcasts) : AbstractSpotifyBroadc
     }
 
     override fun onPlaybackStateChanged(data: SpotifyPlaybackStateChangedData) {
-        getAlbumArt()
+        getAlbumArt("broadcast receiver, on playback state changed") // broadcast receiver, on playback state changed
         activity.broadcasts += data
         Log.e("broadcast", "playback state changed: $data")
 

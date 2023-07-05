@@ -108,10 +108,11 @@ private fun Header(
     ) { // header row
         GridlineCoverImage(
             size = 80.dp,
-            image_url = TrackHolder1.actualist.images.firstOrNull()?.url ?: Constants.DEFAULT_MISSING,
+            image_url = TrackHolder1.actualist.images.firstOrNull()?.url,
+            // no need to add the ?: default_missing, already contained within ocover image
             deeplink_url = TrackHolder1.actualist.uri.uri,
         )
-        Log.e("header image", TrackHolder1.actualist.images.firstOrNull()?.url ?: Constants.DEFAULT_MISSING)
+        Log.e("header image", "image: ${TrackHolder1.actualist.images.firstOrNull()?.url}")
 
         Column() {
             Row( // text row

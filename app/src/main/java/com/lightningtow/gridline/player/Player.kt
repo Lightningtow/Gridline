@@ -50,6 +50,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.R
 import com.lightningtow.gridline.auth.Model
@@ -169,17 +170,17 @@ object Player {
     private var debugging: MutableState<Boolean> = mutableStateOf(false)
     private var randSkipEnabled: MutableState<Boolean> = mutableStateOf(false)
 
-    private fun quickAdd(
+    private fun quickAdd (
         context: Context,
         trackUri: String?,
         playlistUri: String,
         trackDisplayName: String?,
         playlistDisplayname: String?
-    ) {
+    ): Boolean {
         if (trackUri == null) {
             toasty(context, "track is null")
             Log.e("error in quickAdd", "track is null")  // log errors
-            return
+            return false
         }
         var trackDisplayName = trackDisplayName
         if (trackDisplayName == null) trackDisplayName = "trackname"
@@ -199,9 +200,11 @@ object Player {
                 API_State.kotlinApi.playlists.addPlayableToClientPlaylist(playlist = playlistUri, playable = playable)
                 toasty(context, "$trackDisplayName added to $playlistDisplayname")
             }
+            return true
         } catch (ex: Exception) {
             toasty(context, "track could not be added")
             ex.message?.let { Log.e("error in quickAdd", it) } // log errors
+            return false
         }
     }
 
@@ -227,14 +230,16 @@ object Player {
 //                if(image != null) {
 
                 GlideImage(
-                    currentTrackCover.value,
+//                    Constants.DEFAULT_MISSING,
+
+                    currentTrackCover.value ?: Constants.DEFAULT_MISSING,
                     modifier = Modifier // 'modifier' uses argument, 'Modifier' creates new modifier
                         .size(372.dp),
                     contentDescription = null,
                 )
             }
 
-            Row(
+            Row( // buttons
                 modifier = Modifier
                     .align(Alignment.Center)
             ) {
@@ -555,13 +560,13 @@ object Player {
             PlayerButton(
                 icon = R.drawable.knife,
                 OnClick = { // todo hardcoding
-                            quickAdd(context,
+                            if (quickAdd(context,
                                 trackUri = currentPlayerState.value!!.track.uri,
                                 playlistUri = Constants.PURGELIST,
                                 trackDisplayName = currentPlayerState.value!!.track.name,
                                 playlistDisplayname = "Purgelist"
-                            )
-                    skipTrack = SkipVals.FORWARD // skip forward
+                            )) skipTrack = SkipVals.FORWARD // skip forward
+                            else toasty(context, "could not cleanse")
 
                 }
             )
@@ -581,15 +586,16 @@ object Player {
                 icon = R.drawable.round_water_drop_24,
                 OnClick = { // todo hardcoding
 //                    Log.e("Player.UtilRow", "adding " + currentPlayerState.value?.track?.uri + " to roadCleansing")
-                    quickAdd(
+
+                    if (quickAdd( // returns true if successful, else false
                         context,
                         trackUri = currentPlayerState.value?.track?.uri,
                         playlistUri = Constants.ROADPURGE,
                         trackDisplayName = currentPlayerState.value?.track?.name,
                         playlistDisplayname = "Road Cleansing",
 
-                        )
-                    skipTrack = SkipVals.FORWARD // skip forward
+                        )) skipTrack = SkipVals.FORWARD // skip forward
+                    else toasty(context, "could not cleanse")
                 }
             )
 

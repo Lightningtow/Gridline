@@ -9,7 +9,7 @@ object Model {
         SpotifyDefaultCredentialStore(
             clientId = BuildConfig.SPOTIFY_CLIENT_ID,
             redirectUri = BuildConfig.SPOTIFY_REDIRECT_URI_PKCE,
-            applicationContext = com.lightningtow.gridline.GridlineApplication.context
+            applicationContext = com.lightningtow.gridline.GridlineApplication.ApplicationContext
         )
     }
 }

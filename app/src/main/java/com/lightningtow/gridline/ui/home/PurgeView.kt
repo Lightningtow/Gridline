@@ -232,8 +232,9 @@ private fun Slot(
 //            imageModel = if (slot == -42) PurgeData.purgecover.value
 //            else (PurgeData.coverlist[slot]),
 
-            image_url = if(PurgeData.isEmptylist[slot]) Constants.DEFAULT_MISSING
-            else PurgeData.coverlist[slot],
+            image_url = "https://picsum.photos/300/300" , // todo todo todo
+//            if(PurgeData.isEmptylist[slot]) Constants.DEFAULT_MISSING
+//            else PurgeData.coverlist[slot],
 
             deeplink_url = "www.example.com" // todo
         )

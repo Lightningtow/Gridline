@@ -1,56 +1,32 @@
 package com.lightningtow.gridline.ui.components
 
 //import com.lightningtow.gridline.ui.home.dataStore
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.Serializer
-import androidx.datastore.dataStore
-import com.adamratzman.spotify.models.Playable
-import com.google.protobuf.InvalidProtocolBufferException
-import com.lightningtow.gridline.GridlineApplication.Companion.context
+import com.lightningtow.gridline.GridlineApplication.Companion.ApplicationContext
 //import com.lightningtow.gridline.ShortcutList
 //import com.lightningtow.gridline.ShortcutStruct
-import com.lightningtow.gridline.utils.Constants
 import com.lightningtow.gridline.utils.toasty
-import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.io.InputStream
-import java.io.OutputStream
 import androidx.compose.runtime.getValue
 
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import com.adamratzman.spotify.models.PlaylistTrack
 import com.lightningtow.gridline.PlaylistShortcut
 import com.lightningtow.gridline.R
 import com.lightningtow.gridline.TrackShortcut
 import com.lightningtow.gridline.TrackShortcutStore
 import com.lightningtow.gridline.data.PlaylistShortcutStoreDataStore
-import com.lightningtow.gridline.data.TrackHolder1.templist
 import com.lightningtow.gridline.data.TrackShortcutStoreDataStore
 //import com.lightningtow.gridline.p_TrackList
 import com.lightningtow.gridline.ui.theme.GridlineTheme
@@ -60,7 +36,6 @@ public enum class SHORTCUT_TYPE { PLAYLIST, TRACK, ARTIST, ALBUM }
 
 
 //var masterListOfShortcuts: MutableList<KotlinShortcut> = mutableStateListOf()
-var realList: List<TrackShortcut> = listOf()
 
 var masterListOfTracks by mutableStateOf(listOf<TrackShortcut>())
 var masterListOfPlaylists by mutableStateOf(listOf<PlaylistShortcut>())
@@ -82,13 +57,12 @@ fun downloadShortcutData() {
 ////            tempList += protoToKotlin(item)
 //            templist += item.
 //        }
-//        realList = listThing
 //        masterListOfTracks = tempList
 
-        masterListOfTracks = context.TrackShortcutStoreDataStore.data.first().entriesList
-        masterListOfPlaylists = context.PlaylistShortcutStoreDataStore.data.first().entriesList
+        masterListOfTracks = ApplicationContext.TrackShortcutStoreDataStore.data.first().entriesList
+        masterListOfPlaylists = ApplicationContext.PlaylistShortcutStoreDataStore.data.first().entriesList
 
-        toasty(context, "downloaded shortcut data")
+        toasty(ApplicationContext, "downloaded shortcut data")
     }
 
 }
@@ -104,19 +78,19 @@ fun uploadShortcutData() {
 //                tempList += kotlinToProto(item)
 //        }
 
-        context.TrackShortcutStoreDataStore.updateData { data ->
+        ApplicationContext.TrackShortcutStoreDataStore.updateData { data ->
             data.toBuilder()
                 .clearEntries()
                 .addAllEntries(masterListOfTracks)
                 .build()
         }
-        context.PlaylistShortcutStoreDataStore.updateData { data ->
+        ApplicationContext.PlaylistShortcutStoreDataStore.updateData { data ->
             data.toBuilder()
                 .clearEntries()
                 .addAllEntries(masterListOfPlaylists)
                 .build()
         }
-        toasty(context, "uploaded shortcut data") // todo i dont think this fake context works
+        toasty(ApplicationContext, "uploaded shortcut data") // todo i dont think this fake context works
     }
 }
 

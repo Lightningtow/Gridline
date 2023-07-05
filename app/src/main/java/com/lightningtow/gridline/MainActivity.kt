@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
-import com.lightningtow.gridline.GridlineApplication.Companion.context
+import com.lightningtow.gridline.GridlineApplication.Companion.ApplicationContext
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.API_State
@@ -23,7 +23,9 @@ import com.lightningtow.gridline.ui.components.NavHostContainer
 import com.lightningtow.gridline.ui.components.downloadShortcutData
 //import com.lightningtow.gridline.ui.components.getStuff
 import com.lightningtow.gridline.ui.theme.GridlineTheme
+import com.lightningtow.gridline.utils.Constants
 import com.lightningtow.gridline.utils.coroutineExceptionHandler
+import com.lightningtow.gridline.utils.getAlbumArt
 import com.lightningtow.gridline.utils.toasty
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
@@ -33,30 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-fun getAlbumArt() {
-//    Log.e("getAlbumArt", "getting album art")
-    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    scope.launch(coroutineExceptionHandler) {
-
-        try { // get album art
-//                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
-                Log.e("getAlbumArt", "getting album art for " + currentPlayerState.value!!.track.name)
-//                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
-//            guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
-
-                val albumUri = currentPlayerState.value!!.track.album.uri.toString()
-                currentTrackCover.value =
-//                    (kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
-                    (kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
-
-//            }
-        } catch (ex: Exception) {
-            Log.e("coverUri", "failed to get album art: $ex")
-            toasty(context, "failed to get album art")
-        }
-    }
-}
 class MainActivity : AppCompatActivity() {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -67,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 PlaylistsHolder.lists = api.playlists.getClientPlaylists().getAllItemsNotNull()
             }
             PlaylistsHolder.loading = false
-            Log.e("startup", "loaded playlists")
+            Log.i("startup", "loaded playlists")
 
     }
 
@@ -83,30 +62,38 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     override fun onStop() {
-        super.onStop()
-        spotifyAppRemote?.let {
-            SpotifyAppRemote.disconnect(it)
-        }
+        Log.e("MainActivity", "onStop")
+
+        super.onStop() // todo is this wise?
+//        spotifyAppRemote?.let {
+//            Log.e("MainActivity", "Disconnecting from appRemote")
+//            SpotifyAppRemote.disconnect(it)
+//        }
+        // todo if you dont disconnect and mean to actually shut the app, not good
     }
     // https://stackoverflow.com/questions/4414171/how-to-detect-when-an-android-app-goes-to-the-background-and-come-back-to-the-fo/44461605#44461605
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
 
     override fun onStart() {
+        // start of main activity, means this is called every time app resumed
         Log.e("startup", "onStart")
 
 
         super.onStart()
 //        fun tart() {
-        tryConnectToAppRemote()
+        Log.w("MainActivity.onStart", "spotifyAppRemote:  ${spotifyAppRemote.toString()}")
+        Log.w("MainActivity.onStart", "spotifyAppRemote connected:  ${spotifyAppRemote?.isConnected}")
 
+        if (spotifyAppRemote == null || !spotifyAppRemote!!.isConnected) {
 
-
-        Log.e("startup", "downloading shortcut data")
+            tryConnectToAppRemote()
+        } else Log.e("startup", "-----skipped connecting to appremote")
+//        Log.e("startup", "downloading shortcut data")
         downloadShortcutData()
 
         if (!API_State.OFFLINE) {
-            Log.e("startup", "loading playlists")
+//            Log.e("startup", "loading playlists")
             loadPlaylists()
         }
 
@@ -114,30 +101,19 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val context = LocalContext.current
 //            toasty(context, "downloaded shortcut data")
-
             GridlineTheme {
-
                 // remember navController so it does not
                 // get recreated on recomposition
                 val navController = rememberNavController()
-
                 // Scaffold Component
-                Scaffold(
-                    // Bottom navigation
-                    bottomBar = {
-
-                        BottomNavigationBar(navController = navController)
-                    }, content = { padding ->
-
-                        // Navhost: where screens are placed
-                        NavHostContainer(navController = navController, padding = padding)
-                    })
-            }
+                Scaffold( // Bottom navigation // Navhost: where screens are placed
+                    bottomBar = { BottomNavigationBar(navController = navController)
+                    }, content = { padding -> NavHostContainer(navController = navController, padding = padding) }) }
         }
     }
 
     fun tryConnectToAppRemote() {
-        Log.e("startup", "TRY CONNECT TO APP REMOTE")
+        Log.e("startup", "tryConnectToAppRemote")
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
         } // disconnect so you don't accidentally get two instances
@@ -152,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onConnected(appRemote: SpotifyAppRemote) {
                 spotifyAppRemote = appRemote
-                Log.e("startup", "Connected! Yay!")
+                Log.e("startup", "onConnected")
                 // Now you can start interacting with App Remote
 //                connected()
                 // todo this is only for app_remote
@@ -162,18 +138,18 @@ class MainActivity : AppCompatActivity() {
                         kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo uncomment
 
                     }
-                    Log.e("startup", "kotlinAPI initialized")
+                    Log.i("startup", "kotlinAPI initialized")
                 }
                 catch(ex: Exception) {
                     OFFLINE = true
                     Log.e("startup", "error initializing kotlinAPI: $ex")
                 }
 
-                Log.e("startup", "calling connectToSDK")
+                Log.i("startup", "calling connectToSDK")
                 guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
                     subscribeToAppRemote()
 
-                    getAlbumArt()
+                    getAlbumArt("tryConnectToAppRemote") // tryConnectToAppRemote
                 }
             }
             override fun onFailure(throwable: Throwable) {
@@ -186,14 +162,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
     fun subscribeToAppRemote() {
-        Log.e("startup", "connecting to SDK")
+        Log.i("startup", "connecting to SDK")
         // todo todooooooo
 
 
-        Log.e("startup", "getting playerContext")
+        Log.i("startup", "getting playerContext")
         spotifyAppRemote?.playerApi?.subscribeToPlayerContext()?.setEventCallback { playerContext ->
             currentPlayerContext.value = playerContext
-            Log.e("startup", "playerContext appeared to work")
+            Log.i("startup", "playerContext appeared to work")
 //            scope.launch(coroutineExceptionHandler) {
 //                Log.e("startup", "playerContext")
 //
@@ -207,9 +183,9 @@ class MainActivity : AppCompatActivity() {
         }?.setErrorCallback { throwable ->
             Log.e("startup", "playerContext error: $throwable")
         }
-        Log.e("startup", "getting playerState")
+        Log.i("startup", "getting playerState")
         spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
-
+            Log.w("subscribeToAppRemote", "playerstate changed")
 
             currentPlayerState.value = playerState
             currentPos.value = playerState.playbackPosition
@@ -220,7 +196,7 @@ class MainActivity : AppCompatActivity() {
             // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
             guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
 
-                getAlbumArt()
+                getAlbumArt("event callback for playerstate") // event callback for playerstate
             }
 //                spotifyAppRemote?.imagesApi?.getImage(coverUri.value)
 //                    ?.setResultCallback { result ->  bitmap.value = result }

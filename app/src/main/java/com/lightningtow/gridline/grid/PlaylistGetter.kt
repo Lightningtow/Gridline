@@ -1,23 +1,17 @@
 package com.lightningtow.gridline.grid
 
 import android.util.Log
-import android.widget.Toast
 import com.adamratzman.spotify.models.Playable
 import com.adamratzman.spotify.models.PlayableUri
 import com.adamratzman.spotify.utils.Market
-import com.lightningtow.gridline.GridlineApplication.Companion.context
-import com.lightningtow.gridline.MainActivity
-import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.data.API_State.kotlinApi
 import com.lightningtow.gridline.data.TrackHolder2
 import com.lightningtow.gridline.data.TrackHolder1
-import com.lightningtow.gridline.utils.toasty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import com.lightningtow.gridline.auth.guardValidSpotifyApi
 
 class PlaylistGetter() {
     //} : ViewModel() {

@@ -7,11 +7,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.adamratzman.spotify.models.PlayableUri
+import com.lightningtow.gridline.GridlineApplication
 import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.API_State
-import com.lightningtow.gridline.getAlbumArt
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
@@ -46,7 +46,7 @@ fun Activity.toasty(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT)
     toasty(this, getString(message), duration)
 
 fun RefreshAPIs() {
-    MainActivity.
+//    MainActivity.
 }
 
 fun safeLoadImage(action: () -> Unit) {
@@ -54,6 +54,32 @@ fun safeLoadImage(action: () -> Unit) {
         action.invoke()
     } catch (e: IllegalArgumentException) {
         // Possible error: You cannot start a load for a destroyed activity
+    }
+}
+fun getAlbumArt(msg: String = " ") {
+//    Log.e("getAlbumArt", "getting album art")
+    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    scope.launch(coroutineExceptionHandler) {
+
+        try { // get album art
+//                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
+//            if (msg != null) Log.e("getAlbumArt", "getAlbumArt: $msg")
+
+            Log.e("getAlbumArt", "getAlbumArt - ${API_State.currentPlayerState.value!!.track.name} - $msg")
+//                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
+//            guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
+
+            val albumUri = API_State.currentPlayerState.value!!.track.album.uri.toString()
+            API_State.currentTrackCover.value =
+//                    (kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
+                (API_State.kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
+//            }
+        } catch (ex: Exception) {
+            Log.e("coverUri", "failed to get album art: $ex")
+            toasty(GridlineApplication.ApplicationContext, "failed to get album art")
+            API_State.currentTrackCover.value = Constants.DEFAULT_MISSING
+        }
     }
 }
 val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->

@@ -6,7 +6,8 @@ import com.lightningtow.gridline.R
 
 
 object Constants {
-    val DEFAULT_MISSING: String = "https://picsum.photos/300/300"
+//    val DEFAULT_MISSING: String = "https://picsum.photos/300/300"
+    val DEFAULT_MISSING: Int = R.drawable.lame_default_album_art
 
     val TEST_11: String = "spotify:playlist:1KJW3gIz3EGTviDLDwb7xa"
     val TESTLIST: String = "spotify:playlist:5NKYetvb0UeaSDcnjs7SB7"

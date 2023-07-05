@@ -57,7 +57,6 @@ import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.GridlineDivider
 import com.lightningtow.gridline.ui.components.masterListOfPlaylists
 import com.lightningtow.gridline.ui.components.masterListOfTracks
-import com.lightningtow.gridline.ui.components.realList
 import com.lightningtow.gridline.ui.components.uploadShortcutData
 import com.lightningtow.gridline.ui.home.HomePage.swipeableLeftRight
 import com.lightningtow.gridline.ui.theme.GridlineTheme
@@ -144,7 +143,6 @@ object HomePage {
     private fun HomePage() {
 //        Text("hello world")
 //        LazyVerticalGrid( //
-        Log.e("homepage", "reallist: " + realList.toString())
 
         Column(
             //            columns = GridCells.Adaptive(minSize = 128.dp),
