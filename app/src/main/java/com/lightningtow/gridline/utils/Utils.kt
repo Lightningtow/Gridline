@@ -7,9 +7,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.adamratzman.spotify.models.PlayableUri
+import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.API_State
+import com.lightningtow.gridline.getAlbumArt
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,8 +45,8 @@ fun Activity.toasty(message: String, duration: Int = Toast.LENGTH_SHORT) =
 fun Activity.toasty(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) =
     toasty(this, getString(message), duration)
 
-fun refreshSomethingIdk() {
-    // todo
+fun RefreshAPIs() {
+    MainActivity.
 }
 
 fun safeLoadImage(action: () -> Unit) {

@@ -22,10 +22,10 @@ fun <T> Activity.guardValidSpotifyApi(
         try {
             val token = Model.credentialStore.spotifyToken
                 ?: throw SpotifyException.ReAuthenticationNeededException()
-//            val usesPkceAuth = token.refreshToken != null  // todo this is an attempt to force using pkce and not implicit
+            val usesPkceAuth = token.refreshToken != null  // todo this is an attempt to force using pkce and not implicit
             // PKCE authorization lets you obtain a refreshable Spotify token.
             // This means that you do not need to keep prompting your users to re-authenticate (or force them to wait a second for automatic login).
-            val usesPkceAuth = true
+//            val usesPkceAuth = true
 
             val api = (if (usesPkceAuth) Model.credentialStore.getSpotifyClientPkceApi()
             else Model.credentialStore.getSpotifyImplicitGrantApi())

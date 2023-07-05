@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adamratzman.spotify.auth.implicit.startSpotifyImplicitLoginActivity
 import com.adamratzman.spotify.auth.pkce.startSpotifyClientPkceLoginActivity
+//import com.a
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.Model.credentialStore
 //import com.lightningtow.gridline.activities.ActionHomeActivity
@@ -33,7 +34,7 @@ import com.lightningtow.gridline.utils.toasty
 //import androidx.compose.material.icons.filled .materialIconsExtended
 
 @Composable
-private fun AuthPageInner(activity: Activity? = null) {
+fun AuthPageInner(activity: Activity? = null) {
     val context = LocalContext.current
 
 //    MaterialTheme {
@@ -56,12 +57,15 @@ private fun AuthPageInner(activity: Activity? = null) {
             context.startActivity(Intent(context, SpotifyImplicitLoginActivityImpl::class.java))
 
         }) {
-            Text("Connect to Spotify (spotify-auth integration, Implicit Grant)")
+//            Text("Connect to Spotify (spotify-auth integration, Implicit Grant)")
+            Text("spotify-auth library integration, implicit grant")
         };
-        Text(
-            "The button above starts authentication via the spotify-auth library",
-            style = MaterialTheme.typography.body2
-        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+//        Text(
+//            "The button above starts authentication via the spotify-auth library",
+//            style = MaterialTheme.typography.body2
+//        )
 
 
         GridlineButton(onClick = {
@@ -70,12 +74,14 @@ private fun AuthPageInner(activity: Activity? = null) {
             context.startActivity(Intent(context, SpotifyPkceLoginActivityImpl::class.java))
 
         }) {
-            Text("Connect to Spotify (spotify-web-api-kotlin integration, PKCE auth)")
+//            Text("Connect to Spotify (spotify-web-api-kotlin integration, PKCE auth)")
+            Text("spotify-web-api-kotlin integration, PKCE auth")
+
         }
-        Text(
-            "The button above starts authentication via our PKCE auth implementation",
-            style = MaterialTheme.typography.body2
-        )
+//        Text(
+//            "The button above starts authentication via our PKCE auth implementation",
+//            style = MaterialTheme.typography.body2
+//        )
 
 
 //        GridlineButton(onClick = {

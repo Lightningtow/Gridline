@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.lightningtow.gridline.PlaylistShortcut
 import com.lightningtow.gridline.TrackShortcut
+import com.lightningtow.gridline.data.API_State
 import com.lightningtow.gridline.data.PlaylistsHolder.lists
 import com.lightningtow.gridline.player.Player
 import com.lightningtow.gridline.ui.components.GridlineButton
@@ -143,7 +144,7 @@ object HomePage {
     private fun HomePage() {
 //        Text("hello world")
 //        LazyVerticalGrid( //
-        Log.e("homepage", realList.toString())
+        Log.e("homepage", "reallist: " + realList.toString())
 
         Column(
             //            columns = GridCells.Adaptive(minSize = 128.dp),
@@ -188,13 +189,14 @@ object HomePage {
                     when (currrentPage.value) {
                         SHORTCUT_TYPE.PLAYLIST -> {
                             items(masterListOfPlaylists.size) { index ->
-                                HomePageIcon(list = masterListOfPlaylists[index])
+                                HomePageIcon(list = masterListOfPlaylists[index], type = SHORTCUT_TYPE.PLAYLIST)
                             }
+
                         }
 
                         SHORTCUT_TYPE.TRACK -> {
                             items(masterListOfTracks.size) { index ->
-                                HomePageIcon(track = masterListOfTracks[index])
+                                HomePageIcon(track = masterListOfTracks[index], type = SHORTCUT_TYPE.TRACK)
                             }
                         }
 
@@ -306,7 +308,13 @@ object HomePage {
     fun HomePageIcon(
         list: PlaylistShortcut? = null,
         track: TrackShortcut? = null,
+        type: SHORTCUT_TYPE
     ) {
+        if (list == null && type == SHORTCUT_TYPE.PLAYLIST) {
+            Log.e("HomePageIcon", "ERROR") // todo fuck things up
+        } else if (track == null && type == SHORTCUT_TYPE.TRACK) {
+            Log.e("HomePageIcon", "ERROR") // todo fuck things up
+        }
 
         val context = LocalContext.current
 //    val coveraaa by remember { mutableStateOf(realCover) }
@@ -321,8 +329,8 @@ object HomePage {
                 .combinedClickable(
 
                     onClick = {
-                        if (list != null) {
-                            Log.e("deeplink", "deeplinking to ${list.accessUri}")
+                        if (type == SHORTCUT_TYPE.PLAYLIST) {
+                            Log.e("deeplink", "deeplinking to ${list!!.accessUri}")
 
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(list.accessUri))
@@ -332,9 +340,17 @@ object HomePage {
                             )
                             ContextCompat.startActivity(context, browserIntent, null)
 
-                        } else if (track != null) {
-                            Player.queueMe = track.accessUri
-                            toasty(context, "Queued ${track.displayname}")
+                        } else if (type == SHORTCUT_TYPE.TRACK) {
+//                            Player.queueMe = track!!.accessUri
+
+                            try {
+                                API_State.spotifyAppRemote!!.playerApi.queue(track!!.accessUri)
+                                toasty(context, "Queued ${track.displayname}")
+                            } catch (ex: Exception) {
+                                Log.e("Player.queueMe", "Queue error: $ex")
+                                toasty(context, "$ex")
+
+                            }
                         }
                     },
                     onLongClick = { // todo context menu
@@ -357,9 +373,9 @@ object HomePage {
 //        Log.e("ctrlfme", "displaying $coveraaa")
             GlideImage(
 //            imageModel = getCover(uri, type) ?: Constants.DEFAULT_MISSING,
-                imageModel = if (list != null) list.coverUri else track?.coverUri
-                    ?: Constants.DEFAULT_MISSING,
-                modifier = Modifier
+                imageModel = if (type == SHORTCUT_TYPE.PLAYLIST) list!!.coverUri else track?.coverUri
+                    ?: Constants.DEFAULT_MISSING
+                , modifier = Modifier
                     .size(125.dp)
             )
             Text(

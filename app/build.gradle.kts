@@ -37,7 +37,7 @@ android {
     defaultConfig {
         applicationId = "com.lightningtow.gridline"
         minSdk = 23
-        targetSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -65,20 +65,18 @@ android {
         debug {
             isDebuggable = true
             buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"ecb84aef29dc414d97e133c1984b1e0d\"")
-            buildConfigField(
-                "String",
-                "SPOTIFY_REDIRECT_URI_AUTH",
-                "\"gridline://spotify-auth\""
-            )
-            buildConfigField(
-                "String",
-                "SPOTIFY_REDIRECT_URI_PKCE",
-                "\"gridline://spotify-pkce\""
-            )
+            buildConfigField("String", "SPOTIFY_REDIRECT_URI_AUTH", "\"gridline://spotify-auth\"")
+            buildConfigField("String", "SPOTIFY_REDIRECT_URI_PKCE", "\"gridline://spotify-pkce\"")
+            packagingOptions {
+                exclude("META-INF/*.kotlin_module")
+            }
 
         }
 //        /*
         release {
+            packagingOptions {
+                exclude("META-INF/*.kotlin_module")
+            }
 //            signingConfig signingConfigs.debug
 //            minifyEnabled = false
 //            isMinifyEnabled = true
@@ -117,6 +115,9 @@ var lifecycle_version = "2.4.1"
 val protobuf_version = "3.21.7"
 
 dependencies {
+
+
+
 //    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
 
@@ -150,7 +151,12 @@ dependencies {
     implementation("com.github.skydoves:landscapist-glide:1.5.0")
 
     // Spotify
-    implementation("com.adamratzman:spotify-api-kotlin-android:3.8.6")
+    // https://mvnrepository.com/artifact/com.adamratzman/spotify-api-kotlin-core
+//    implementation(files("libs/spotify-api-kotlin-android-4.0.0.aar"))
+//    implementation("com.adamratzman:spotify-api-kotlin-android:3.8.6")
+    implementation("com.adamratzman:spotify-api-kotlin-android:3.8.8")
+//    implementation("com.adamratzman:spotify-api-kotlin-android:4.0.0")
+//    implementation("com.adamratzman:spotify-api-kotlin-core:4.0.0")
 
     implementation("androidx.compose.runtime:runtime:${compose_version}")
 

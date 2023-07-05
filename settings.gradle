@@ -1,3 +1,6 @@
 rootProject.name = "gridline"
+//include ':app'
 include ':app'
+//include ':app:libs:spotify-api-kotlin-android-4.0.0.aar'
+
 //include ':lib_gridline'

@@ -50,8 +50,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.R
 import com.lightningtow.gridline.auth.Model
+import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.API_State
 import com.lightningtow.gridline.data.API_State.contextLen
 import com.lightningtow.gridline.data.API_State.currentPlayerContext
@@ -59,6 +61,7 @@ import com.lightningtow.gridline.data.API_State.currentPlayerState
 import com.lightningtow.gridline.data.API_State.currentPos
 import com.lightningtow.gridline.data.API_State.currentTrackCover
 import com.lightningtow.gridline.data.API_State.spotifyAppRemote
+import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.data.TrackHolder1.TrackHolder1Uri
 import com.lightningtow.gridline.ui.components.FavoriteStar
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
@@ -614,7 +617,10 @@ object Player {
             tint = color,
             modifier = modifier
                 .combinedClickable(
-                    onClick = { OnClick() },
+                    onClick = {
+//                        guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api -> }
+                        OnClick()
+                              },
                     onLongClick = {
                         Log.e("ctrlfme", "long click")
                         OnLongClick()

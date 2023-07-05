@@ -34,20 +34,22 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 fun getAlbumArt() {
-    Log.e("getAlbumArt", "getting album art")
+//    Log.e("getAlbumArt", "getting album art")
     val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     scope.launch(coroutineExceptionHandler) {
 
         try { // get album art
 //                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
-
+                Log.e("getAlbumArt", "getting album art for " + currentPlayerState.value!!.track.name)
 //                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
 //            guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
 
                 val albumUri = currentPlayerState.value!!.track.album.uri.toString()
                 currentTrackCover.value =
+//                    (kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
                     (kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
+
 //            }
         } catch (ex: Exception) {
             Log.e("coverUri", "failed to get album art: $ex")
@@ -85,12 +87,7 @@ class MainActivity : AppCompatActivity() {
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
         }
-
     }
-
-
-
-
     // https://stackoverflow.com/questions/4414171/how-to-detect-when-an-android-app-goes-to-the-background-and-come-back-to-the-fo/44461605#44461605
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -138,7 +135,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    private fun tryConnectToAppRemote() {
+
+    fun tryConnectToAppRemote() {
         Log.e("startup", "TRY CONNECT TO APP REMOTE")
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
@@ -160,7 +158,10 @@ class MainActivity : AppCompatActivity() {
                 // todo this is only for app_remote
 
                 try {
-                    kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!!
+                    guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
+                        kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo uncomment
+
+                    }
                     Log.e("startup", "kotlinAPI initialized")
                 }
                 catch(ex: Exception) {

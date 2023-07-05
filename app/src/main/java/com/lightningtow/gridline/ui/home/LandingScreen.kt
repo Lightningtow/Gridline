@@ -35,6 +35,7 @@ fun LandingScreen() {
     var toggle = true
     var msg = "default"
     GridlineTheme() {
+        AuthPageInner()
 
         Column(
             modifier = Modifier
@@ -42,7 +43,6 @@ fun LandingScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)
         ) {
-
 
             GridlineButton(onClick = {
                 context.startActivity(Intent(context, Broadcasts::class.java))

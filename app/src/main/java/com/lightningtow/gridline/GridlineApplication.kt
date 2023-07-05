@@ -9,7 +9,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
-import com.adamratzman.spotify.SpotifyClientApi
+//import com.adamratzman.spotify.SpotifyClientApi
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.auth.guardValidSpotifyApi

@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+//import com.
+//import com.bumptech.gli
 import com.adamratzman.spotify.notifications.*
 import com.lightningtow.gridline.GridlineApplication
 import com.lightningtow.gridline.auth.Model
@@ -28,6 +30,7 @@ import com.lightningtow.gridline.notifications.SpotifyBroadcastReceiver
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.toasty
+//import com.spotify.android.appremote.api
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 import java.util.*

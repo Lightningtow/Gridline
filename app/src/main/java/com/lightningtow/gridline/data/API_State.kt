@@ -3,6 +3,7 @@ package com.lightningtow.gridline.data
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.adamratzman.spotify.SpotifyClientApi
+//import com.adamratzman.spotify.models.CurrentUserQueue
 import com.lightningtow.gridline.auth.Model
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.PlayerContext
@@ -21,6 +22,7 @@ object API_State {
 //    val kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo yo wtf this gets initialized on its own by api_state
 
     lateinit var kotlinApi: SpotifyClientApi
+//    lateinit var currentUserQueue: CurrentUserQueue
 
     var OFFLINE = false
 

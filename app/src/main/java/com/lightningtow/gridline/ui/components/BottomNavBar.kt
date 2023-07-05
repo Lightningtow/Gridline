@@ -38,6 +38,8 @@ import com.lightningtow.gridline.ui.home.AllPlaylistsViewEntry
 import com.lightningtow.gridline.ui.home.LandingScreen
 //import com.lightningtow.gridline.ui.home.MainActivity
 import com.lightningtow.gridline.ui.home.PurgeViewMaster
+import com.lightningtow.gridline.ui.home.QueuePage
+import com.lightningtow.gridline.ui.home.QueuePageEntry
 import com.lightningtow.gridline.ui.home.listPicking
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
@@ -78,13 +80,11 @@ fun NavHostContainer(
                 showTracksNow = false
             }
             composable("queue") {
-                PlayerPage()
+                QueuePageEntry()
+//                QueuePage()
                 showTracksNow = false
             }
-            composable("auth") {
-                AuthPage()
-                showTracksNow = false
-            }
+
 
 //            // todo what is showTracksNow
 //            composable("purge") {
@@ -144,11 +144,6 @@ private val BottomNavItems = listOf(
 
 
 
-    BottomNavItem(
-        label = "Auth",
-        icon = R.drawable.account_circle,
-        route = "auth"
-    ),
 
     BottomNavItem(
         label = "Home",

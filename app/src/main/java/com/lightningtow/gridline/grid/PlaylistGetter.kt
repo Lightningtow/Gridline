@@ -6,6 +6,7 @@ import com.adamratzman.spotify.models.Playable
 import com.adamratzman.spotify.models.PlayableUri
 import com.adamratzman.spotify.utils.Market
 import com.lightningtow.gridline.GridlineApplication.Companion.context
+import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.data.API_State.kotlinApi
 import com.lightningtow.gridline.data.TrackHolder2
@@ -16,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import com.lightningtow.gridline.auth.guardValidSpotifyApi
 
 class PlaylistGetter() {
     //} : ViewModel() {
@@ -26,9 +28,9 @@ class PlaylistGetter() {
 
 //                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 //                val api = kotlinApi
-
-                kotlinApi.playlists.removeAllClientPlaylistPlayables(TrackHolder1.TrackHolder1Uri)
-
+//                guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
+                    kotlinApi.playlists.removeAllClientPlaylistPlayables(TrackHolder1.TrackHolder1Uri)
+//                }
                 val newlist: MutableList<PlayableUri> =
                     mutableListOf(); //PlaylistHolder.templist.toTypedArray()
 
