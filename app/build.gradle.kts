@@ -82,12 +82,11 @@ android {
 //            isMinifyEnabled = true
 // todo fix using debug keys
 
-//            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt'), "proguard-rules.pro"
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro"
+//            )
             buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"ecb84aef29dc414d97e133c1984b1e0d\"")
             buildConfigField("String", "SPOTIFY_REDIRECT_URI_AUTH", "\"spotifyandroidplayground://spotify-auth\"")
             buildConfigField("String", "SPOTIFY_REDIRECT_URI_PKCE", "\"spotifyandroidplayground://spotify-pkce\"")
@@ -116,6 +115,7 @@ val protobuf_version = "3.21.7"
 
 dependencies {
 
+    implementation("org.burnoutcrew.composereorderable:reorderable:0.9.6")
 
 
 //    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
@@ -154,9 +154,10 @@ dependencies {
     // https://mvnrepository.com/artifact/com.adamratzman/spotify-api-kotlin-core
 //    implementation(files("libs/spotify-api-kotlin-android-4.0.0.aar"))
 //    implementation("com.adamratzman:spotify-api-kotlin-android:3.8.6")
-    implementation("com.adamratzman:spotify-api-kotlin-android:3.8.8")
-//    implementation("com.adamratzman:spotify-api-kotlin-android:4.0.0")
-//    implementation("com.adamratzman:spotify-api-kotlin-core:4.0.0")
+//    implementation("com.adamratzman:spotify-api-kotlin-android:3.8.8")
+//    implementation("com.adamratzman:spotify-api-kotlin-android:4.0.1")
+    implementation("com.adamratzman:spotify-api-kotlin-android:4.0.2")
+//    implementation("com.adamratzman:spotify-api-kotlin-core:4.0.2")
 
     implementation("androidx.compose.runtime:runtime:${compose_version}")
 

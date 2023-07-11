@@ -18,6 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.adamratzman.spotify.models.CurrentUserQueue
+import com.lightningtow.gridline.data.API_State
+import com.lightningtow.gridline.data.API_State.currentUserQueue
+import com.lightningtow.gridline.grid.PlaylistGetter
 import com.lightningtow.gridline.ui.components.GridlineButton
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.lightningtow.gridline.ui.components.downloadShortcutData
@@ -27,6 +31,10 @@ import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.ui.theme.gridline_pink
 import com.lightningtow.gridline.utils.Constants
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -65,10 +73,6 @@ fun LandingScreen() {
             GridlineButton(
                 onClick = {
 
-//                    GetDiffByURI(
-//                        baselist = Constants.TESTLIST2,
-//                        removeTheseTracks = Constants.TESTLIST
-//                    )
                     uploadShortcutData()
 
                     toasty(context, "uploaded")
@@ -78,13 +82,22 @@ fun LandingScreen() {
 
             GridlineButton(
                 onClick = {
-
-
                     downloadShortcutData()
 
                     toasty(context, "downloaded")
                 }) {
                 Text("download shortcuts")
+            }
+            GridlineButton(
+                onClick = {
+                    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+                    scope.launch {
+                        val album = API_State.kotlinApi.albums.getAlbum("spotify:album:6YGXlFehYvg5MuzMPfgkdp")
+                        API_State.kotlinApi.player.startPlayback(contextUri = album!!.uri) //null, null, null, null, null)
+                    }
+                    toasty(context, "bugs squashed")
+                }) {
+                Text("debug func")
             }
         }
     }

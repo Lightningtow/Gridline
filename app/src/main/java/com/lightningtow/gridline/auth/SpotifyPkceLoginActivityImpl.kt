@@ -20,9 +20,9 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
 
     //    override val clientId: String = Secrets.CLIENT_ID
     //    override val redirectUri: String = Secrets.REDIRECT_URI_PKCE
-    val appremote = SpotifyScope.APP_REMOTE_CONTROL
-    val streaming = SpotifyScope.STREAMING
-    override val scopes = SpotifyScope.values().toList() + streaming + appremote
+    val appremote = SpotifyScope.AppRemoteControl
+    val streaming = SpotifyScope.Streaming
+    override val scopes = SpotifyScope.values().toList() + streaming + appremote + SpotifyScope.UserModifyPlaybackState
 //    override val scopes = SpotifyScope.values().toList() // original
 
     override fun onCreate(savedInstanceState: Bundle?) { // this didnt exist

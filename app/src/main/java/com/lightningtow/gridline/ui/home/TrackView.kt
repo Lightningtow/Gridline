@@ -194,7 +194,7 @@ fun PlayableList(playables: List<Playable>) {
 
 // one playable item
 @Composable
-fun PlayableRow(playable: Playable) {
+fun PlayableRow(playable: Playable, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 //    var offsetX by remember { mutableStateOf(0f) }
 //    var offsetY by remember { mutableStateOf(0f) }
@@ -204,7 +204,7 @@ fun PlayableRow(playable: Playable) {
     var swipeQueueReady by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier
+        modifier = modifier // lowercase to use argument if supplied
 //            .clickable(onClick = { onTrackClick(track) })
             .offset {
                 if (offset.roundToInt() < 0) IntOffset(0, 0)

@@ -21,6 +21,7 @@ import com.lightningtow.gridline.data.API_State.spotifyAppRemote
 import com.lightningtow.gridline.ui.components.BottomNavigationBar
 import com.lightningtow.gridline.ui.components.NavHostContainer
 import com.lightningtow.gridline.ui.components.downloadShortcutData
+import com.lightningtow.gridline.ui.home.getQueue
 //import com.lightningtow.gridline.ui.components.getStuff
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
@@ -85,13 +86,14 @@ class MainActivity : AppCompatActivity() {
         Log.w("MainActivity.onStart", "spotifyAppRemote:  ${spotifyAppRemote.toString()}")
         Log.w("MainActivity.onStart", "spotifyAppRemote connected:  ${spotifyAppRemote?.isConnected}")
 
-        if (spotifyAppRemote == null || !spotifyAppRemote!!.isConnected) {
+        if (spotifyAppRemote == null || !(spotifyAppRemote!!.isConnected)) {
 
             tryConnectToAppRemote()
         } else Log.e("startup", "-----skipped connecting to appremote")
 //        Log.e("startup", "downloading shortcut data")
         downloadShortcutData()
-
+        getAlbumArt()
+        getQueue()
         if (!API_State.OFFLINE) {
 //            Log.e("startup", "loading playlists")
             loadPlaylists()
@@ -169,7 +171,7 @@ class MainActivity : AppCompatActivity() {
         Log.i("startup", "getting playerContext")
         spotifyAppRemote?.playerApi?.subscribeToPlayerContext()?.setEventCallback { playerContext ->
             currentPlayerContext.value = playerContext
-            Log.i("startup", "playerContext appeared to work")
+            Log.i("startup", "subscribed to playerContext")
 //            scope.launch(coroutineExceptionHandler) {
 //                Log.e("startup", "playerContext")
 //
@@ -180,21 +182,21 @@ class MainActivity : AppCompatActivity() {
 //                } catch (ex: Exception) { Log.e("MainActivity.connected", "error getting context length: $ex") }
 
 //            }
+
         }?.setErrorCallback { throwable ->
             Log.e("startup", "playerContext error: $throwable")
         }
+
         Log.i("startup", "getting playerState")
         spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback { playerState ->
             Log.w("subscribeToAppRemote", "playerstate changed")
 
             currentPlayerState.value = playerState
-            currentPos.value = playerState.playbackPosition
-            // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
-//            coverUri = playerState.track.imageUri
-//            Log.e("startup", "playerState changed, this is the event callback")
 
-            // todo //////////////////// THIS CAUSES INFINITE LOOP ON STARTUP WHEN 1H REFRESH HAPPENS
+            currentPos.value = playerState.playbackPosition
+
             guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
+                getQueue()
 
                 getAlbumArt("event callback for playerstate") // event callback for playerstate
             }

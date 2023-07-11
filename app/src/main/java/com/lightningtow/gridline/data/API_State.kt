@@ -1,8 +1,11 @@
 package com.lightningtow.gridline.data
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.adamratzman.spotify.SpotifyClientApi
+import com.adamratzman.spotify.models.CurrentUserQueue
 //import com.adamratzman.spotify.models.CurrentUserQueue
 import com.lightningtow.gridline.auth.Model
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -18,6 +21,9 @@ object API_State {
     val currentTrackCover: MutableState<Any?> = mutableStateOf(null) // todo what format is this
     val currentPos: MutableState<Long> = mutableStateOf(0) // current position of track todo in MS? seconds?
     var spotifyAppRemote: SpotifyAppRemote? = null
+    var currentUserQueue: CurrentUserQueue? = null
+//    val afaf = kotlinApi.player.getUserQueue()
+    var loadingQueue by mutableStateOf(true)
 
 //    val kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo yo wtf this gets initialized on its own by api_state
 

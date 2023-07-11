@@ -16,10 +16,10 @@ class SpotifyImplicitLoginActivityImpl : AbstractSpotifyAppImplicitLoginActivity
     override val redirectUri: String = BuildConfig.SPOTIFY_REDIRECT_URI_AUTH
     override val useDefaultRedirectHandler: Boolean = false
 
-//    val appremote = SpotifyScope.APP_REMOTE_CONTROL
-//    val streaming = SpotifyScope.STREAMING
-//    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() + appremote + streaming
-    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() // original
+    val appremote = SpotifyScope.AppRemoteControl
+    val streaming = SpotifyScope.Streaming
+    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() + appremote + streaming + SpotifyScope.UserModifyPlaybackState
+//    override fun getRequestingScopes(): List<SpotifyScope> = SpotifyScope.values().toList() // original
 
     override fun onCreate(savedInstanceState: Bundle?) { // this didn't exist
         super.onCreate(savedInstanceState)

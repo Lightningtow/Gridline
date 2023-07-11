@@ -28,6 +28,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -79,6 +80,7 @@ import com.spotify.protocol.types.Repeat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonNull.content
 import kotlin.properties.Delegates
@@ -165,7 +167,12 @@ object Player {
 ////            else -> Log.e("Player.skipTrack", "ERROR: updateSkip called when skipTo == null") }
 //        } catch (ex: Exception) { Log.e("Player.queueMe", "error: $ex") }
 //    }
+    fun updateCurrentPos() {
+        currentPlayerState.value
+//        spotifyAppRemote!!.playerApi.
+        currentPos.value = currentPlayerState.value?.playbackPosition ?: 0
 
+    }
 
     private var debugging: MutableState<Boolean> = mutableStateOf(false)
     private var randSkipEnabled: MutableState<Boolean> = mutableStateOf(false)
@@ -332,6 +339,13 @@ object Player {
 
     @Composable
     private fun PlayerSlider(value: Float = 42f) {
+        LaunchedEffect(Unit) {
+            while(true) {
+                updateCurrentPos()
+                Log.w("PlayerSlider.LaunchedEffect", "updated position to ${currentPos.value}")
+                delay(1000)
+            }
+        }
         // todo https://stackoverflow.com/questions/66386039/jetpack-compose-react-to-slider-changed-value
 //        if (episodeDuration != null) {
 //        Log.e("PlayerSlider", "generating player slider")
@@ -353,8 +367,8 @@ object Player {
                         sliderValueRaw
 //                        heldPos
                     } else {
-                        currentPos.value.toFloat()
-//                    currentPlayerState.value?.playbackPosition?.toFloat() ?: 0f
+//                        currentPos.value.toFloat()
+                    currentPlayerState.value?.playbackPosition?.toFloat() ?: 0f
                     }
                 }
             }
@@ -373,7 +387,7 @@ object Player {
                 colors = GridlineSliderColors(),
                 interactionSource = interactionSource
             )
-//            Text("isPressed: $isPressed | isDragged: $isDragged | sliderValue: $sliderValue | sliderValueRaw: $sliderValueRaw")
+            if (debugging.value) Text("isPressed: $isPressed | isDragged: $isDragged | sliderValue: $sliderValue | sliderValueRaw: $sliderValueRaw")
 
             Row(Modifier.fillMaxWidth()) {
 //                    Text(text = "0s")
