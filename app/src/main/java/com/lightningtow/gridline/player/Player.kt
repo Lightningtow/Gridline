@@ -62,6 +62,7 @@ import com.lightningtow.gridline.data.API_State.currentPlayerContext
 import com.lightningtow.gridline.data.API_State.currentPlayerState
 import com.lightningtow.gridline.data.API_State.currentPos
 import com.lightningtow.gridline.data.API_State.currentTrackCover
+import com.lightningtow.gridline.data.API_State.kotlinApi
 import com.lightningtow.gridline.data.API_State.spotifyAppRemote
 import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.data.TrackHolder1.TrackHolder1Uri
@@ -71,6 +72,7 @@ import com.lightningtow.gridline.ui.theme.GridlineSliderColors
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
 import com.lightningtow.gridline.utils.StringToPlayableURI
+import com.lightningtow.gridline.utils.coroutineExceptionHandler
 import com.lightningtow.gridline.utils.toasty
 import com.skydoves.landscapist.glide.GlideImage
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -167,12 +169,19 @@ object Player {
 ////            else -> Log.e("Player.skipTrack", "ERROR: updateSkip called when skipTo == null") }
 //        } catch (ex: Exception) { Log.e("Player.queueMe", "error: $ex") }
 //    }
-    fun updateCurrentPos() {
-        currentPlayerState.value
-//        spotifyAppRemote!!.playerApi.
-        currentPos.value = currentPlayerState.value?.playbackPosition ?: 0
 
-    }
+    fun updateCurrentPos() {
+//        currentPlayerState.value
+//        spotifyAppRemote!!.playerApi.
+        val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        scope.launch(coroutineExceptionHandler) {
+//            currentPos.value = currentPlayerState.value?.playbackPosition ?: 0
+            currentPos.value = kotlinApi.player.getCurrentContext()?.progressMs?.toLong() ?: 0
+//            Log.w("PlayerSlider", "updated position to ${currentPos.value}")
+
+        }
+
+}
 
     private var debugging: MutableState<Boolean> = mutableStateOf(false)
     private var randSkipEnabled: MutableState<Boolean> = mutableStateOf(false)
@@ -184,6 +193,7 @@ object Player {
         trackDisplayName: String?,
         playlistDisplayname: String?
     ): Boolean {
+        /** quckly adds a track to a playlist and displays a toast */
         if (trackUri == null) {
             toasty(context, "track is null")
             Log.e("error in quickAdd", "track is null")  // log errors
@@ -281,6 +291,7 @@ object Player {
 
     @Composable
     private fun ContextData() {
+        /** the 'Playing From Playlist:' text */
         val context = LocalContext.current
 
         val uri: String? = currentPlayerContext.value?.uri
@@ -339,11 +350,11 @@ object Player {
 
     @Composable
     private fun PlayerSlider(value: Float = 42f) {
-        LaunchedEffect(Unit) {
-            while(true) {
+        /** the progress bar */
+        LaunchedEffect(Unit) { // todo figure out more what this actually does
+            while(true) { // runs updateCurrentPos() every X ms while this composable is displayed
                 updateCurrentPos()
-                Log.w("PlayerSlider.LaunchedEffect", "updated position to ${currentPos.value}")
-                delay(1000)
+                delay(500)
             }
         }
         // todo https://stackoverflow.com/questions/66386039/jetpack-compose-react-to-slider-changed-value
@@ -367,14 +378,15 @@ object Player {
                         sliderValueRaw
 //                        heldPos
                     } else {
-//                        currentPos.value.toFloat()
-                    currentPlayerState.value?.playbackPosition?.toFloat() ?: 0f
+                        currentPos.value.toFloat()
+//                    currentPlayerState.value?.playbackPosition?.toFloat() ?: 0f
+
                     }
                 }
             }
             Slider(
                 value = sliderValue,
-                valueRange = 0f.rangeTo(currentPlayerState.value?.track?.duration?.toFloat() ?: 0f),
+                valueRange = 0f.rangeTo(currentPlayerState.value?.track?.duration?.toFloat() ?: 100f),
                 onValueChange = {
 //                    heldPos = it.toLong()
                     sliderValueRaw = it
@@ -387,7 +399,7 @@ object Player {
                 colors = GridlineSliderColors(),
                 interactionSource = interactionSource
             )
-            if (debugging.value) Text("isPressed: $isPressed | isDragged: $isDragged | sliderValue: $sliderValue | sliderValueRaw: $sliderValueRaw")
+            if (debugging.value) Text("isPressed: $isPressed | isDragged: $isDragged | isInteracting: $isInteracting | sliderValue: $sliderValue | sliderValueRaw: $sliderValueRaw")
 
             Row(Modifier.fillMaxWidth()) {
 //                    Text(text = "0s")
@@ -542,6 +554,7 @@ object Player {
 
     @Composable
     private fun UtilRow( modifier: Modifier = Modifier, ) {
+        /** util shortcuts above the album art */
         val context = LocalContext.current
         val spacing = Modifier.padding(8.dp)
 

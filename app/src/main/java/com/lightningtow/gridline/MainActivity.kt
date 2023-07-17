@@ -35,7 +35,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+fun tryConnectToKotlinAPI() {
+    Log.e("startup", "tryConnectToKotlinAPI")
 
+    try {
+//        guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
+//        Log.
+        kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo uncomment
+//        kotlinApi = Model.credentialStore.getSpotifyCli
+//        }
+        Log.e("startup", "kotlinAPI initialized")
+        val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+            scope.launch(coroutineExceptionHandler) {
+                val drones = kotlinApi.tracks.getTrack("spotify:track:5JvspoRjPwqMmPV5anGYZj")
+                Log.e("startup", "testing KotlinAPI: should be Drones: ${drones?.asTrack?.name}")
+                if (drones?.asTrack?.name == "Drones") Log.e("startup", "KOTLIN API INITIALIZED SUCCESSFULLY")
+            }
+    }
+    catch(ex: Exception) {
+        OFFLINE = true
+        Log.e("startup", "error initializing kotlinAPI: $ex")
+    }
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -83,16 +104,20 @@ class MainActivity : AppCompatActivity() {
 
         super.onStart()
 //        fun tart() {
-        Log.w("MainActivity.onStart", "spotifyAppRemote:  ${spotifyAppRemote.toString()}")
-        Log.w("MainActivity.onStart", "spotifyAppRemote connected:  ${spotifyAppRemote?.isConnected}")
+        Log.e("MainActivity.onStart", "spotifyAppRemote:  ${spotifyAppRemote.toString()}")
+        Log.e("MainActivity.onStart", "spotifyAppRemote connected:  ${spotifyAppRemote?.isConnected}")
 
         if (spotifyAppRemote == null || !(spotifyAppRemote!!.isConnected)) {
-
+            Log.e("startup", "appRemote is null or disconnected, trying to reconnect")
             tryConnectToAppRemote()
+
         } else Log.e("startup", "-----skipped connecting to appremote")
 //        Log.e("startup", "downloading shortcut data")
+        tryConnectToKotlinAPI()
+//        if (kotlinApi == null)
+
         downloadShortcutData()
-        getAlbumArt()
+        getAlbumArt("MainActivity")
         getQueue()
         if (!API_State.OFFLINE) {
 //            Log.e("startup", "loading playlists")
@@ -113,6 +138,7 @@ class MainActivity : AppCompatActivity() {
                     }, content = { padding -> NavHostContainer(navController = navController, padding = padding) }) }
         }
     }
+
 
     fun tryConnectToAppRemote() {
         Log.e("startup", "tryConnectToAppRemote")
@@ -135,21 +161,11 @@ class MainActivity : AppCompatActivity() {
 //                connected()
                 // todo this is only for app_remote
 
-                try {
-                    guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
-                        kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo uncomment
 
-                    }
-                    Log.i("startup", "kotlinAPI initialized")
-                }
-                catch(ex: Exception) {
-                    OFFLINE = true
-                    Log.e("startup", "error initializing kotlinAPI: $ex")
-                }
 
                 Log.i("startup", "calling connectToSDK")
                 guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
-                    subscribeToAppRemote()
+                    subscribeToAppRemote() // this func only works if connected to app remote
 
                     getAlbumArt("tryConnectToAppRemote") // tryConnectToAppRemote
                 }
@@ -164,8 +180,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
     fun subscribeToAppRemote() {
-        Log.i("startup", "connecting to SDK")
+        Log.i("startup", "subscribeToAppRemote")
         // todo todooooooo
+
+
 
 
         Log.i("startup", "getting playerContext")
@@ -193,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
             currentPlayerState.value = playerState
 
-            currentPos.value = playerState.playbackPosition
+//            currentPos.value = playerState.playbackPosition // this doesn't work
 
             guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
                 getQueue()

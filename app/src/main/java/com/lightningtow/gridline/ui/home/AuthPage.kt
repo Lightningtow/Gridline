@@ -68,16 +68,16 @@ fun AuthPageInner(activity: Activity? = null) {
 //        )
 
 
-        GridlineButton(onClick = {
-            Log.e("AuthPageInner", "pkce login")
-//            activity?.startSpotifyClientPkceLoginActivity(SpotifyPkceLoginActivityImpl::class.java);
-            context.startActivity(Intent(context, SpotifyPkceLoginActivityImpl::class.java))
+//        GridlineButton(onClick = {
+//            Log.e("AuthPageInner", "pkce login")
+////            activity?.startSpotifyClientPkceLoginActivity(SpotifyPkceLoginActivityImpl::class.java);
+//            context.startActivity(Intent(context, SpotifyPkceLoginActivityImpl::class.java))
+//
+//        }) {
+////            Text("Connect to Spotify (spotify-web-api-kotlin integration, PKCE auth)")
+//            Text("spotify-web-api-kotlin integration, PKCE auth")
+//        }
 
-        }) {
-//            Text("Connect to Spotify (spotify-web-api-kotlin integration, PKCE auth)")
-            Text("spotify-web-api-kotlin integration, PKCE auth")
-
-        }
 //        Text(
 //            "The button above starts authentication via our PKCE auth implementation",
 //            style = MaterialTheme.typography.body2

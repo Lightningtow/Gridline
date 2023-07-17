@@ -146,7 +146,9 @@ dependencies {
 
     // Images
     implementation("com.github.bumptech.glide:glide:4.13.1")
-    implementation(files("libs/spotify-app-remote-release-0.7.2.aar"))
+//    implementation(files("libs/spotify-app-remote-release-0.7.2.aar"))
+        implementation(files("libs/spotify-app-remote-release-0.8.0.aar"))
+
     annotationProcessor("com.github.bumptech.glide:compiler:4.13.1")
     implementation("com.github.skydoves:landscapist-glide:1.5.0")
 

@@ -44,6 +44,7 @@ import com.lightningtow.gridline.ui.home.getQueue
 import com.lightningtow.gridline.ui.home.listPicking
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
+import com.lightningtow.gridline.utils.getAlbumArt
 
 
 //@Preview
@@ -77,6 +78,7 @@ fun NavHostContainer(
                 showTracksNow = false
             }
             composable("player") {
+                getAlbumArt("from nav bar")
                 PlayerPage()
                 showTracksNow = false
             }

@@ -6,12 +6,14 @@ import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.adamratzman.spotify.SpotifyException
 import com.adamratzman.spotify.models.PlayableUri
 import com.lightningtow.gridline.GridlineApplication
 import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.auth.Model
 import com.lightningtow.gridline.auth.guardValidSpotifyApi
 import com.lightningtow.gridline.data.API_State
+import com.lightningtow.gridline.tryConnectToKotlinAPI
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
@@ -61,25 +63,37 @@ fun getAlbumArt(msg: String = " ") {
     val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     scope.launch(coroutineExceptionHandler) {
+//        guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
 
-        try { // get album art
+            try { // get album art
 //                val api = Model.credentialStore.getSpotifyClientPkceApi()!!
 //            if (msg != null) Log.e("getAlbumArt", "getAlbumArt: $msg")
 
-            Log.e("getAlbumArt", "getAlbumArt - ${API_State.currentPlayerState.value!!.track.name} - $msg")
+                Log.e(
+                    "getAlbumArt",
+                    "getAlbumArt - ${API_State.currentPlayerState.value!!.track.name} - $msg"
+                )
 //                    Log.e("within coroutine", tempPlayerStateFILLME?.track!!.album.uri.toString())
 //            guardValidSpotifyApi(classBackTo = MainActivity::class.java) { api ->
 
-            val albumUri = API_State.currentPlayerState.value!!.track.album.uri.toString()
-            API_State.currentTrackCover.value =
+                val albumUri = API_State.currentPlayerState.value!!.track.album.uri.toString()
+                API_State.currentTrackCover.value =
 //                    (kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
-                (API_State.kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
+                    (API_State.kotlinApi.albums.getAlbum(album = albumUri)!!.images.firstOrNull()?.url)
 //            }
-        } catch (ex: Exception) {
-            Log.e("coverUri", "failed to get album art: $ex")
-            toasty(GridlineApplication.ApplicationContext, "failed to get album art")
-            API_State.currentTrackCover.value = Constants.DEFAULT_MISSING
-        }
+            } catch (ex: SpotifyException.BadRequestException) {
+                tryConnectToKotlinAPI()
+
+
+                Log.e("coverUri", "BadRequestException: $ex")
+//                toasty(GridlineApplication.ApplicationContext, "failed to get album art") // doesnt work
+                API_State.currentTrackCover.value = Constants.DEFAULT_MISSING
+            } catch (ex: Exception) {
+                Log.e("coverUri", "failed to get album art: $ex")
+                API_State.currentTrackCover.value = Constants.DEFAULT_MISSING
+
+            }
+//        }
     }
 }
 val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
