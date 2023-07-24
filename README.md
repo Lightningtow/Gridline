@@ -12,18 +12,25 @@ It is still in alpha, under heavy development. Many functionalities have not bee
 Nowadays, I use Gridline instead of the actual Spotify app.  
   
 Screenshots:  
-  
-<img src="app/src/main/res/screenshots/player_screen.jpg" alt="Player Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="app/src/main/res/screenshots/shortcut_screen.jpg" alt="Home Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="app/src/main/res/screenshots/all_playlists_screen.jpg" alt="All Playlists Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="app/src/main/res/screenshots/playlist_tracks_screen.jpg" alt="Playlist Tracks Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Player Screen
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Home Screen
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Home Screen  
+<img src="app/src/main/res/screenshots/player_screen.jpg" alt="Player Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="app/src/main/res/screenshots/shortcut_screen.jpg" alt="Home Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+
+-----------------------------------------------------------------
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 All Playlists
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Playlists' Tracks
+
+<img src="app/src/main/res/screenshots/all_playlists_screen.jpg" alt="All Playlists Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="app/src/main/res/screenshots/playlist_tracks_screen.jpg" alt="Playlist Tracks Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
 
