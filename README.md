@@ -9,10 +9,21 @@ This will eventually provide all of the functionality provided by
 [my Python, terminal-based Spotify shuffler](https://github.com/Lightningtow/Spotify_Shuffler).
 
 It is still in alpha, under heavy development. Many functionalities have not been implemented yet, but it's coming along quickly. 
-Nowadays, I use Gridline instead of the actual Spotify app.
+Nowadays, I use Gridline instead of the actual Spotify app.  
+  
 Screenshots:  
-![player screen](app/src/main/res/screenshots/player_screen.jpg "Player Screen")
-![all playlists screen](app/src/main/res/screenshots/shortcut_screen.jpg "Home Screen")
+  
+<img src="app/src/main/res/screenshots/player_screen.jpg" alt="Player Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="app/src/main/res/screenshots/shortcut_screen.jpg" alt="Home Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="app/src/main/res/screenshots/all_playlists_screen.jpg" alt="All Playlists Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="app/src/main/res/screenshots/playlist_tracks_screen.jpg" alt="Playlist Tracks Screen" width="200"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-![all playlists screen](app/src/main/res/screenshots/all_playlists_screen.jpg "All Playlists Screen")
-![playlist tracks screen](app/src/main/res/screenshots/playlist_tracks_screen.jpg "Playlist Tracks Screen")
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Player Screen
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Home Screen
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+All Playlists
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Playlists' Tracks
+
