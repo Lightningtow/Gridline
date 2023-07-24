@@ -19,10 +19,14 @@ import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 // safeLet retrieved from: https://stackoverflow.com/a/35522422/6422820
@@ -49,6 +53,34 @@ fun Activity.toasty(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT)
 
 fun RefreshAPIs() {
 //    MainActivity.
+}
+
+
+
+fun dumpPlayerState() {
+    val t = "dump"
+
+    if (API_State.currentPlayerState.value == API_State.oldState.value) {
+        Log.e(t,"NOTHING HAS CHANGED")
+    }
+    API_State.oldState.value = API_State.currentPlayerState.value
+
+    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    scope.launch(coroutineExceptionHandler) {
+        val state = API_State.currentPlayerState.value ?: return@launch // if null, return
+        Log.e(t, "=======================================================")
+        Log.e(t, "state: " + state)
+//        Log.e(t, "name: " + state.track.name)
+//        Log.e(t, "uri:" + state.track.uri.toString())
+//        Log.e(t, "speedpos: ${state.playbackSpeed} ${state.playbackPosition}")
+//        val o = state.playbackOptions; Log.e(t, "options: ${o.isShuffling} ${o.repeatMode}")
+//        val r = state.playbackRestrictions
+//        Log.e(t, "restrictions + paused: ${r.canRepeatContext} ${r.canRepeatTrack} ${r.canSeek} " +
+//                "${r.canSkipNext} ${r.canSkipPrev} ${r.canToggleShuffle} ${state.isPaused}")
+
+        Log.e(t, "=======================================================")
+
+    }
 }
 
 fun safeLoadImage(action: () -> Unit) {
@@ -96,9 +128,17 @@ fun getAlbumArt(msg: String = " ") {
 //        }
     }
 }
-val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+
+val coroutineExceptionHandler = CoroutineExceptionHandler{context, throwable ->
     Log.e("coroutine error", throwable.message.toString())
     throwable.printStackTrace()
+//    throwable.
+//    throwable.cause.cause.cause
+
+//    if (throwable == SpotifyException.AuthenticationException) {
+//
+//    }
+
 }
 // todo deal with coroutines
 //fun getCover(uri: String, type: SHORTCUT_TYPE): Any {

@@ -1,8 +1,10 @@
 package com.lightningtow.gridline.auth
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.getIntent
+import android.net.Credentials
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import com.adamratzman.spotify.SpotifyClientApi
@@ -14,27 +16,31 @@ import com.lightningtow.gridline.GridlineApplication.Companion.ApplicationContex
 import com.lightningtow.gridline.MainActivity
 import com.lightningtow.gridline.data.API_State.spotifyAppRemote
 import com.lightningtow.gridline.ui.home.Broadcasts
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.net.UnknownHostException
 
 
-fun guardValidAppRemote() {
-    if (spotifyAppRemote != null && spotifyAppRemote!!.isConnected) {
-        return
-    } else {
-//        val intent = Intent(ApplicationContext, MainActivity::class.java)
-//        startActivity(intent)
-//        finish()
-//        val intent = Intent( MainActivity::class.java)
-//        startActivity()
-//        context.startActivity(Intent(context, Broadcasts::class.java))
-//        val browserIntent = Intent(Intent.ACTION_VIEW, MainActivity::class.java)
-//        startActivity(Intent(this, MainActivity::class.java))
-//        val intent = Intent(ApplicationContext, MainActivity::class.java)
-//        startActivity(intent)
-//        finish()
-        startActivity(ApplicationContext, Intent(ApplicationContext, MainActivity::class.java), null)
-    }
-}
+
+//fun guardValidAppRemote() {
+//    if (spotifyAppRemote != null && spotifyAppRemote!!.isConnected) {
+//        return
+//    } else {
+////        val intent = Intent(ApplicationContext, MainActivity::class.java)
+////        startActivity(intent)
+////        finish()
+////        val intent = Intent( MainActivity::class.java)
+////        startActivity()
+////        context.startActivity(Intent(context, Broadcasts::class.java))
+////        val browserIntent = Intent(Intent.ACTION_VIEW, MainActivity::class.java)
+////        startActivity(Intent(this, MainActivity::class.java))
+////        val intent = Intent(ApplicationContext, MainActivity::class.java)
+////        startActivity(intent)
+////        finish()
+//        startActivity(ApplicationContext, Intent(ApplicationContext, MainActivity::class.java), null)
+//    }
+//}
 
 private fun guardValidSpotifyApi(
     classBackTo: Class<MainActivity>,

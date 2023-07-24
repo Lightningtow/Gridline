@@ -27,10 +27,13 @@ object API_State {
 
 //    val kotlinApi = Model.credentialStore.getSpotifyClientPkceApi()!! // todo yo wtf this gets initialized on its own by api_state
 
-    lateinit var kotlinApi: SpotifyClientApi
+    lateinit var kotlinApi: SpotifyClientApi // maybe best to just make it have to work
+//    val kotlinApi: MutableState<SpotifyClientApi?> = mutableStateOf(null)
 //    lateinit var currentUserQueue: CurrentUserQueue
 
     var OFFLINE = false
+
+    var oldState: MutableState<PlayerState?> = mutableStateOf(null)
 
     /**     never update these manually  */
 

@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions.OnClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -66,6 +67,7 @@ import com.lightningtow.gridline.data.API_State.kotlinApi
 import com.lightningtow.gridline.data.API_State.spotifyAppRemote
 import com.lightningtow.gridline.data.PlaylistsHolder
 import com.lightningtow.gridline.data.TrackHolder1.TrackHolder1Uri
+import com.lightningtow.gridline.s
 import com.lightningtow.gridline.ui.components.FavoriteStar
 import com.lightningtow.gridline.ui.components.SHORTCUT_TYPE
 import com.lightningtow.gridline.ui.theme.GridlineSliderColors
@@ -126,6 +128,9 @@ object Player {
     }
 
     private var randSkip: Boolean by Delegates.observable(false) { _, _, _ ->
+        /** this picks a random place in the context and skips to that place
+         * skipping backwards doesn't really work; skipping forward then back will not return you to the same song
+         * */
         try {
 // todo this will ignore stuff in the queue
             val location = currentPlayerContext.value!!.uri
@@ -147,9 +152,9 @@ object Player {
                 when (skipTrack) {
                     SkipVals.FORWARD -> spotifyAppRemote!!.playerApi.skipNext()
                     SkipVals.BACK -> spotifyAppRemote!!.playerApi.skipPrevious()
-                    else -> Log.e("Player.skipTrack", "ERROR: in updateSkip, skipTo == null")
-                } } catch (ex: Exception) { Log.e("Player.skipTrack", "error: $ex") }
-        }
+                    else -> Log.e("Player.skipTrack", "ERROR: in updateSkip, skipTo == null") }
+            currentPos.value = 0
+        } catch (ex: Exception) { Log.e("Player.skipTrack", "error: $ex") } }
     }
 
     var queueMe: String? by Delegates.observable(null) { _, _, _ ->
@@ -317,17 +322,16 @@ object Player {
     @Composable
     fun PlayerPage() {
         GridlineTheme() {
-            Column( // right column
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                DebugInfo()
-            }
 
             Column() { // left (main) column
+                Row( // right column
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    ContextData()
 
-                ContextData()
+//                    DebugInfo()
+                }
 
                 Spacer(Modifier.padding(46.dp))
 
@@ -337,16 +341,31 @@ object Player {
 
                 BottomPart()
             }
+
+//            Column( // right column
+//                horizontalAlignment = Alignment.End,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            ) {
+//                DebugInfo()
+//            }
+//
+//            Column() { // left (main) column
+//
+//                ContextData()
+//
+//                Spacer(Modifier.padding(46.dp))
+//
+//                UtilRow()
+//
+//                BigButton()
+//
+//                BottomPart()
+//            }
         }
     }
 
-    @Composable
-    private fun DebugInfo() {
-        if (!debugging.value) return
-        Column() {
-            Text("rand skip enabled: " + randSkipEnabled.value.toString())
-        }
-    }
+
 
     @Composable
     private fun PlayerSlider(value: Float = 42f) {

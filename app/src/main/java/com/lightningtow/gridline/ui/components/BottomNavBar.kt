@@ -32,6 +32,7 @@ import com.lightningtow.gridline.ui.home.Broadcasts
 import com.lightningtow.gridline.ui.home.HomePage
 
 import com.lightningtow.gridline.ui.home.AllPlaylistsViewEntry
+import com.lightningtow.gridline.ui.home.DebugPage
 //import com.lightningtow.gridline.activities.PlaylistViewActivity
 //import com.lightningtow.gridline.activities.PlaylistViewPage
 //import com.lightningtow.gridline.ui.home.AuthPage
@@ -42,6 +43,7 @@ import com.lightningtow.gridline.ui.home.QueuePage
 import com.lightningtow.gridline.ui.home.QueuePageEntry
 import com.lightningtow.gridline.ui.home.getQueue
 import com.lightningtow.gridline.ui.home.listPicking
+import com.lightningtow.gridline.ui.home.refreshDebugInfo
 import com.lightningtow.gridline.ui.theme.GridlineTheme
 import com.lightningtow.gridline.utils.Constants
 import com.lightningtow.gridline.utils.getAlbumArt
@@ -66,7 +68,11 @@ fun NavHostContainer(
 
         builder = {
             /**  the order of these are irrelevant!  */
-
+            composable("debug") {
+                refreshDebugInfo()
+                DebugPage()
+                showTracksNow = false
+            }
 
             composable("idk") {
 //                HelloWorld()
@@ -157,6 +163,12 @@ private val BottomNavItems = listOf(
         label = "Player",
         icon = R.drawable.baseline_play_circle_24,
         route = "player"
+    ),
+
+    BottomNavItem(
+        label = "Debug",
+        icon = R.drawable.round_bug_report_24,
+        route = "debug"
     ),
 
     BottomNavItem(
